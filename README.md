@@ -28,7 +28,7 @@ Because I am working on this library primarily to learn, it is a work in progres
 
 
 ## Repository overview
-- `src/bad/`: the library. If you want to use `bad` in your project, this is probably the only directory you need
+- [`src/bad/`](src/bad/): the library. If you want to use `bad` in your project, this is probably the only directory you need
     - [`common/`](src/bad/common/): common operations likely to be used throughout the rest of the library
     - [`detect/`](src/bad/detect/): context detection around the library
     - [`math/`](src/bad/math/): math functions
