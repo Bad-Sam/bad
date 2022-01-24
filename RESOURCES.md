@@ -3,13 +3,11 @@ This is a glossary of all the resources I used to develop the code in this repos
 Resources I found especially helpful are in **bold**.
 
 ## Libraries
-----
 - Nicholas Frechette's [Real Time Math (RTM)](https://github.com/nfrechette/rtm)
 - DLTcollab's [sse2neon](https://github.com/DLTcollab/sse2neon) (Intel SSE intrinsics to ARM/ARM64 Neon instrinsics
 
 
 ## Compilers ##
-----
 ### MSVC
 - ["Introducing ‘Vector Calling Convention’" article](https//devblogs.microsoft.com/cppblog/introducing-vector-calling-convention/)
 - [MSVC predefined macros](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
@@ -22,18 +20,15 @@ Resources I found especially helpful are in **bold**.
 
 
 ## Tools ##
-----
 - [IEEE-754 floating point converter](https://www.h-schmidt.net/FloatConverter/IEEE754.html)
 
 
 ## C/C++ language features ##
-----
 - [C++ reference](https://en.cppreference.com/w/)
 - [IEEE-754 floating point numbers](https://steve.hollasch.net/cgindex/coding/ieeefloat.html)
 
 
 ## Optimization ##
-----
 ### General
 - **[Agner Fog's software optimization resources](https://www.agner.org/optimize/)**
 - **[Stack Overflow](https://stackoverflow.com/)**
@@ -90,7 +85,6 @@ Resources I found especially helpful are in **bold**.
 - [Compiler intrinsics explanation across compilers and CPU architectures, compilation options, C macros, and more](https://www.linuxjournal.com/content/introduction-gcc-compiler-intrinsics-vector-processing)
 
 ## Power consumption
-----
 - [Power Consumption of Performance-Scaled SIMD Processors](https://link.springer.com/chapter/10.1007/978-3-540-30205-6_55)
 - [How SIMD width affects energy efficiency: a case study on sorting](https://researcher.watson.ibm.com/researcher/files/jp-INOUEHRS/COOLChips_SIMDsort_slides.pdf)
 - [Do SSE instructions consume more power/energy?](https://stackoverflow.com/questions/19722950/do-sse-instructions-consume-more-power-energy)
