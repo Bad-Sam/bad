@@ -1,0 +1,73 @@
+#ifndef BAD_F32X8_CALC_H
+#define BAD_F32X8_CALC_H
+
+#include <bad/bad.h>
+#include <bad/qualifiers.h>
+#include <bad/args.h>
+
+#include <bad/types.h>
+#include <bad/common/f32x8.h>
+#include <bad/common/mask256.h>
+
+#if !defined(__AVX__)
+#   include "f32x4_calc.h"
+#endif
+
+BAD_NAMESPACE_START
+
+// =========== Arithmetic ===========
+static bad_forceinline f32x8 bad_veccall f32x8_add(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline f32x8 bad_veccall f32x8_sub(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline f32x8 bad_veccall f32x8_mul(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline f32x8 bad_veccall f32x8_div(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline f32   bad_veccall f32x8_hadd(f32x8_vec0 a);
+
+
+// ====== Advanced arithmetic =======
+static bad_forceinline f32x8 bad_veccall f32x8_rcp(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_sqrt(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_rsqrt(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_min(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline f32x8 bad_veccall f32x8_max(f32x8_vec0 a, f32x8_vec1 b);
+
+// TODO: power, exponential, log, 
+static bad_forceinline f32x8 bad_veccall f32x8_abs(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_neg(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_mod(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline f32x8 bad_veccall f32x8_trunc(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_round(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_floor(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_ceil(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_clamp(f32x8_vec0 a, f32x8_vec1 min, f32x8_vec2 max);
+
+static bad_forceinline f32x8 bad_veccall f32x8_mul_add(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c);
+static bad_forceinline f32x8 bad_veccall f32x8_mul_sub(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c);
+static bad_forceinline f32x8 bad_veccall f32x8_nmul_add(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c);
+static bad_forceinline f32x8 bad_veccall f32x8_nmul_sub(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c);
+
+
+// ============ Comparison ============
+static bad_forceinline mask256 bad_veccall f32x8_neq(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline mask256 bad_veccall f32x8_eq(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline mask256 bad_veccall f32x8_ge(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline mask256 bad_veccall f32x8_gt(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline mask256 bad_veccall f32x8_le(f32x8_vec0 a, f32x8_vec1 b);
+static bad_forceinline mask256 bad_veccall f32x8_lt(f32x8_vec0 a, f32x8_vec1 b);
+
+
+// ======= Selection & tests ========
+static bad_forceinline mask256 bad_veccall f32x8_is_nan(f32x8_vec0 a);
+static bad_forceinline mask256 bad_veccall f32x8_is_infinite(f32x8_vec0 a);
+static bad_forceinline mask256 bad_veccall f32x8_is_finite(f32x8_vec0 a);
+
+#if defined(__SSE__)
+#   include "f32x8_calc/f32x8_calc_x86-64.inl"
+#elif defined(__ARM_NEON_FP)
+#   include "f32x8_calc/f32x8_calc_arm.inl"
+#else
+#   include "f32x8_calc/f32x8_calc_no_simd.inl"
+#endif
+
+BAD_NAMESPACE_END
+
+#endif
