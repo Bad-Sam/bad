@@ -45,7 +45,7 @@ Resources I found especially helpful are in **bold**.
 - [Chebyshev-approximation-based sin(x) implementation](https://web.archive.org/web/20200628195036/http://mooooo.ooo/chebyshev-sine-approximation/)
 - [Fast math function implementation](https://stackoverflow.com/questions/18662261/fastest-implementation-of-sine-cosine-and-square-root-in-c-doesnt-need-to-b)
 
-### SIMD ISAs (SSE & AVX)
+### SIMD ISAs
 
 **Intel**
 - [Intel intrinsics C headers](https://stackoverflow.com/questions/11228855/header-files-for-x86-simd-intrinsics)
