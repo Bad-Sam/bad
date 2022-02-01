@@ -1,5 +1,5 @@
-#ifndef BAD_MASKXN_H
-#define BAD_MASKXN_H
+#ifndef BAD_MASKN_H
+#define BAD_MASKN_H
 
 #include <bad/bad.h>
 
