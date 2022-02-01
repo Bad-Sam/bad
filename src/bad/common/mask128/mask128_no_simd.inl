@@ -13,8 +13,8 @@ static bad_forceinline mask128 mask128_loadu(const mask_elem* mem_addr)
 }
 
 
-static bad_forceinline mask128 mask128_set(const mask_elem a, const mask_elem b,
-                                           const mask_elem c, const mask_elem d)
+static bad_forceinline mask128 mask128_set(mask_elem a, mask_elem b,
+                                           mask_elem c, mask_elem d)
 {
     mask128 res;
 
@@ -27,13 +27,13 @@ static bad_forceinline mask128 mask128_set(const mask_elem a, const mask_elem b,
 }
 
 
-static bad_forceinline mask128 mask128_set1(const mask_elem k)
+static bad_forceinline mask128 mask128_set1(mask_elem k)
 {
     return mask128_set(k, k, k, k);
 }
 
 
-static bad_forceinline void mask128_store(mask_elem* const mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128_vec0 a)
 {
     mem_addr[0] = a.x;
     mem_addr[1] = a.y;
@@ -42,7 +42,7 @@ static bad_forceinline void mask128_store(mask_elem* const mem_addr, mask128_vec
 }
 
 
-static bad_forceinline void mask128_storeu(mask_elem* const mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_storeu(mask_elem* mem_addr, mask128_vec0 a)
 {
     return mask128_store(mem_addr, a);
 }
@@ -201,6 +201,19 @@ static bad_forceinline mask128 bad_veccall mask128_xor(mask128_vec0 a, mask128_v
     res.y = a.y ^ b.y;
     res.z = a.z ^ b.z;
     res.w = a.w ^ b.w;
+
+    return res;
+}
+
+
+static bad_forceinline mask128 bad_veccall mask128_not(mask128_vec0 a)
+{
+    mask128 res;
+
+    res.x = ~a.x;
+    res.y = ~a.y;
+    res.z = ~a.z;
+    res.w = ~a.w;
 
     return res;
 }

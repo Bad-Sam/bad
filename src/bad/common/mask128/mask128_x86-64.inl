@@ -18,22 +18,22 @@ static bad_forceinline mask128 mask128_loadu(const mask_elem* mem_addr)
 }
 
 
-static bad_forceinline mask128 mask128_set(const mask_elem a, const mask_elem b,
-                                           const mask_elem c, const mask_elem d)
+static bad_forceinline mask128 mask128_set(mask_elem a, mask_elem b,
+                                           mask_elem c, mask_elem d)
 {
     bad_align(16) const mask_elem e[4] = {a, b, c, d};
     return mask128_load(e);
 }
 
 
-static bad_forceinline mask128 mask128_set1(const mask_elem k)
+static bad_forceinline mask128 mask128_set1(mask_elem k)
 {
     bad_align(16) const mask_elem e[4] = {k, k, k, k};
     return mask128_load(e);
 }
 
 
-static bad_forceinline void mask128_store(mask_elem* const mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128_vec0 a)
 {
 #if defined(__SSE2__)
     _mm_store_si128((__m128i*)mem_addr, a);
@@ -43,7 +43,7 @@ static bad_forceinline void mask128_store(mask_elem* const mem_addr, mask128_vec
 }
 
 
-static bad_forceinline void mask128_storeu(mask_elem* const mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_storeu(mask_elem* mem_addr, mask128_vec0 a)
 {
 #if defined(__SSE2__)
     _mm_storeu_si128((__m128i*)mem_addr, a);
@@ -65,14 +65,14 @@ static bad_forceinline mask128 mask128_zero()
 
 static bad_forceinline mask128 mask128_all1()
 {
-// MSVC seems to always generate movdqa (or more) instead of the desired vpcmpeqd
+// MSVC seems to always generate movdqa (or more) instead of the desired pcmpeqd
 #if defined(_MSC_VER)
 #   if defined(BAD_x86)
 #       if defined(__SSE2__)
-            mask128 v;
-            __asm { vpcmpeqd xmm0, xmm0, xmm0 };
+            __asm { pcmpeqd xmm0, xmm0, xmm0 };
 #       else
-            return _mm_set1_ps(0xFFFFFFFF);
+            mask128 v = _mm_setzero_ps();
+            return _mm_cmpeq_ps(v, v);
 #       endif
 #   else
 #       if defined(__SSE2__)
@@ -190,6 +190,16 @@ static bad_forceinline mask128 bad_veccall mask128_xor(mask128_vec0 a, mask128_v
     return _mm_xor_si128(a, b);
 #else
     return _mm_xor_ps(a, b);
+#endif
+}
+
+
+static bad_forceinline mask128 bad_veccall mask128_not(mask128_vec0 a)
+{
+#if defined(__SSE2__)
+    return _mm_xor_si128(a, _mm_cmpeq_epi32(a, a));
+#else
+    return _mm_xor_ps(a, _mm_cmpeq_ps(a, a));
 #endif
 }
 
