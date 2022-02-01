@@ -56,7 +56,7 @@
     while (0)
 
 #define bad_assert_sse_aligned(ptr) bad_assert_aligned((ptr), 16)
-#define bad_assert_avx_aligned(ptr) bad_assert_aligned((ptr), 16)
+#define bad_assert_avx_aligned(ptr) bad_assert_aligned((ptr), 32)
 #else
 #   define bad_assert(x)                      do {} while (0)
 #   define bad_assert_aligned(ptr, alignment) do {} while (0)
