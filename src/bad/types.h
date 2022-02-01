@@ -53,14 +53,8 @@ typedef double   f64;
 
 
 // ========== SIMD types ==========
-#if defined(__AVX__)
-    typedef __m256  f32x8;
-    typedef __m256i mask256;
-#endif
-
 #if defined(__SSE__)
-    typedef __m128  f32x3;
-    typedef __m128  f32x4;
+    typedef __m128 f32x4;
 #   if defined(__SSE2__)
         typedef __m128i mask128;
         typedef u32     mask_elem;
@@ -68,19 +62,71 @@ typedef double   f64;
         typedef __m128  mask128;
         typedef f32     mask_elem;
 #   endif
+
+#   if defined(__AVX__)
+        typedef __m256  f32x8;
+        typedef __m256i mask256;
+#   else
+        typedef struct
+        {
+            __m128 a;
+            __m128 b;
+        } f32x8;
+
+        typedef struct
+        {
+            mask128 a;
+            mask128 b;
+        } mask256;
+#   endif
 #elif defined(__ARM_NEON_FP)
-    typedef float32x2_t   f32x2;
-    typedef float32x4_t   f32x3;
     typedef float32x4_t   f32x4;
-    typedef float32x4x2_t f32x8;
     typedef uint32x4_t    mask128;
     typedef u32           mask_elem;
+
+    typedef struct
+    {
+        float32x4_t a;
+        float32x4_t b;
+    } f32x8;
+
+    typedef struct
+    {
+        uint32x4_t a;
+        uint32x4_t b;
+    } mask256;
 #else
-    typedef union  { f32 e[2]; struct { f32 x; f32 y; };               } f32x2;
-    typedef union  { f32 e[3]; struct { f32 x; f32 y; f32 z; };        } f32x3;
-    typedef union  { f32 e[4]; struct { f32 x; f32 y; f32 z; f32 w; }; } f32x4;
-    typedef struct { u32 e[4]; struct { u32 x; u32 y; u32 z; u32 w; }; } mask128;
-    typedef u32                                                          mask_elem;
+    typedef union
+    {
+        f32 e[4];
+        struct
+        {
+            f32 x; f32 y; f32 z; f32 w;
+        };
+    } f32x4;
+
+    typedef struct
+    {
+        f32x4 a;
+        f32x4 b;
+    } f32x8;
+
+    typedef union
+    {
+        u32 e[4];
+        struct
+        {
+            u32 x; u32 y; u32 z; u32 w;
+        };
+    } mask128;
+
+    typedef struct
+    {
+        mask128 a;
+        mask128 b;
+    } mask256;
+
+    typedef u32 mask_elem;
 #endif
 
 BAD_NAMESPACE_END
