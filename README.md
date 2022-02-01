@@ -50,7 +50,7 @@ General:
 - [ ] Support for other ISAs (PowerPC, MIPS, RISC-V?)
 
 Common:
-- [ ] Implement `vecf`, a general vector type built on top of the most suited SIMD ISA available for the needs of the user
+- [ ] Implement `f32xn` and `maskn`, a general vector type built on top of the most suited SIMD ISA available for the needs of the user
 - [ ] Explore non-temporal loads and stores
 - [ ] Explore possible implementation of types whose size is not a multiple of the available vector width (vec2 and vec3 for instance)
 - [ ] Remove the dependency on `stdint.h` in [`types.h`](src/bad/types.h)
