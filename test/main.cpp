@@ -1,8 +1,8 @@
 #include "test.h"
-#include "clock/counter.h"
+
 #include "tests/test_mask128.h"
 #include "tests/test_f32x4.h"
-#include "tests/test_vec4.h"
+#include "tests/test_f32x4_calc.h"
 
 #include <bad/common/f32x4.h>
 
@@ -25,6 +25,8 @@ int main()
     test_f32x4_one();
     test_f32x4_load_store();
     test_f32x4_loadu_storeu();
+    test_f32x4_blend();
+    
     test_f32x4_hadd();
     test_f32x4_abs();
     test_f32x4_neg();
@@ -38,13 +40,9 @@ int main()
     test_f32x4_mul_sub();
     test_f32x4_nmul_add();
     test_f32x4_nmul_sub();
-    test_f32x4_blend();
     test_f32x4_is_nan();
     test_f32x4_is_infinite();
     test_f32x4_is_finite();
-
-    // vec4
-    //test_vec4_dot();
 
     test_report();
 
