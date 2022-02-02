@@ -22,7 +22,7 @@ Because I am working on this library primarily to learn, it is a work in progres
 - Compiled with Clang
 - Compiled under Windows 10
 - C++ compatible
-- Takes advantage of MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2 and FMA intrinsics
+- Takes advantage of MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2 and FMA intrinsics
 - Contains only common single-precision floating-point vector operations
 - Has no dependency, but relies on `stdint.h`
 
