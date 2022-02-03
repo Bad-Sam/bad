@@ -66,6 +66,7 @@ typedef double   f64;
 #   if defined(__AVX__)
         typedef __m256  f32x8;
         typedef __m256i mask256;
+        typedef u32     mask_elem;
 #   else
         typedef struct
         {
