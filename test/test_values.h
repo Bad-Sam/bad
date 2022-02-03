@@ -23,6 +23,7 @@ static const f32 snan   = *(f32*)&snan_bits;
 static const f32 qnan   = *(f32*)&qnan_bits;
 static const f32 inf    = *(f32*)&inf_bits;
 static const f32 lower  = *(f32*)&lower_bits;
+static const f32 higher = *(f32*)&higher_bits;
 
 BAD_NAMESPACE_END
 
