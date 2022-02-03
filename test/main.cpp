@@ -2,9 +2,8 @@
 
 #include "tests/test_mask128.h"
 #include "tests/test_f32x4.h"
+#include "tests/test_f32x8.h"
 #include "tests/test_f32x4_calc.h"
-
-#include <bad/common/f32x4.h>
 
 #if defined(__cplusplus)
 using namespace bad;
@@ -30,7 +29,7 @@ int main()
     test_mask128_or();
     test_mask128_xor();
     test_mask128_not();
-    
+
     fprintf(stderr, "\n\n========== f32x4.h ==========");
     test_f32x4_zero();
     test_f32x4_one();
@@ -40,6 +39,16 @@ int main()
     test_f32x4_set1();
     test_f32x4_blend();
     test_f32x4_cast_mask128();
+
+    fprintf(stderr, "\n\n========== f32x8.h ==========");
+    test_f32x8_zero();
+    test_f32x8_one();
+    test_f32x8_load_store();
+    test_f32x8_loadu_storeu();
+    test_f32x8_set();
+    test_f32x8_set1();
+    test_f32x8_blend();
+    test_f32x8_cast_mask256();
     
     fprintf(stderr, "\n\n========== f32x4_calc.h ==========");
     test_f32x4_hadd();
