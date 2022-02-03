@@ -18,8 +18,7 @@ static bad_forceinline mask128 mask128_loadu(const mask_elem* mem_addr)
 }
 
 
-static bad_forceinline mask128 mask128_set(mask_elem a, mask_elem b,
-                                           mask_elem c, mask_elem d)
+static bad_forceinline mask128 mask128_set(mask_elem a, mask_elem b, mask_elem c, mask_elem d)
 {
     bad_align(16) const mask_elem e[4] = {a, b, c, d};
     return mask128_load(e);
@@ -85,7 +84,11 @@ static bad_forceinline mask128 mask128_all1()
 #   endif
 #else
     mask128 v;
-    return _mm_cmpeq_epi32(v, v);
+#   if defined(__SSE2__)
+        return _mm_cmpeq_epi32(v, v);
+#   else
+        return _mm_cmpeq_ps(v, v);
+#   endif
 #endif
 }
 
@@ -142,14 +145,27 @@ static bad_forceinline mask128 mask128_eq(mask128_vec0 a, mask128_vec1 b)
 #if defined(__SSE2__)
     return _mm_cmpeq_epi32(a, b);
 #else
-    return _mm_cmpeq_ps(a, b);
+    const mask128 a_nans = _mm_cmpunord_ps(a, a);
+    const mask128 b_nans = _mm_cmpunord_ps(b, b);
+    const mask128 nans   = _mm_and_ps(a_nans, b_nans);
+    
+    return _mm_or_ps(_mm_cmpeq_ps(a, b), nans);
 #endif
 }
 
 
 static bad_forceinline mask128 mask128_neq(mask128_vec0 a, mask128_vec1 b)
 {
-    return _mm_cmpneq_ps(mask128_cast_f32x4(a), mask128_cast_f32x4(b));
+#if defined(__SSE2__)
+    const mask128 eq = _mm_cmpeq_epi32(a, b);
+    return _mm_xor_si128(eq, _mm_cmpeq_epi32(a, a));
+#else
+    const mask128 a_ord = _mm_cmpord_ps(a, a);
+    const mask128 b_ord = _mm_cmpord_ps(b, b);
+    const mask128 ord   = _mm_or_ps(a_ord, b_ord);
+
+    return _mm_and_ps(_mm_cmpneq_ps(a, b), ord);
+#endif
 }
 
 
