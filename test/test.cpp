@@ -63,12 +63,6 @@ void reset_f32_array(f32* array, const s32 n)
 bool is_nan(const f32 a)
 {
     return a != a;
-/*
-    const u32 bits = *(u32*)&a;
-
-    return ((bits & 0x7F800000) == 0x7F800000)
-        && ((bits & 0x007FFFFF) != 0);
-*/
 }
 
 bool is_qnan(const f32 a)

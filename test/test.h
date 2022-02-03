@@ -58,12 +58,20 @@ void test_report();
 
 
 // Tools
-#define print_f32x4(v)                                                              \
-do                                                                                  \
-{                                                                                   \
-    f32 __c[4];                                                                     \
-    f32x4_storeu(__c, (v));                                                         \
-    fprintf(stderr, "\n%s = [%f, %f, %f, %f]", #v, __c[0], __c[1], __c[2], __c[3]); \
+#define print_f32x4(__v)                                                                \
+do                                                                                    \
+{                                                                                     \
+    f32 __c[4];                                                                       \
+    f32x4_storeu(__c, (__v));                                                         \
+    fprintf(stderr, "\n%s = [%f, %f, %f, %f]", #__v, __c[0], __c[1], __c[2], __c[3]); \
+} while(0)
+
+#define print_mask128(__v)                                                            \
+do                                                                                    \
+{                                                                                     \
+    mask_elem __c[4];                                                                 \
+    mask128_storeu(__c, (__v));                                                       \
+    fprintf(stderr, "\n%s = [%X, %X, %X, %X]", #__v, __c[0], __c[1], __c[2], __c[3]); \
 } while(0)
 
 f32  random_f32(const s32 min, const f32 range);
