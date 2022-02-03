@@ -1,7 +1,7 @@
 #include "test_f32x4_calc.h"
 
 #include "../test.h"
-#include "../f32_values.h"
+#include "../test_values.h"
 
 #include <bad/types.h>
 #include <bad/qualifiers.h>
@@ -38,7 +38,7 @@ void test_f32x4_abs()
     const f32x4 a = f32x4_set(qnan, -inf, inf, -denorm);
     const f32x4 b = f32x4_set(-10.26f, -.0f, .0f, 3.56f);
 
-    const f32 expected_a[4] = {snan, inf, inf, denorm};
+    const f32 expected_a[4] = {snan, inf, inf, -denorm};
     const f32 expected_b[4] = {10.26f, .0f, .0f, 3.56f};
 
     f32 a_abs_out[4];
