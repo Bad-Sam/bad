@@ -47,7 +47,7 @@ General:
 - [ ] Work on Linux support
 - [ ] Support compilation with GCC and MSVC
 - [ ] Support compilation under ARM
-- [ ] Support for other ISAs (PowerPC, MIPS, RISC-V?)
+- [ ] Add support for more SIMD instruction sets (PowerPC, MIPS, Helium?)
 
 Common:
 - [ ] Implement `f32xn` and `maskn`, a general vector type built on top of the most suited SIMD ISA available for the needs of the user
