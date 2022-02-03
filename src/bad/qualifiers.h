@@ -18,19 +18,21 @@
 #endif
 
 // bad_align
-#if defined(_MSC_VER)
-#   define bad_align(x) __declspec(align((x)))
-#elif defined(__clang__)
-#   define bad_align(x) __attribute__((align_value((x))))
-#elif defined(__GNUC__)
+#if defined(__GNUC__)
 #   define bad_align(x) __attribute__((aligned((x))))
+#elif defined(_MSC_VER)
+#   define bad_align(x) __declspec(align((x)))
+#else
+#   define bad_align(x) _Alignas((x))
 #endif
 
 // bad_restrict
 #if defined(__cplusplus)
 #   define bad_restrict __restrict
-#else
+#elif defined(__clang__) || defined(__GNUC__)
 #   define bad_restrict restrict
+#else
+#   define bad_restrict
 #endif
 
 // bad_inline
