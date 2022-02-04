@@ -26,7 +26,7 @@ static bad_forceinline void bad_veccall f32x4_store(f32* mem_addr, f32x4_vec0 a)
 static bad_forceinline void bad_veccall f32x4_storeu(f32* mem_addr, f32x4_vec0 a);
 
 
-// ======= Selection & tests ========
+// ======= Selection ========
 static bad_forceinline f32x4 bad_veccall f32x4_blend(f32x4_vec0 a, f32x4_vec1 b, mask128_vec2 m);
 
 
