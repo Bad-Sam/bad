@@ -145,6 +145,7 @@ static bad_forceinline mask128 mask128_eq(mask128_vec0 a, mask128_vec1 b)
 #if defined(__SSE2__)
     return _mm_cmpeq_epi32(a, b);
 #else
+    // TODO: could we use MMX instrinsics to simplify this?
     const mask128 a_nans = _mm_cmpunord_ps(a, a);
     const mask128 b_nans = _mm_cmpunord_ps(b, b);
     const mask128 nans   = _mm_and_ps(a_nans, b_nans);
