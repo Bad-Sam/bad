@@ -37,7 +37,7 @@ Because I am working on this library primarily to learn, it is a work in progres
     - [`debug.h`](src/bad/debug.h): debug-mode runtime checks through macros
     - [`qualifiers.h`](src/bad/qualifiers.h): a variety of qualifiers used to affect how the compiler generates code
     - [`types.h`](src/bad/types.h): where data types available to the library are included, declared and typedef'ed
-- [`test`](test/): unit tests on important and/or non-trivial functions
+- [`test/`](test/): unit tests on important and/or non-trivial functions
 - [`build.bat`](build.bat/): custom compilation script for Windows 10 with Clang. Can be called with `build`, `build run`, `build clean` or `build asm`
 - [`RESOURCES.md`](RESOURCES.md): a collection knowledge that helped me learn
 
@@ -54,6 +54,7 @@ Common:
 - [ ] Explore non-temporal loads and stores
 - [ ] Explore possible implementation of types whose size is not a multiple of the available vector width (vec2 and vec3 for instance)
 - [ ] Remove the dependency on `stdint.h` in [`types.h`](src/bad/types.h)
+- [ ] Learn about interoperability and penalties between ISA (SSE <--> AVX for instance), and manage them
 
 Tests:
 - [ ] Extend tests to all functions, trivial or not
