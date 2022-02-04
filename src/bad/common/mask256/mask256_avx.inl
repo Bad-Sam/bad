@@ -1,39 +1,39 @@
-static bad_forceinline mask256 mask256_load(const mask_elem* mem_addr)
+static bad_forceinline mask256 mask256_load(const u32* mem_addr)
 {
+    bad_assert_avx_aligned(mem_addr);
     return _mm256_load_si256((__m256i*)mem_addr);
 }
 
 
-static bad_forceinline mask256 mask256_loadu(const mask_elem* mem_addr)
+static bad_forceinline mask256 mask256_loadu(const u32* mem_addr)
 {
     return _mm256_loadu_si256((__m256i*)mem_addr);
 }
 
 
-static bad_forceinline mask256 mask256_set(mask_elem a, mask_elem b,
-                                           mask_elem c, mask_elem d,
-                                           mask_elem e, mask_elem f,
-                                           mask_elem g, mask_elem h)
+static bad_forceinline mask256 mask256_set(u32 a, u32 b, u32 c, u32 d,
+                                           u32 e, u32 f, u32 g, u32 h)
 {
-    return _mm256_set_epi32(a, b, c, d, e, f, g, h);
+    bad_align(32) const u32 mem_addr[8] = {a, b, c, d, e, f, g, h};
+    return mask256_load(mem_addr);
 }
 
 
-static bad_forceinline mask256 mask256_set1(mask_elem k)
+static bad_forceinline mask256 mask256_set1(u32 k)
 {
     return _mm256_set1_epi32(k);
 }
 
 
-static bad_forceinline void mask256_store(mask_elem* mem_addr, mask256_vec0 a)
+static bad_forceinline void mask256_store(u32* mem_addr, mask256_vec0 a)
 {
-    bad_assert_avx_aligned(mask_elem);
+    bad_assert_avx_aligned(mem_addr);
     
     _mm256_store_si256((__m256i*)mem_addr, a);
 }
 
 
-static bad_forceinline void mask256_storeu(mask_elem* mem_addr, mask256_vec0 a)
+static bad_forceinline void mask256_storeu(u32* mem_addr, mask256_vec0 a)
 {
     _mm256_storeu_si256((__m256i*)mem_addr, a);
 }
@@ -120,14 +120,26 @@ static bad_forceinline mask256 mask256_eq(mask256_vec0 a, mask256_vec1 b)
 #if defined(__AVX2__)
     return _mm256_cmpeq_epi32(a, b);
 #else
-    return _mm256_cmp_ps(_mm256_castps_si256(a), _mm256_castps_si256(b), _CMP_EQ_OQ);
+    const f32x4 a_nans = _mm256_cmp_ps(_mm256_castsi256_ps(a), _mm256_castsi256_ps(a), _CMP_UNORD_Q);
+    f32x4       nans   = _mm256_cmp_ps(_mm256_castsi256_ps(b), _mm256_castsi256_ps(b), _CMP_UNORD_Q);
+                nans   = _mm256_and_ps(a_nans, nans);
+    
+    return _mm256_castps_si256(_mm256_or_ps(_mm256_cmp_ps(a, b, _CMP_EQ_OQ), nans));
 #endif
 }
 
 
 static bad_forceinline mask256 mask256_neq(mask256_vec0 a, mask256_vec1 b)
 {
-    return _mm256_cmp_ps(_mm256_castsi256_ps(a), _mm256_castsi256_ps(b), _CMP_NEQ_OQ);
+#if defined(__AVX2__)
+    return _mm256_xor_si256(_mm256_cmpeq_epi32(a, b), _mm256_cmpeq_epi32(a, a));
+#else
+    const mask256 a_ord = _mm256_cmp_ps(_mm256_castsi256_ps(a), _mm256_castsi256_ps(a), _CMP_UNORD_Q);
+    const mask256 b_ord = _mm256_cmp_ps(_mm256_castsi256_ps(b), _mm256_castsi256_ps(b), _CMP_UNORD_Q);
+    const mask256 ord   = _mm256_and_ps(a_ord, b_ord);
+    
+    return _mm256_and_ps(_mm256_cmp_ps(a, b, _CMP_NEQ_OQ), ord);
+#endif
 }
 
 
