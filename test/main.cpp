@@ -1,6 +1,7 @@
 #include "test.h"
 
 #include "tests/test_mask128.h"
+#include "tests/test_mask256.h"
 #include "tests/test_f32x4.h"
 #include "tests/test_f32x8.h"
 #include "tests/test_f32x4_calc.h"
@@ -29,6 +30,25 @@ int main()
     test_mask128_or();
     test_mask128_xor();
     test_mask128_not();
+
+    fprintf(stderr, "\n\n========== mask256.h ==========");
+    test_mask256_load_store();
+    test_mask256_loadu_storeu();
+    test_mask256_set();
+    test_mask256_set1();
+    test_mask256_zero();
+    test_mask256_all1();
+    test_mask256_value32();
+    test_mask256_highbit32();
+    test_mask256_lowbit32();
+    test_mask256_exponent32();
+    test_mask256_eq();
+    test_mask256_neq();
+    test_mask256_and();
+    test_mask256_and_not();
+    test_mask256_or();
+    test_mask256_xor();
+    test_mask256_not();
 
     fprintf(stderr, "\n\n========== f32x4.h ==========");
     test_f32x4_zero();
