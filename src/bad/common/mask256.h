@@ -15,13 +15,13 @@
 BAD_NAMESPACE_START
 
 // ========== Load & store ==========
-static bad_forceinline mask256 mask256_load(const mask_elem* mem_addr);
-static bad_forceinline mask256 mask256_loadu(const mask_elem* mem_addr);
-static bad_forceinline mask256 mask256_set(mask_elem a, mask_elem b, mask_elem c, mask_elem d,
-                                           mask_elem e, mask_elem f, mask_elem g, mask_elem h);
-static bad_forceinline mask256 mask256_set1(mask_elem k);
-static bad_forceinline void bad_veccall mask256_store(mask_elem* mem_addr, mask256_vec0 a);
-static bad_forceinline void bad_veccall mask256_storeu(mask_elem* mem_addr, mask256_vec0 a);
+static bad_forceinline mask256 mask256_load(const u32* mem_addr);
+static bad_forceinline mask256 mask256_loadu(const u32* mem_addr);
+static bad_forceinline mask256 mask256_set(u32 a, u32 b, u32 c, u32 d,
+                                           u32 e, u32 f, u32 g, u32 h);
+static bad_forceinline mask256 mask256_set1(u32 k);
+static bad_forceinline void bad_veccall mask256_store(u32* mem_addr, mask256_vec0 a);
+static bad_forceinline void bad_veccall mask256_storeu(u32* mem_addr, mask256_vec0 a);
 
 
 // ========== Common masks ==========
