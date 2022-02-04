@@ -48,8 +48,7 @@ static bad_forceinline f32 bad_veccall f32x8_hadd(f32x8_vec0 a)
     f32x4 high  = _mm256_extractf128_ps(v, 1);
     low         = _mm_add_ps(low, high);
 
-    // TODO: isn't there a penalty for the AVX <--> SSE transition?
-    //       If so, find an alternative 
+    // TODO: manage the penalty for the AVX <--> SSE transition 
     f32x4 shuf = _mm_movehdup_ps(low);
     f32x4 sums = _mm_add_ps(low, shuf);
     shuf       = _mm_movehl_ps(shuf, sums);
