@@ -5,10 +5,6 @@
 #include <bad/common/mask128.h>
 #include <bad/qualifiers.h>
 
-#if defined(__SSE__) && !defined(__SSE2__)
-#   define BAD_TEST_F32_MASK
-#endif
-
 BAD_NAMESPACE_START
 
 void test_mask128_load_store()
@@ -16,7 +12,7 @@ void test_mask128_load_store()
 // With SSE, mask128_load/mask128_store is the same as _mm_load_ps/_mm_store_ps,
 // which are already tested in test_f32x4.cpp
 #if defined(__SSE2__)
-    bad_align(16) const u32 a[4] = {all1_bits, nosign_bits, zero_bits, lower_bits};
+    bad_align(16) const u32 a[4] = {all1, nosign, zero, lowbit32};
     bad_align(16) const u32 b[4] = {6484587u, 3u, 55u, 987654321u};
 
     bad_align(16) u32 a_out[4];
@@ -41,7 +37,7 @@ void test_mask128_loadu_storeu()
 // With SSE, mask128_loadu/mask128_storeu is the same as _mm_loadu_ps/_mm_storeu_ps,
 // which are already tested in test_f32x4.cpp
 #if defined(__SSE2__)
-    const u32 a[4] = {all1_bits, nosign_bits, zero_bits, lower_bits};
+    const u32 a[4] = {all1, nosign, zero, lowbit32};
     const u32 b[4] = {6484587u, 3u, 55u, 987654321u};
 
     u32 a_out[4];
@@ -66,7 +62,7 @@ void test_mask128_set()
 // With SSE, mask128_set is the same as _mm_set_ps,
 // which is already tested in test_f32x4.cpp
 #if defined(__SSE2__)
-    const u32 a[4] = {all1_bits, nosign_bits, zero_bits, lower_bits};
+    const u32 a[4] = {all1, nosign, zero, lowbit32};
     const u32 b[4] = {6484587u, 3u, 55u, 987654321u};
 
     u32 a_set_store[4];
@@ -91,7 +87,7 @@ void test_mask128_set1()
 // With SSE, mask128_set1 is the same as _mm_set1_ps,
 // which is already tested in test_f32x4.cpp
 #if defined(__SSE2__)
-    const u32 a = all1_bits;
+    const u32 a = all1;
     const u32 b = 6484587u;
 
     u32 a_set1_store[4];
@@ -116,16 +112,10 @@ void test_mask128_zero()
     mask_elem zero_store[4];
     mask128_storeu(zero_store, mask128_zero());
 
-#if defined(BAD_TEST_F32_MASK)
-    const f32 expected_zero = .0f;
-#else
-    const u32 expected_zero = zero_bits;
-#endif
-
-    bad_test_check(zero_store[0] == expected_zero
-                && zero_store[1] == expected_zero
-                && zero_store[2] == expected_zero
-                && zero_store[3] == expected_zero);
+    bad_test_check(zero_store[0] == zero
+                && zero_store[1] == zero
+                && zero_store[2] == zero
+                && zero_store[3] == zero);
 }
 
 
@@ -134,17 +124,10 @@ void test_mask128_all1()
     u32 all1_out[4];
     mask128_storeu(all1_out, mask128_all1());
 
-#if defined(BAD_TEST_F32_MASK)
-    const u32 all1_bits     = all1_bits;
-    const f32 expected_all1 = *(f32*)&all1_bits;
-#else
-    const u32 expected_all1 = all1_bits;
-#endif
-
-    bad_test_check(all1_out[0] == expected_all1
-                && all1_out[1] == expected_all1
-                && all1_out[2] == expected_all1
-                && all1_out[3] == expected_all1);
+    bad_test_check(all1_out[0] == all1
+                && all1_out[1] == all1
+                && all1_out[2] == all1
+                && all1_out[3] == all1);
 }
 
 
@@ -153,17 +136,10 @@ void test_mask128_value32()
     mask_elem value32_out[4];
     mask128_storeu(value32_out, mask128_value32());
 
-#if defined(BAD_TEST_F32_MASK)
-    const u32 value32_bits     = nosign_bits;
-    const f32 expected_value32 = *(f32*)&value32_bits;
-#else
-    const u32 expected_value32 = nosign_bits;
-#endif
-
-    bad_test_check(value32_out[0] == expected_value32
-                && value32_out[1] == expected_value32
-                && value32_out[2] == expected_value32
-                && value32_out[3] == expected_value32);
+    bad_test_check(value32_out[0] == nosign
+                && value32_out[1] == nosign
+                && value32_out[2] == nosign
+                && value32_out[3] == nosign);
 }
 
 
@@ -172,16 +148,10 @@ void test_mask128_highbit32()
     mask_elem highbit32_out[4];
     mask128_storeu(highbit32_out, mask128_highbit32());
 
-#if defined(BAD_TEST_F32_MASK)
-    const f32 expected_highbit32 = *(f32*)&higher_bits;
-#else
-    const u32 expected_highbit32 = higher_bits;
-#endif
-
-    bad_test_check(highbit32_out[0] == expected_highbit32
-                && highbit32_out[1] == expected_highbit32
-                && highbit32_out[2] == expected_highbit32
-                && highbit32_out[3] == expected_highbit32);
+    bad_test_check(highbit32_out[0] == highbit32
+                && highbit32_out[1] == highbit32
+                && highbit32_out[2] == highbit32
+                && highbit32_out[3] == highbit32);
 }
 
 
@@ -190,11 +160,7 @@ void test_mask128_lowbit32()
     mask_elem lowbit32_out[4];
     mask128_storeu(lowbit32_out, mask128_lowbit32());
 
-#if defined(BAD_TEST_F32_MASK)
-    const f32 expected_lowbit32 = *(f32*)&lower_bits;
-#else
-    const u32 expected_lowbit32 = lower_bits;
-#endif
+    const f32 expected_lowbit32 = lowbit32;
 
     bad_test_check(lowbit32_out[0] == expected_lowbit32
                 && lowbit32_out[1] == expected_lowbit32
@@ -208,11 +174,7 @@ void test_mask128_exponent32()
     mask_elem exponent32_out[4];
     mask128_storeu(exponent32_out, mask128_exponent32());
 
-#if defined(BAD_TEST_F32_MASK)
-    const f32 expected_exponent32 = *(f32*)&inf_bits;
-#else
-    const u32 expected_exponent32 = inf_bits;
-#endif
+    const f32 expected_exponent32 = inf;
 
     bad_test_check(exponent32_out[0] == expected_exponent32
                 && exponent32_out[1] == expected_exponent32
@@ -228,9 +190,9 @@ void test_mask128_eq()
     const mask128 a2 = mask128_set(.0f, -53.5f, 36.84841f, -.0f);
     const mask128 b1 = mask128_set(qnan, inf, -inf, denorm);
 #else
-    const mask128 a1 = mask128_set(qnan_bits, ninf_bits, inf_bits, denorm_bits);
+    const mask128 a1 = mask128_set(qnan, ninf, inf, denorm);
     const mask128 a2 = mask128_set(6484587u, 0u, 55u, 987654321u);
-    const mask128 b1 = mask128_set(qnan_bits, inf_bits, ninf_bits, denorm_bits);
+    const mask128 b1 = mask128_set(qnan, inf, ninf, denorm);
 #endif
 
     mask_elem eq1_store[4];
@@ -238,10 +200,10 @@ void test_mask128_eq()
     mask128_storeu(eq1_store, mask128_eq(a1, b1));
     mask128_storeu(eq2_store, mask128_eq(a2, a2));    
 
-#if defined(BAD_TEST_F32_MASK)
-    const f32 expected_eq1[4] = {.0f, .0f, .0f, all1};
+    const f32 expected_eq1[4] = {all1, zero, zero, all1};
     const f32 expected_eq2[4] = {all1, all1, all1, all1};
 
+#if defined(BAD_TEST_F32_MASK)
     bad_test_check(eq1_store[0] == expected_eq1[0]
                 && eq1_store[1] == expected_eq1[1]
                 && eq1_store[2] == expected_eq1[2]
@@ -251,9 +213,6 @@ void test_mask128_eq()
                 && is_qnan(eq2_store[2])
                 && is_qnan(eq2_store[3]));
 #else
-    const u32 expected_eq1[4] = {all1_bits, zero_bits, zero_bits, all1_bits};
-    const u32 expected_eq2[4] = {all1_bits, all1_bits, all1_bits, all1_bits};
-
     bad_test_check(eq1_store[0] == expected_eq1[0]
                 && eq1_store[1] == expected_eq1[1]
                 && eq1_store[2] == expected_eq1[2]
@@ -273,9 +232,9 @@ void test_mask128_neq()
     const mask128 a2 = mask128_set(.0f, -53.5f, 36.84841f, -.0f);
     const mask128 b1 = mask128_set(qnan, inf, -inf, denorm);
 #else
-    const mask128 a1 = mask128_set(qnan_bits, ninf_bits, inf_bits, denorm_bits);
+    const mask128 a1 = mask128_set(qnan, ninf, inf, denorm);
     const mask128 a2 = mask128_set(6484587u, 0u, 55u, 987654321u);
-    const mask128 b1 = mask128_set(qnan_bits, inf_bits, ninf_bits, denorm_bits);
+    const mask128 b1 = mask128_set(qnan, inf, ninf, denorm);
 #endif
 
     mask_elem eq1_store[4];
@@ -296,8 +255,8 @@ void test_mask128_neq()
                 && eq2_store[2] == expected_eq2[2]
                 && eq2_store[3] == expected_eq2[3]);
 #else
-    const f32 expected_eq1[4] = {zero_bits, all1_bits, all1_bits, zero_bits};
-    const f32 expected_eq2[4] = {zero_bits, zero_bits, zero_bits, zero_bits};
+    const f32 expected_eq1[4] = {zero, all1, all1, zero};
+    const f32 expected_eq2[4] = {zero, zero, zero, zero};
 
     bad_test_check(eq1_store[0] == expected_eq1[0]
                 && eq1_store[1] == expected_eq1[1]
@@ -315,11 +274,11 @@ void test_mask128_and()
 {
 #if defined(BAD_TEST_F32_MASK)
     const mask128 a1 = mask128_set(qnan, -inf, denorm, all1);
-    const mask128 a2 = mask128_set(all1, .0f, -.0f, lower);
+    const mask128 a2 = mask128_set(all1, .0f, -.0f, lowbit32);
     const mask128 b  = mask128_set(1.f, 2.f, -3.f, 4.f);
 #else
-    const mask128 a1 = mask128_set(qnan_bits, ninf_bits, denorm_bits, all1_bits);
-    const mask128 a2 = mask128_set(all1_bits, zero_bits, higher_bits, lower_bits);
+    const mask128 a1 = mask128_set(qnan, ninf, denorm, all1);
+    const mask128 a2 = mask128_set(all1, zero, highbit32, lowbit32);
     const mask128 b  = mask128_set(0x3F800000, 0x40000000, 0xC0400000, 0x40800000);
 #endif
 
@@ -332,8 +291,8 @@ void test_mask128_and()
     const f32 expected_and1[4] = {1.f, 2.f, 2.f, 4.f};
     const f32 expected_and2[4] = {1.f, .0f, -.0f, .0f};
 #else
-    const u32 expected_and1[4] = {0x3F800000, 0x40000000, higher_bits, 0x40800000};
-    const u32 expected_and2[4] = {0x3F800000, zero_bits, higher_bits, zero_bits};
+    const u32 expected_and1[4] = {0x3F800000, 0x40000000, highbit32, 0x40800000};
+    const u32 expected_and2[4] = {0x3F800000, zero, highbit32, zero};
 #endif
 
     bad_test_check(and1_store[0] == expected_and1[0]
@@ -351,11 +310,11 @@ void test_mask128_and_not()
 {
 #if defined(BAD_TEST_F32_MASK)
     const mask128 a1 = mask128_set(qnan, -inf, denorm, all1);
-    const mask128 a2 = mask128_set(all1, .0f, -.0f, lower);
+    const mask128 a2 = mask128_set(all1, .0f, -.0f, lowbit32);
     const mask128 b  = mask128_set(1.f, 2.f, -3.f, 4.f);
 #else
-    const mask128 a1 = mask128_set(qnan_bits, ninf_bits, denorm_bits, all1_bits);
-    const mask128 a2 = mask128_set(all1_bits, zero_bits, higher_bits, lower_bits);
+    const mask128 a1 = mask128_set(qnan, ninf, denorm, all1);
+    const mask128 a2 = mask128_set(all1, zero, highbit32, lowbit32);
     const mask128 b  = mask128_set(0x3F800000, 0x40000000, 0xC0400000, 0x40800000);
 #endif
 
@@ -366,10 +325,10 @@ void test_mask128_and_not()
 
 #if defined(BAD_TEST_F32_MASK)
     const f32 expected_and_not1[4] = {0xC00A6A0C, 0xBF800000, 0x0019010E, 0xBF7FFFFF};
-    const f32 expected_and_not2[4] = {0xC07FFFFF, .0f, .0f, lower};
+    const f32 expected_and_not2[4] = {0xC07FFFFF, .0f, .0f, lowbit32};
 #else
     const u32 expected_and_not1[4] = {0xC00A6A0C, 0xBF800000, 0x0019010E, 0xBF7FFFFF};
-    const u32 expected_and_not2[4] = {0xC07FFFFF, zero_bits, zero_bits, lower_bits};
+    const u32 expected_and_not2[4] = {0xC07FFFFF, zero, zero, lowbit32};
 #endif
 
     bad_test_check(and_not1_store[0] == expected_and_not1[0]
@@ -387,11 +346,11 @@ void test_mask128_or()
 {
 #if defined(BAD_TEST_F32_MASK)
     const mask128 a1 = mask128_set(qnan, -inf, denorm, all1);
-    const mask128 a2 = mask128_set(all1, .0f, -.0f, lower);
+    const mask128 a2 = mask128_set(all1, .0f, -.0f, lowbit32);
     const mask128 b  = mask128_set(1.f, 2.f, -3.f, 4.f);
 #else
-    const mask128 a1 = mask128_set(qnan_bits, ninf_bits, denorm_bits, all1_bits);
-    const mask128 a2 = mask128_set(all1_bits, zero_bits, higher_bits, lower_bits);
+    const mask128 a1 = mask128_set(qnan, ninf, denorm, all1);
+    const mask128 a2 = mask128_set(all1, zero, highbit32, lowbit32);
     const mask128 b  = mask128_set(0x3F800000, 0x40000000, 0xC0400000, 0x40800000);
 #endif
 
@@ -404,8 +363,8 @@ void test_mask128_or()
     const f32 expected_or1[4] = {0xFF8A6A0C, -inf, 0xC059010E, all1};
     const f32 expected_or2[4] = {all1, 2.f, -3.f, 0x40800001};
 #else
-    const u32 expected_or1[4] = {0xFF8A6A0C, ninf_bits, 0xC059010E, all1_bits};
-    const u32 expected_or2[4] = {all1_bits, 0x40000000, 0xC0400000, 0x40800001};
+    const u32 expected_or1[4] = {0xFF8A6A0C, ninf, 0xC059010E, all1};
+    const u32 expected_or2[4] = {all1, 0x40000000, 0xC0400000, 0x40800001};
 #endif
 
 #if defined(BAD_TEST_F32_MASK)
@@ -427,11 +386,11 @@ void test_mask128_xor()
 {
 #if defined(BAD_TEST_F32_MASK)
     const mask128 a1 = mask128_set(qnan, -inf, denorm, all1);
-    const mask128 a2 = mask128_set(all1, .0f, -.0f, lower);
+    const mask128 a2 = mask128_set(all1, .0f, -.0f, lowbit32);
     const mask128 b  = mask128_set(1.f, 2.f, -3.f, 4.f);
 #else
-    const mask128 a1 = mask128_set(qnan_bits, ninf_bits, denorm_bits, all1_bits);
-    const mask128 a2 = mask128_set(all1_bits, zero_bits, higher_bits, lower_bits);
+    const mask128 a1 = mask128_set(qnan, ninf, denorm, all1);
+    const mask128 a2 = mask128_set(all1, zero, highbit32, lowbit32);
     const mask128 b  = mask128_set(0x3F800000, 0x40000000, 0xC0400000, 0x40800000);
 #endif
 
@@ -460,7 +419,7 @@ void test_mask128_not()
     const mask128 a = mask128_set(qnan, -inf, denorm, all1);
     const mask128 b = mask128_set(1.f, 2.f, -3.f, 4.f);
 #else
-    const mask128 a = mask128_set(qnan_bits, ninf_bits, denorm_bits, all1_bits);
+    const mask128 a = mask128_set(qnan, ninf, denorm, all1);
     const mask128 b = mask128_set(0x3F800000, 0x40000000, 0xC0400000, 0x40800000);
 #endif
 

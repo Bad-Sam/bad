@@ -1,6 +1,6 @@
 #include "test_f32x4.h" 
 #include "../test.h"
-#include "../test_values.h" // qnan, inf, -inf, denorm, all1
+#include "../test_values.h" // qnan, inff, -inff, denormf, all1
 
 #include <bad/types.h>
 #include <bad/qualifiers.h>
@@ -39,7 +39,7 @@ void test_f32x4_one()
 
 void test_f32x4_load_store()
 {
-    bad_align(16) const f32 a[4] = {qnan, inf, -inf, denorm};
+    bad_align(16) const f32 a[4] = {qnanf, inff, -inff, denormf};
     bad_align(16) const f32 b[4] = {.0f, 1.f, -2.f, 10.f};
     bad_align(16) f32 a_load_store[4];
     bad_align(16) f32 b_load_store[4];
@@ -60,7 +60,7 @@ void test_f32x4_load_store()
 
 void test_f32x4_loadu_storeu()
 {
-    const f32 a[4] = {qnan, inf, -inf, denorm};
+    const f32 a[4] = {qnanf, inff, -inff, denormf};
     const f32 b[4] = {.0f, 1.f, -2.f, 10.f};
     f32 a_loadu_storeu[4];
     f32 b_loadu_storeu[4];
@@ -81,7 +81,7 @@ void test_f32x4_loadu_storeu()
 
 void test_f32x4_set()
 {
-    const f32 a[4] = {qnan, inf, -inf, denorm};
+    const f32 a[4] = {qnanf, inff, -inff, denormf};
     const f32 b[4] = {.0f, 1.f, -2.f, 10.f};
     f32 a_set[4];
     f32 b_set[4];
@@ -102,7 +102,7 @@ void test_f32x4_set()
 
 void test_f32x4_set1()
 {
-    const f32 a[4] = {qnan, inf, -inf, denorm};
+    const f32 a[4] = {qnanf, inff, -inff, denormf};
     const f32 b[4] = {.0f, 1.f, -2.f, 10.f};
     f32 a0_set[4];
     f32 a1_set[4];
@@ -135,21 +135,17 @@ void test_f32x4_set1()
 
 void test_f32x4_blend()
 {
-    const f32x4 a = f32x4_set(snan, qnan, -inf, denorm);
-    const f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.608f);
-
-#if defined(__SSE__) && !defined(__SSE2__)
-    const mask128 mask = mask128_set(all1, all1, all1, .0f);
-#else
-    const mask128 mask = mask128_set(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000);
-#endif
-    const f32 expected_blend1[4] = {snan, qnan, -inf, -9595.608f};
-    const f32 expected_blend2[4] = {.0f, -.0f, 10.6f, denorm};
+    const f32x4 a      = f32x4_set(snanf, qnanf, -inff, denormf);
+    const f32x4 b      = f32x4_set(.0f, -.0f, 10.6f, -9595.608f);
+    const mask128 mask = mask128_set(all1, all1, all1, zero);
 
     f32 blend1_store[4];
     f32 blend2_store[4];
     f32x4_storeu(blend1_store, f32x4_blend(a, b, mask));
     f32x4_storeu(blend2_store, f32x4_blend(b, a, mask));
+
+    const f32 expected_blend1[4] = {snanf, qnanf, -inff, -9595.608f};
+    const f32 expected_blend2[4] = {.0f, -.0f, 10.6f, denormf};
 
     bad_test_check(is_snan(blend1_store[0])
                 && is_qnan(blend1_store[1])
@@ -164,29 +160,18 @@ void test_f32x4_blend()
 
 void test_f32x4_cast_mask128()
 {
-    const f32x4 a = f32x4_set(snan, qnan, -inf, denorm);
+    const f32x4 a = f32x4_set(snanf, qnanf, -inff, denormf);
     const f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.608f);
 
-#if defined(__SSE__) && !defined(__SSE2__)
-    const f32 expected_a_cast[4] = {snan, qnan, -inf, denorm};
-    const f32 expected_a_cast[4] = {.0f, -.0f, 10.6f, -9595.608f};
-#else
-    const u32 expected_a_cast[4] = {snan_bits, qnan_bits, ninf_bits, denorm_bits};
-    const u32 expected_b_cast[4] = {0x00000000, 0x80000000, 0x4129999A, 0xC615EE6F};
-#endif
-
-#if defined(__SSE__) && !defined(__SSE2__)
-    f32 cast_a_store[4];
-    f32 cast_b_store[4];
-#else
-    u32 cast_a_store[4];
-    u32 cast_b_store[4];
-#endif
-
+    mask_elem cast_a_store[4];
+    mask_elem cast_b_store[4];
     mask128_storeu(cast_a_store, f32x4_cast_mask128(a));
     mask128_storeu(cast_b_store, f32x4_cast_mask128(b));
 
-#if defined(__SSE__) && !defined(__SSE2__)
+    const mask_elem expected_a_cast[4] = {snan, qnan, ninf, denorm};
+    const mask_elem expected_b_cast[4] = {0x00000000, 0x80000000, 0x4129999A, 0xC615EE6F};
+
+#if defined(BAD_TEST_F32_MASK)
     bad_test_check(is_snan(cast_a_store[0])
                 && is_qnan(cast_a_store[1])
                 && cast_a_store[2] == expected_a_cast[2]
