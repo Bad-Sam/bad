@@ -34,7 +34,7 @@ static bad_forceinline f32 bad_veccall f32x4_hadd(f32x4_vec0 a)
     sums       = _mm_add_ss(sums, shuf);
 
     return _mm_cvtss_f32(sums);
-#elif defined(__SSE__)
+#else
     f32x4 shuf = _mm_shuffle_ps(a, a, _MM_SHUFFLE(2, 3, 0, 1));
     f32x4 sums = _mm_add_ps(a, shuf);
     shuf       = _mm_movehl_ps(shuf, sums);
@@ -81,8 +81,25 @@ static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4_vec0 a)
 #if defined(__SSE2__)
     // Shift out the sign bit, shift in zero instead
     return _mm_castsi128_ps(_mm_srli_epi32(_mm_slli_epi32(_mm_castps_si128(a), 1), 1));
-#elif defined(__SSE__)
+#else
     return _mm_and_ps(mask128_value32(), a);
+#endif
+}
+
+
+static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4_vec0 a)
+{
+#if defined(__SSE2__)
+    mask128       a_sign = _mm_cmpeq_epi32(_mm_castps_si128(a), _mm_castps_si128(a));
+    const mask128 one    = _mm_slli_epi32(_mm_srli_epi32(a_sign, 25), 23);
+                  a_sign = _mm_slli_epi32(_mm_srli_epi32(_mm_castps_si128(a), 31), 31);
+
+    return _mm_castsi128_ps(_mm_or_si128(one, a_sign));
+#else
+    const f32x4 one    = f32x4_one();
+    const f32x4 a_sign = _mm_and_ps(mask128_highbit32(), a);
+
+    return _mm_or_ps(a_sign, one);
 #endif
 }
 
@@ -113,7 +130,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4_vec0 a)
     return _mm_round_ps(a, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC);
 #elif defined(__SSE2__)
     return _mm_cvtepi32_ps(_mm_cvttps_epi32(a));
-#elif defined(__SSE__)
+#else
     const __m64 low  = _mm_cvttps_pi32(a);
     const __m64 high = _mm_cvttps_pi32(_mm_shuffle_ps(a, a, _MM_SHUFFLE(0, 0, 3, 2)));
 
