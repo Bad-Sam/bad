@@ -11,6 +11,7 @@ void test_f32x4_hadd();
 
 // ====== Advanced arithmetic =======
 void test_f32x4_abs();
+void test_f32x4_sign();
 void test_f32x4_neg();
 void test_f32x4_mod();
 void test_f32x4_trunc();
@@ -24,7 +25,16 @@ void test_f32x4_nmul_add();
 void test_f32x4_nmul_sub();
 
 
-// ======= Selection & tests ========
+// ============ Comparison ============
+void test_f32x4_neq();
+void test_f32x4_eq();
+void test_f32x4_ge();
+void test_f32x4_gt();
+void test_f32x4_le();
+void test_f32x4_lt();
+
+
+// ======= Tests ========
 void test_f32x4_is_nan();
 void test_f32x4_is_infinite();
 void test_f32x4_is_finite();

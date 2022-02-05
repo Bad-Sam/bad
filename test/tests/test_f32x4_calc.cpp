@@ -57,6 +57,30 @@ void test_f32x4_abs()
 }
 
 
+void test_f32x4_sign()
+{
+    const f32x4 a = f32x4_set(qnanf, -inff, inff, denormf);
+    const f32x4 b = f32x4_set(-10.26f, -.0f, .0f, 3.56f);
+
+    const f32 expected_a[4] = {-1.f, -1.f, 1.f, -1.f};
+    const f32 expected_b[4] = {-1.f, -1.f, 1.f, 1.f};
+
+    f32 a_sign_out[4];
+    f32 b_sign_out[4];
+    f32x4_storeu(a_sign_out, f32x4_sign(a));
+    f32x4_storeu(b_sign_out, f32x4_sign(b));
+
+    bad_test_check(a_sign_out[0] == expected_a[0]
+                && a_sign_out[1] == expected_a[1]
+                && a_sign_out[2] == expected_a[2]
+                && a_sign_out[3] == expected_a[3]
+                && b_sign_out[0] == expected_b[0]
+                && b_sign_out[1] == expected_b[1]
+                && b_sign_out[2] == expected_b[2]
+                && b_sign_out[3] == expected_b[3]);
+}
+
+
 void test_f32x4_neg()
 {
     const f32x4 a = f32x4_set(snanf, inff, -inff, -denormf);
@@ -353,6 +377,157 @@ void test_f32x4_nmul_sub()
 #endif
                   );
 }
+
+
+void test_f32x4_neq()
+{
+    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    const f32x4 b  = f32x4_set(qnanf, qnanf, -inff, -denormf);
+
+    u32 neq0_store[4];
+    u32 neq1_store[4];
+    mask128_storeu(neq0_store, f32x4_neq(a0, b));
+    mask128_storeu(neq1_store, f32x4_neq(a1, b));
+
+    const u32 expected_neq0[4] = {all1, all1, zero, all1};
+    const u32 expected_neq1[4] = {all1, all1, all1, zero};
+
+    bad_test_check(neq0_store[0] == expected_neq0[0]
+                && neq0_store[1] == expected_neq0[1]
+                && neq0_store[2] == expected_neq0[2]
+                && neq0_store[3] == expected_neq0[3]
+                && neq1_store[0] == expected_neq1[0]
+                && neq1_store[1] == expected_neq1[1]
+                && neq1_store[2] == expected_neq1[2]
+                && neq1_store[3] == expected_neq1[3]);
+}
+
+
+void test_f32x4_eq()
+{
+    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    const f32x4 b  = f32x4_set(qnanf, qnanf, -inff, -denormf);
+
+    u32 eq0_store[4];
+    u32 eq1_store[4];
+    mask128_storeu(eq0_store, f32x4_eq(a0, b));
+    mask128_storeu(eq1_store, f32x4_eq(a1, b));
+
+    const u32 expected_eq0[4] = {zero, zero, all1, zero};
+    const u32 expected_eq1[4] = {zero, zero, zero, all1};
+
+    bad_test_check(eq0_store[0] == expected_eq0[0]
+                && eq0_store[1] == expected_eq0[1]
+                && eq0_store[2] == expected_eq0[2]
+                && eq0_store[3] == expected_eq0[3]
+                && eq1_store[0] == expected_eq1[0]
+                && eq1_store[1] == expected_eq1[1]
+                && eq1_store[2] == expected_eq1[2]
+                && eq1_store[3] == expected_eq1[3]);
+}
+
+
+void test_f32x4_ge()
+{
+    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    const f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
+
+    u32 ge0_store[4];
+    u32 ge1_store[4];
+    mask128_storeu(ge0_store, f32x4_ge(a0, b));
+    mask128_storeu(ge1_store, f32x4_ge(a1, b));
+
+    const u32 expected_ge0[4] = {zero, zero, all1, zero};
+    const u32 expected_ge1[4] = {zero, all1, all1, all1};
+
+    bad_test_check(ge0_store[0] == expected_ge0[0]
+                && ge0_store[1] == expected_ge0[1]
+                && ge0_store[2] == expected_ge0[2]
+                && ge0_store[3] == expected_ge0[3]
+                && ge1_store[0] == expected_ge1[0]
+                && ge1_store[1] == expected_ge1[1]
+                && ge1_store[2] == expected_ge1[2]
+                && ge1_store[3] == expected_ge1[3]);
+}
+
+
+void test_f32x4_gt()
+{
+    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    const f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
+
+    u32 gt0_store[4];
+    u32 gt1_store[4];
+    mask128_storeu(gt0_store, f32x4_gt(a0, b));
+    mask128_storeu(gt1_store, f32x4_gt(a1, b));
+
+    const u32 expected_gt0[4] = {zero, zero, zero, zero};
+    const u32 expected_gt1[4] = {zero, zero, all1, all1};
+
+    bad_test_check(gt0_store[0] == expected_gt0[0]
+                && gt0_store[1] == expected_gt0[1]
+                && gt0_store[2] == expected_gt0[2]
+                && gt0_store[3] == expected_gt0[3]
+                && gt1_store[0] == expected_gt1[0]
+                && gt1_store[1] == expected_gt1[1]
+                && gt1_store[2] == expected_gt1[2]
+                && gt1_store[3] == expected_gt1[3]);
+}
+
+
+void test_f32x4_le()
+{
+    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    const f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
+
+    u32 le0_store[4];
+    u32 le1_store[4];
+    mask128_storeu(le0_store, f32x4_le(a0, b));
+    mask128_storeu(le1_store, f32x4_le(a1, b));
+
+    const u32 expected_le0[4] = {zero, zero, all1, all1};
+    const u32 expected_le1[4] = {all1, all1, zero, zero};
+
+    bad_test_check(le0_store[0] == expected_le0[0]
+                && le0_store[1] == expected_le0[1]
+                && le0_store[2] == expected_le0[2]
+                && le0_store[3] == expected_le0[3]
+                && le1_store[0] == expected_le1[0]
+                && le1_store[1] == expected_le1[1]
+                && le1_store[2] == expected_le1[2]
+                && le1_store[3] == expected_le1[3]);
+}
+
+
+void test_f32x4_lt()
+{
+    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    const f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
+
+    u32 lt0_store[4];
+    u32 lt1_store[4];
+    mask128_storeu(lt0_store, f32x4_lt(a0, b));
+    mask128_storeu(lt1_store, f32x4_lt(a1, b));
+
+    const u32 expected_lt0[4] = {zero, zero, zero, all1};
+    const u32 expected_lt1[4] = {all1, zero, zero, zero};
+
+    bad_test_check(lt0_store[0] == expected_lt0[0]
+                && lt0_store[1] == expected_lt0[1]
+                && lt0_store[2] == expected_lt0[2]
+                && lt0_store[3] == expected_lt0[3]
+                && lt1_store[0] == expected_lt1[0]
+                && lt1_store[1] == expected_lt1[1]
+                && lt1_store[2] == expected_lt1[2]
+                && lt1_store[3] == expected_lt1[3]);
+}
+
 
 void test_f32x4_is_nan()
 {
