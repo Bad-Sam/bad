@@ -32,6 +32,7 @@ static bad_forceinline f32x8 bad_veccall f32x8_max(f32x8_vec0 a, f32x8_vec1 b);
 
 // TODO: power, exponential, log, 
 static bad_forceinline f32x8 bad_veccall f32x8_abs(f32x8_vec0 a);
+static bad_forceinline f32x8 bad_veccall f32x8_sign(f32x8_vec0 a);
 static bad_forceinline f32x8 bad_veccall f32x8_neg(f32x8_vec0 a);
 static bad_forceinline f32x8 bad_veccall f32x8_mod(f32x8_vec0 a, f32x8_vec1 b);
 static bad_forceinline f32x8 bad_veccall f32x8_trunc(f32x8_vec0 a);
