@@ -13,9 +13,13 @@ static bad_forceinline f32x8 f32x8_zero()
 
 static bad_forceinline f32x8 f32x8_one()
 {
+#if defined(__AVX2__)
     const mask256 one = _mm256_slli_epi32(_mm256_srli_epi32(mask256_all1(), 25), 23);
 
     return _mm256_castsi256_ps(one);
+#else
+    return _mm256_set1_ps(1.f);
+#endif
 }
 
 
