@@ -44,7 +44,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_sqrt(f32x4_vec0 a)
 
 static bad_forceinline f32x4 bad_veccall f32x4_rsqrt(f32x4_vec0 a)
 {
-    return _mm_rsqrt_ps(a);
+    return vrsqrteq_f32(a);
 }
 
 
@@ -63,6 +63,16 @@ static bad_forceinline f32x4 bad_veccall f32x4_max(f32x4_vec0 a, f32x4_vec1 b)
 static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4_vec0 a)
 {
     return vabsq_f32(a);
+}
+
+
+static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4_vec0 a)
+{
+          mask128 a_sign = vceqq_u32(vreinterpretq_u32_f32(a), vreinterpretq_u32_f32(a));
+    const mask128 one    = vshlq_n_u32(vshrq_n_u32(a_sign, 25), 23);
+                  a_sign = vshlq_n_u32(vshrq_n_u32(vreinterpretq_u32_f32(a), 31), 31);
+
+    return vreinterpretq_f32_u32(vorq_u32(one, a_sign));
 }
 
 
