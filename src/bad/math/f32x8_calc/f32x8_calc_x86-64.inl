@@ -44,8 +44,8 @@ static bad_forceinline f32x8 bad_veccall f32x8_div(f32x8_vec0 a, f32x8_vec1 b)
 static bad_forceinline f32 bad_veccall f32x8_hadd(f32x8_vec0 a)
 {
 #if defined(__AVX__)
-    f32x4 low   = _mm256_castps256_ps128(v);
-    f32x4 high  = _mm256_extractf128_ps(v, 1);
+    f32x4 low   = _mm256_castps256_ps128(a);
+    f32x4 high  = _mm256_extractf128_ps(a, 1);
     low         = _mm_add_ps(low, high);
 
     // TODO: manage the penalty for the AVX <--> SSE transition 
@@ -129,6 +129,44 @@ static bad_forceinline f32x8 bad_veccall f32x8_abs(f32x8_vec0 a)
 }
 
 
+static bad_forceinline f32x8 bad_veccall f32x8_sign(f32x8_vec0 a)
+{
+#if defined(__AVX2__)
+    mask256       a_sign = _mm256_cmpeq_epi32(_mm256_castps_si256(a), _mm256_castps_si256(a));
+    const mask256 one    = _mm256_slli_epi32(_mm256_srli_epi32(a_sign, 25), 23);
+                  a_sign = _mm256_slli_epi32(_mm256_srli_epi32(_mm256_castps_si256(a), 31), 31);
+
+    return _mm256_castsi256_ps(_mm256_or_si256(one, a_sign));
+#elif defined(__AVX__)
+    const f32x8   one    = _mm256_set1_ps(1.f);
+    const mask256 a_sign = _mm256_and_ps(_mm256_castsi256_ps(_mm256_set1_epi32(0x7FFFFFFF)), a);
+
+    return _mm256_or_ps(one, a_sign);
+#elif defined(__SSE2__)
+    // b_sign is all1
+    mask128       b_sign = _mm_cmpeq_epi32(_mm_castps_si128(a.a), _mm_castps_si128(a.a));
+    const mask128 one    = _mm_slli_epi32(_mm_srli_epi32(b_sign, 25), 23);
+    mask128       a_sign = _mm_slli_epi32(_mm_srli_epi32(_mm_castps_si128(a.a), 31), 31);
+                  b_sign = _mm_slli_epi32(_mm_srli_epi32(_mm_castps_si128(a.b), 31), 31);
+
+    return (f32x8)
+    {
+        _mm_castsi128_ps(_mm_or_si128(one, a_sign)),
+        _mm_castsi128_ps(_mm_or_si128(one, b_sign)),
+    }
+#else
+    const f32x4 one       = f32x4_one();
+    const f32x4 sign_mask = mask128_highbit32();
+
+    return (f32x8)
+    {
+        _mm_and_ps(_mm_or_ps(sign_mask, a.a), one),
+        _mm_and_ps(_mm_or_ps(sign_mask, a.b), one),
+    }
+#endif
+}
+
+
 static bad_forceinline f32x8 bad_veccall f32x8_neg(f32x8_vec0 a)
 {
 #if defined(__AVX2__)
@@ -160,7 +198,7 @@ static bad_forceinline f32x8 bad_veccall f32x8_mod(f32x8_vec0 a, f32x8_vec1 b)
 static bad_forceinline f32x8 bad_veccall f32x8_trunc(f32x8_vec0 a)
 {
 #if defined(__AVX__)
-    _mm256_round_ps(a, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC);
+    return _mm256_round_ps(a, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC);
 #else
     return (f32x8){f32x4_trunc(a.a), f32x4_trunc(a.b)};
 #endif
@@ -190,7 +228,7 @@ static bad_forceinline f32x8 bad_veccall f32x8_floor(f32x8_vec0 a)
 static bad_forceinline f32x8 bad_veccall f32x8_ceil(f32x8_vec0 a)
 {
 #if defined(__AVX__)
-    return _mm256_ceil_pss(a);
+    return _mm256_ceil_ps(a);
 #else
     return (f32x8){f32x4_ceil(a.a), f32x4_ceil(a.b)};
 #endif
@@ -255,7 +293,7 @@ static bad_forceinline f32x8 bad_veccall f32x8_nmul_sub(f32x8_vec0 a, f32x8_vec1
 static bad_forceinline mask256 bad_veccall f32x8_neq(f32x8_vec0 a, f32x8_vec1 b)
 {
 #if defined(__AVX__)
-    return _mm256_castps_si256(_mm256_cmp_ps(a, b, _CMP_NEQ_OQ));
+    return _mm256_castps_si256(_mm256_cmp_ps(a, b, _CMP_NEQ_UQ));
 #else
     return (f32x8){f32x4_neq(a.a, b.a), f32x4_neq(a.b, b.b)};
 #endif
@@ -332,7 +370,7 @@ static bad_forceinline mask256 bad_veccall f32x8_is_infinite(f32x8_vec0 a)
     mask256 a_abs           = _mm256_srli_epi32(all1_mask, 1);
     a_abs                   = _mm256_and_si256(a_abs, _mm256_castps_si256(a));
 
-    return _mm256_cmpeq_epi32(a_abs, inf_mask, _CMP_EQ_OQ);
+    return _mm256_cmpeq_epi32(a_abs, inf_mask);
 #else
 #   if defined(__SSE2__)
     mask128 a_abs          = mask128_all1();
@@ -363,14 +401,14 @@ static bad_forceinline mask256 bad_veccall f32x8_is_finite(f32x8_vec0 a)
 #if defined(__AVX__)
     // a is finite if its exponent is not all 1
     const mask256 exp_mask = mask256_exponent32();
-    return mask256_eq(mask256_and(f32x8_cast_mask256(a), exp_mask), exp_mask);
+    return mask256_neq(mask256_and(f32x8_cast_mask256(a), exp_mask), exp_mask);
 #else
     const mask128 exp_mask = mask128_exponent32();
 
     return (f32x8)
     {
-        mask128_eq(mask128_and(f32x4_cast_mask128(a.a), exp_mask), exp_mask),
-        mask128_eq(mask128_and(f32x4_cast_mask128(a.b), exp_mask), exp_mask),
+        mask128_neq(mask128_and(f32x4_cast_mask128(a.a), exp_mask), exp_mask),
+        mask128_neq(mask128_and(f32x4_cast_mask128(a.b), exp_mask), exp_mask),
     };
 #endif
 }
