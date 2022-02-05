@@ -26,8 +26,9 @@ static bad_forceinline f32x4 bad_veccall f32x4_rsqrt(f32x4_vec0 a);
 static bad_forceinline f32x4 bad_veccall f32x4_min(f32x4_vec0 a, f32x4_vec1 b);
 static bad_forceinline f32x4 bad_veccall f32x4_max(f32x4_vec0 a, f32x4_vec1 b);
 
-// TODO: power, exponential, log, 
+// TODO: power, exponential, log
 static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4_vec0 a);
+static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4_vec0 a);
 static bad_forceinline f32x4 bad_veccall f32x4_neg(f32x4_vec0 a);
 static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4_vec0 a, f32x4_vec1 b);
 static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4_vec0 a);
@@ -51,7 +52,7 @@ static bad_forceinline mask128 bad_veccall f32x4_le(f32x4_vec0 a, f32x4_vec1 b);
 static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4_vec0 a, f32x4_vec1 b);
 
 
-// ======= Selection & tests ========
+// ======= Tests ========
 static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4_vec0 a);
 static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4_vec0 a);
 static bad_forceinline mask128 bad_veccall f32x4_is_finite(f32x4_vec0 a);
