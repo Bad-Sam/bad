@@ -36,7 +36,7 @@ static bad_forceinline mask256 bad_veccall f32x8_cast_mask256(f32x8_vec0 a);
 
 
 #if defined(__AVX__)
-#   include "f32x8/f32x8_x86-64.inl"
+#   include "f32x8/f32x8_avx.inl"
 #else
 #   include "f32x8/f32x8_no_avx.inl"
 #endif
