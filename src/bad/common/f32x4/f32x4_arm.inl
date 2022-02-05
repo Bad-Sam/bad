@@ -15,8 +15,9 @@ static bad_forceinline f32x4 f32x4_zero()
 
 static bad_forceinline f32x4 f32x4_one()
 {
-    const f32x4 v;
-    return vreinterpretq_f32_u32(vceqq_f32(v, v));
+    const mask128 one = vshlq_n_u32(vshrq_n_u32(mask128_all1(), 25), 23);
+
+    return vreinterpretq_f32_u32(one);
 }
 
 
