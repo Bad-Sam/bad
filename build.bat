@@ -21,7 +21,7 @@ set COMP=clang++ -std=c++17 -pipe
 set INCLUDE_DIR=-I%SRC_DIR% -I%TEST_DIR%
 set MACRO=-DNDEBUG
 ::  -ferror-limit=0
-set WARNING=-W -Wall -Werror -Wextra -Wshadow -Wnon-virtual-dtor -Wno-uninitialized -Wfatal-errors
+set WARNING=-W -Wall -Werror -Wextra -Wshadow -Wnon-virtual-dtor -Wno-uninitialized
 set OPTI=-O3 -march=native -mno-vaes
 set ASM=-fverbose-asm -masm=intel
 
