@@ -112,19 +112,44 @@ static bad_forceinline f32x4 f32x4_max(f32x4_vec0 a, f32x4_vec1 b)
 
 static bad_forceinline f32x4 f32x4_abs(f32x4_vec0 a)
 {
-    const mask128 abs_mask = mask128_value32();
-    const mask128 a_mask   = f32x4_cast_mask128(a);
+    const u32 value_mask = 0x7FFFFFFF;
+    const mask128 a_mask = f32x4_cast_mask128(a);
 
-    return mask128_cast_f32x4(mask128_and(a_mask, abs_mask));
+    a_mask.x &= value_mask;
+    a_mask.y &= value_mask;
+    a_mask.z &= value_mask;
+    a_mask.w &= value_mask;
+
+    return mask128_cast_f32x4(a_mask);
+}
+
+
+static bad_forceinline f32x4 f32x4_sign(f32x4_vec0 a)
+{
+    const u32 sign_mask = 0x80000000;
+    const u32 one_mask  = 0x3F800000;
+    mask128   a_mask    = f32x4_cast_mask128(a);
+
+    a_mask.x = (a_mask.x & sign_mask) | one_mask;
+    a_mask.y = (a_mask.y & sign_mask) | one_mask;
+    a_mask.z = (a_mask.z & sign_mask) | one_mask;
+    a_mask.w = (a_mask.w & sign_mask) | one_mask;
+
+    return mask128_cast_f32x4(a_mask);
 }
 
 
 static bad_forceinline f32x4 f32x4_neg(f32x4_vec0 a)
 {
-    const mask128 neg_mask = mask128_highbit32();
-    const mask128 a_mask   = f32x4_cast_mask128(a);
+    const u32 sign_mask = 0x80000000;
+    mask128   a_mask    = f32x4_cast_mask128(a);
+
+    a_mask.x ^= sign_mask;
+    a_mask.y ^= sign_mask;
+    a_mask.z ^= sign_mask;
+    a_mask.w ^= sign_mask;
     
-    return mask128_cast_f32x4(mask128_xor(a_mask, neg_mask));
+    return mask128_cast_f32x4(a_mask);
 }
 
 
@@ -159,10 +184,14 @@ static bad_forceinline f32x4 f32x4_round(f32x4_vec0 a)
 
 static bad_forceinline f32x4 f32x4_floor(f32x4_vec0 a)
 {
-    const f32x4   truncated = f32x4_trunc(a);
-    const mask128 greater   = f32x4_gt(a, truncated);
-    const mask128 one       = f32x4_cast_mask128(f32x4_one());
-    const mask128 decrement = mask128_and(greater, one);
+    const u32   one       = 0x3F800000;
+    const f32x4 truncated = f32x4_trunc(a);
+    mask128     decrement = f32x4_gt(a, truncated);
+    
+    decrement.x &= one;
+    decrement.y &= one;
+    decrement.z &= one;
+    decrement.w &= one;
 
     return f32x4_sub(truncated, mask128_cast_f32x4(decrement));
 }
@@ -170,10 +199,14 @@ static bad_forceinline f32x4 f32x4_floor(f32x4_vec0 a)
 
 static bad_forceinline f32x4 f32x4_ceil(f32x4_vec0 a)
 {
-    const f32x4   truncated = f32x4_trunc(a);
-    const mask128 less      = f32x4_lt(a, truncated);
-    const mask128 one       = f32x4_cast_mask128(f32x4_one());
-    const mask128 increment = mask128_and(less, one);
+    const u32   one       = 0x3F800000;
+    const f32x4 truncated = f32x4_trunc(a);
+    mask128     increment = f32x4_lt(a, truncated);
+
+    increment.x &= one;
+    increment.y &= one;
+    increment.z &= one;
+    increment.w &= one;
 
     return f32x4_add(truncated, mask128_cast_f32x4(increment));
 }
@@ -297,18 +330,38 @@ static bad_forceinline mask128 f32x4_is_nan(f32x4_vec0 a)
 
 static bad_forceinline mask128 f32x4_is_infinite(f32x4_vec0 a)
 {
-    const mask128 nosign_mask = mask128_value32();
-    const mask128 inf_mask    = mask128_exponent32();
-    const mask128 a_mask      = f32x4_cast_mask128(a);
+    const u32 value_mask = 0x7FFFFFFF;
+    const u32 inf_mask   = 0x7F800000;
+    mask128   a_mask     = f32x4_cast_mask128(a);
 
-    return mask128_eq(mask128_and(a_mask, nosign_mask), inf_mask);
+    a_mask.x &= value_mask;
+    a_mask.y &= value_mask;
+    a_mask.z &= value_mask;
+    a_mask.w &= value_mask;
+
+    a_mask.x = (a_mask.x == inf_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+    a_mask.y = (a_mask.y == inf_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+    a_mask.z = (a_mask.z == inf_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+    a_mask.w = (a_mask.w == inf_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+
+    return a_mask;
 }
 
 
 static bad_forceinline mask128 f32x4_is_finite(f32x4_vec0 a)
 {
-    const mask128 exp_mask = mask128_exponent32();
-    const mask128 a_mask   = f32x4_cast_mask128(a);
+    const u32 exp_mask = 0x7F800000;
+    mask128   a_mask   = f32x4_cast_mask128(a);
 
-    return mask128_neq(mask128_and(a_mask, exp_mask), exp_mask);
+    a_mask.x &= exp_mask;
+    a_mask.y &= exp_mask;
+    a_mask.z &= exp_mask;
+    a_mask.w &= exp_mask;
+
+    a_mask.x = (a_mask.x != exp_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+    a_mask.y = (a_mask.y != exp_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+    a_mask.z = (a_mask.z != exp_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+    a_mask.w = (a_mask.w != exp_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+
+    return a_mask;
 }
