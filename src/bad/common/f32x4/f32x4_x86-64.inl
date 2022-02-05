@@ -29,7 +29,6 @@ static bad_forceinline f32x4 f32x4_load(const f32* mem_addr)
     bad_assert_sse_aligned(mem_addr);
 
 #if defined(__SSE2__)
-    // NOTE: si128 version has a better throughput
     return _mm_load_si128((__m128i*)mem_addr);
 #else
     return _mm_load_ps(mem_addr);
@@ -40,7 +39,6 @@ static bad_forceinline f32x4 f32x4_load(const f32* mem_addr)
 static bad_forceinline f32x4 f32x4_loadu(const f32* mem_addr)
 {
 #if defined(__SSE2__)
-    // NOTE: si128 version has a better throughput
     return _mm_loadu_si128((__m128i*)mem_addr);
 #else
     return _mm_loadu_ps(mem_addr);
@@ -65,7 +63,6 @@ static bad_forceinline void bad_veccall f32x4_store(f32* mem_addr, f32x4_vec0 a)
     bad_assert_sse_aligned(mem_addr);
 
 #if defined(__SSE2__)
-    // NOTE: si128 version has a better throughput
     return _mm_store_si128((__m128i*)mem_addr, a);
 #else
     return _mm_store_ps(mem_addr, a);
@@ -76,7 +73,6 @@ static bad_forceinline void bad_veccall f32x4_store(f32* mem_addr, f32x4_vec0 a)
 static bad_forceinline void bad_veccall f32x4_storeu(f32* mem_addr, f32x4_vec0 a)
 {
 #if defined(__SSE2__)
-    // NOTE: si128 version has a better throughput
     return _mm_storeu_si128((__m128i*)mem_addr, a);
 #else
     return _mm_storeu_ps(mem_addr, a);
