@@ -66,6 +66,21 @@ static bad_forceinline f32x8 bad_veccall f32x8_abs(f32x8_vec0 a)
 }
 
 
+static bad_forceinline f32x8 bad_veccall f32x8_sign(f32x8_vec0 a)
+{
+          mask128 b_sign = vceqq_u32(vreinterpretq_u32_f32(a.a), vreinterpretq_u32_f32(a.a));
+    const mask128 one    = vshlq_n_u32(vshrq_n_u32(b_sign, 25), 23);
+          mask128 a_sign = vshlq_n_u32(vshrq_n_u32(vreinterpretq_u32_f32(a.a), 31), 31);
+                  b_sign = vshlq_n_u32(vshrq_n_u32(vreinterpretq_u32_f32(a.b), 31), 31);
+
+    return (f32x8)
+    {
+        vvreinterpretq_f32_u32(vorq_u32(one, a_sign)),
+        vvreinterpretq_f32_u32(vorq_u32(one, b_sign))
+    };
+}
+
+
 static bad_forceinline f32x8 bad_veccall f32x8_neg(f32x8_vec0 a)
 {
     return (f32x8){f32x4_neg(a.a, b.a), f32x4_neg(a.b, b.b)};
