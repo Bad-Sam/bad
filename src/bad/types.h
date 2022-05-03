@@ -5,9 +5,10 @@
 #include <bad/detect/isa.h>
 #include <bad/qualifiers.h>
 
-// TODO: find an alternative to <stdint.h>
+// TODO: find an alternative
 #include <stdint.h>
 
+// TODO move to simd_header.h
 #if defined(__FMA__) || defined(__AVX__)
 #   include <immintrin.h>
 #elif defined(__SSE4_2__)
@@ -81,9 +82,9 @@ typedef double   f64;
         } mask256;
 #   endif
 #elif defined(__ARM_NEON_FP)
-    typedef float32x4_t   f32x4;
-    typedef uint32x4_t    mask128;
-    typedef u32           mask_elem;
+    typedef float32x4_t f32x4;
+    typedef uint32x4_t  mask128;
+    typedef u32         mask_elem;
 
     typedef struct
     {
@@ -102,14 +103,21 @@ typedef double   f64;
         f32 e[4];
         struct
         {
-            f32 x; f32 y; f32 z; f32 w;
+            f32 x;
+            f32 y;
+            f32 z;
+            f32 w;
         };
     } f32x4;
 
-    typedef struct
+    typedef union
     {
-        f32x4 a;
-        f32x4 b;
+        f32x4 e[2];
+        struct
+        {
+            f32x4 a;
+            f32x4 b;
+        }
     } f32x8;
 
     typedef union
@@ -117,7 +125,10 @@ typedef double   f64;
         u32 e[4];
         struct
         {
-            u32 x; u32 y; u32 z; u32 w;
+            u32 x;
+            u32 y;
+            u32 z;
+            u32 w;
         };
     } mask128;
 
