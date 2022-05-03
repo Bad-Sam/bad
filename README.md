@@ -47,7 +47,8 @@ General:
 - [ ] Work on Linux support
 - [ ] Support compilation with GCC and MSVC
 - [ ] Support compilation under ARM
-- [ ] Add support for more SIMD instruction sets (PowerPC, MIPS, Helium?)
+- [ ] Add support for more SIMD instruction sets (RISC-V "V", PowerPC's AltiVec, MIPS' MSA, ARM's Helium?)
+- [ ] Take endianness in consideration
 
 Common:
 - [ ] Implement `f32xn` and `maskn`, a general vector type built on top of the most suited SIMD ISA available for the needs of the user
@@ -62,13 +63,12 @@ Tests:
 
 Math:
 - [ ] Migrate calculus/mathematical functions in `common/f32x4.h` to `math`
-- [ ] Implement common calculus functions such as power, exponential, log
+- [ ] Implement common calculus functions such as power, exponential, log, cos, sin, tan...
 - [ ] Implement 4-dimensional vector
 - [ ] Implement 3-dimensional vector
 - [ ] Implement quaternion
 - [ ] Implement 4x4, 3x4 and 3x3 matrices
 - [ ] Implement math types conversion functions
-- [ ] Implement common trigonometric functions
 - [ ] Implement common splines
 
 Collisions & intersections:
