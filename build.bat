@@ -16,20 +16,23 @@ set SRC=
 set OBJ=
 
 :: Compilation flags
-set COMP=clang++ -std=c++17 -pipe
-:: Don't replace INCLUDE_DIR by INCLUDE. INCLUDE can be a global path variable
+set COMP=clang++ -pipe
+:: Don't replace INCLUDE_DIR by INCLUDE. INCLUDE may be a global path variable
 set INCLUDE_DIR=-I%SRC_DIR% -I%TEST_DIR%
 set MACRO=-DNDEBUG
-::  -ferror-limit=0
 set WARNING=-W -Wall -Werror -Wextra -Wshadow -Wnon-virtual-dtor -Wno-uninitialized
 set OPTI=-O3 -march=native -mno-vaes
 set ASM=-fverbose-asm -masm=intel
 
 :: Rules
 if "%1"=="" (
+    call :find_src
+    call :find_test
     call :compile
     exit /B 0
 ) else if "%1"=="asm" (
+    call :find_src
+    call :find_test
     call :asm
     exit /B 0
 ) else if "%1"=="run" (
@@ -57,6 +60,9 @@ if "%1"=="" (
         set file=%%f
         set "SRC=!SRC!!file! "
     )
+    exit /B 0
+
+:find_test
     for /R %TEST_DIR% %%f in (*.cpp) do (
         set file=%%f
         set "SRC=!SRC!!file! "
@@ -67,7 +73,6 @@ if "%1"=="" (
 :: Asm output
 :asm
     setlocal EnableDelayedExpansion
-    call :find_src
 
     :: Create the build and objects directories if they do not exist
     mkdir %BUILD_DIR% 2> nul
@@ -88,7 +93,6 @@ if "%1"=="" (
 :: Compile into a binary
 :compile
     setlocal EnableDelayedExpansion
-    call :find_src
 
     :: Create the build and objects directories if they do not exist
     mkdir %BUILD_DIR% 2> nul
@@ -99,16 +103,16 @@ if "%1"=="" (
     set "startTime=%time: =0%"
 
     :: Isolate the file and its extension from the absolute path to make its .o file path
-    for %%i in (!SRC!) do (
-        set src_file=%%~nxi
-        set obj_file=!src_file:.cpp=.o!
-        set obj_file=%~dp0%!OBJ_DIR!!obj_file!
-        set "OBJ=!OBJ!!obj_file! "
-        
-        %COMP% %INCLUDE_DIR% %MACRO% %WARNING% %OPTI% -c %%i -o !obj_file!
-    )
+    ::for %%i in (!SRC!) do (
+    ::    set src_file=%%~nxi
+    ::    set obj_file=!src_file:.cpp=.o!
+    ::    set obj_file=%~dp0%!OBJ_DIR!!obj_file!
+    ::    set "OBJ=!OBJ!!obj_file! "
+    ::    
+    ::    %COMP% %INCLUDE_DIR% %MACRO% %WARNING% %OPTI% -c %%i -o !obj_file!
+    ::)
 
-    %COMP% %WARNING% %OPTI% %LIB% !OBJ! -o %BINARY%
+    %COMP% %INCLUDE_DIR% %MACRO% %WARNING% %OPTI% %LIB% !SRC! -o %BINARY%
 
     :: https://stackoverflow.com/a/9935540
     set "endTime=%time: =0%"
