@@ -9,4 +9,8 @@
 #   define BAD_NAMESPACE_END
 #endif
 
+#if defined(__SSE__) || defined(__ARM_NEON_FP)
+#   define BAD_SIMD_AVAILABLE
+#endif
+
 #endif
