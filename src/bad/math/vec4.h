@@ -3,25 +3,21 @@
 
 #include <bad/args.h>
 #include <bad/types.h>
+#include <bad/qualifiers.h>
 
-#include <bad/common/f32x4.h>
+#include <bad/math/f32x4_calc.h>
+#include <bad/debug.h>
 
 BAD_NAMESPACE_START
 
 typedef f32x4 vec4;
 
-static bad_inline f32 bad_veccall vec4_dot(vec4_vec0 v0, vec4_vec1 v1);
-/*
-void bad_veccall vec4_dotn(f32* const dot,
-                                           const vec4* const bad_restrict v0,
-                                           const vec4* const bad_restrict v1,
-                                           const u32 n);
+bad_inline f32  bad_veccall vec4_dot           (f32x4_vec1 v0, f32x4_vec1 v1);
+bad_inline f32  bad_veccall vec4_length_squared(f32x4_vec1 v0);
+bad_inline f32  bad_veccall vec4_length        (f32x4_vec1 v0);
+bad_inline vec4 bad_veccall vec4_unit          (f32x4_vec0 v0);
+bad_inline vec4 bad_veccall vec4_lerp          (f32x4_vec1 v0, f32x4_vec1 v1, f32 t);
 
-void bad_veccall f32_dotn(f32* const dot,
-                                          const f32* const bad_restrict v0,
-                                          const f32* const bad_restrict v1,
-                                          const u32 n);
-*/
 #include "vec4.inl"
 
 BAD_NAMESPACE_END
