@@ -63,7 +63,7 @@ do                                                                              
 {                                                                                     \
     f32 __c[4];                                                                       \
     f32x4_storeu(__c, (__v));                                                         \
-    fprintf(stderr, "\n%s = [%f, %f, %f, %f]", #__v, __c[0], __c[1], __c[2], __c[3]); \
+    fprintf(stderr, "\n%s = [%.20f, %.20f, %.20f, %.20f]", #__v, __c[0], __c[1], __c[2], __c[3]); \
 } while(0)
 
 #define print_f32x8(__v)                                                     \
@@ -92,19 +92,27 @@ do                                                                           \
             __c[0], __c[1], __c[2], __c[3], __c[4], __c[5], __c[6], __c[7]); \
 } while(0)
 
-f32  random_f32(const s32 min, const f32 range);
-void randomize_f32_array(f32* array, const s32 n, const f32 min, const f32 max);
-void randomize_f32x4_array(f32x4* array, const s32 n, const f32 min, const f32 max);
-void reset_f32_array(f32* array, const s32 n);
-bool is_nan(const f32 a);
-bool is_qnan(const f32 a);
-bool is_snan(const f32 a);
-u8   biased_exponent(const f32 a);
-s8   unbiased_exponent(const f32 a);
-s8   sign(const s8 a);
-f32  abs(const f32 a);
-f32  ulp(const f32 a);
-bool are_equal_ulp(const f32 a, const f32 b);
+#define test_debug(cond)                                                      \
+do                                                                            \
+{                                                                             \
+    bool __cond_res = (cond);                                                 \
+    fprintf(stderr, "\n%s returns %s", #cond, __cond_res ? "true" : "false"); \
+} while(0)
+
+f32  random_f32(f32 min, f32 range);
+void randomize_f32_array(f32* array, s32 n, f32 min, f32 max);
+void randomize_f32x4_array(f32x4* array, s32 n, f32 min, f32 max);
+void reset_f32_array(f32* array, s32 n);
+bool is_nan(f32 a);
+bool is_qnan(f32 a);
+bool is_snan(f32 a);
+u8   unbiased_exponent(f32 a);
+s8   exponent(f32 a);
+s8   sign(s8 a);
+f32  abs(f32 a);
+f32  ulp(f32 a);
+bool are_equal_ulp(f32 a, f32 b);
+bool are_equal_n_ulp(f32 a, f32 b, f32 ulp_delta);
 
 BAD_NAMESPACE_END
 

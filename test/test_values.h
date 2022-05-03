@@ -10,8 +10,8 @@ BAD_NAMESPACE_START
 #   define BAD_TEST_F32_MASK
     static const u32 all1_bits      = 0xFFFFFFFF;
     static const u32 denorm_bits    = 0x8019010E;
-    static const u32 snan_bits      = 0x7F80E030;
-    static const u32 qnan_bits      = 0xFF8A6A0C;
+    static const u32 snan_bits      = 0x7FA00000;
+    static const u32 qnan_bits      = 0x7FC00000;
     static const u32 inf_bits       = 0x7F800000;
     static const u32 ninf_bits      = 0xFF800000;
     static const u32 nosign_bits    = 0x7FFFFFFF;
@@ -41,8 +41,8 @@ BAD_NAMESPACE_START
 #else
     static const u32 all1       = 0xFFFFFFFF;
     static const u32 denorm     = 0x8019010E;
-    static const u32 snan       = 0x7F80E030;
-    static const u32 qnan       = 0xFF8A6A0C;
+    static const u32 snan       = 0x7FA00000;
+    static const u32 qnan       = 0x7FC00000;
     static const u32 inf        = 0x7F800000;
     static const u32 ninf       = 0xFF800000;
     static const u32 nosign     = 0x7FFFFFFF;
@@ -55,6 +55,7 @@ BAD_NAMESPACE_START
     static const f32 snanf      = *(f32*)&snan;
     static const f32 qnanf      = *(f32*)&qnan;
     static const f32 inff       = *(f32*)&inf;
+    static const f32 ninff      = *(f32*)&ninf;
     static const f32 zerof      = *(f32*)&zero;
     static const f32 lowbit32f  = *(f32*)&lowbit32;
     static const f32 highbit32f = *(f32*)&highbit32;
