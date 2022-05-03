@@ -2,9 +2,10 @@
 This is a glossary of all the resources I used to develop the code in this repository.  
 Resources I found especially helpful are in **bold**.
 
-## Libraries
+## Projects & repositories
 - Nicholas Frechette's [Real Time Math (RTM)](https://github.com/nfrechette/rtm)
 - DLTcollab's [sse2neon](https://github.com/DLTcollab/sse2neon) (Intel SSE intrinsics to ARM/ARM64 Neon instrinsics
+- MathGeniusJodie's [jodiemath](https://github.com/MathGeniusJodie/jodiemath)
 
 
 ## Compilers ##
@@ -33,10 +34,12 @@ Resources I found especially helpful are in **bold**.
 - **[Agner Fog's software optimization resources](https://www.agner.org/optimize/)**
 - **[Stack Overflow](https://stackoverflow.com/)**
 - [Fastest way to compute absolute value using SSE](https://stackoverflow.com/questions/32408665/fastest-way-to-compute-absolute-value-using-sse)
-- [Fastest way to do horizontal SSE vector sum or other reduction](https://stackoverflow.com/questions/6996764/fastest-way-to-do-horizontal-sse-vector-sum-or-other-reduction/35270026#35270026)
+- [Fastest way to do horizontal SSE vector sum or other reduction](https://stackoverflow.com/a/35270026)
 - **[Table of latency, throughput and port usage by micro-operation](https://www.uops.info/table.html)**
 - **[The uops.info code analyzer](https://uica.uops.info/)**
 - [SIMD at Insomniac Games](https://deplinenoise.files.wordpress.com/2015/03/gdc2015_afredriksson_simd.pdf)
+- [Fast, Approximate Exponential Function in C++](http://spfrnd.de/posts/2018-03-10-fast-exponential.html)
+- [Approximation theory and approximation practice by Lloyd  N. Trefethen](https://people.maths.ox.ac.uk/trefethen/ATAP/ATAPfirst6chapters.pdf)
 
 ### Memory access
 - [Memory part 5: what programmers can do](https://lwn.net/Articles/255364/)
@@ -44,6 +47,8 @@ Resources I found especially helpful are in **bold**.
 ### Math
 - [Chebyshev-approximation-based sin(x) implementation](https://web.archive.org/web/20200628195036/http://mooooo.ooo/chebyshev-sine-approximation/)
 - [Fast math function implementation](https://stackoverflow.com/questions/18662261/fastest-implementation-of-sine-cosine-and-square-root-in-c-doesnt-need-to-b)
+- ["Rational approximation of functions", by Bengt Carlson & Max Goldstein](https://www.osti.gov/servlets/purl/4374577)
+- ["Handbook of mathematical functions", Chapter 4: "Elementary transcendental functions"](http://jonsson.eu/resources/hmf/aas_hmf_master.pdf#page=79&zoom=auto,-214,770)
 
 ### SIMD ISAs
 
