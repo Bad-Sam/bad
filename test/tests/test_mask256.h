@@ -8,7 +8,7 @@ BAD_NAMESPACE_START
 void test_mask256_load_store();
 void test_mask256_loadu_storeu();
 void test_mask256_set();
-void test_mask256_set1();
+void test_mask256_set_all();
 void test_mask256_zero();
 void test_mask256_all1();
 void test_mask256_value32();

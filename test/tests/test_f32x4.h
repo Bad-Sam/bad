@@ -14,14 +14,14 @@ void test_f32x4_one();
 void test_f32x4_load_store();
 void test_f32x4_loadu_storeu();
 void test_f32x4_set();
-void test_f32x4_set1();
+void test_f32x4_set_all();
 
 
 // ======= Selection ========
 void test_f32x4_blend();
 
 // ============ Cast/reinterpret =============
-void test_f32x4_cast_mask128();
+void test_f32x4_as_mask128();
 
 BAD_NAMESPACE_END
 

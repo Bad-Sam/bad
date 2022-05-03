@@ -100,7 +100,7 @@ void test_f32x4_set()
 }
 
 
-void test_f32x4_set1()
+void test_f32x4_set_all()
 {
     const f32 a[4] = {qnanf, inff, -inff, denormf};
     const f32 b[4] = {.0f, 1.f, -2.f, 10.f};
@@ -113,14 +113,14 @@ void test_f32x4_set1()
     f32 b2_set[4];
     f32 b3_set[4];
 
-    f32x4_storeu(a0_set, f32x4_set1(a[0]));
-    f32x4_storeu(a1_set, f32x4_set1(a[1]));
-    f32x4_storeu(a2_set, f32x4_set1(a[2]));
-    f32x4_storeu(a3_set, f32x4_set1(a[3]));
-    f32x4_storeu(b0_set, f32x4_set1(b[0]));
-    f32x4_storeu(b1_set, f32x4_set1(b[1]));
-    f32x4_storeu(b2_set, f32x4_set1(b[2]));
-    f32x4_storeu(b3_set, f32x4_set1(b[3]));
+    f32x4_storeu(a0_set, f32x4_set_all(a[0]));
+    f32x4_storeu(a1_set, f32x4_set_all(a[1]));
+    f32x4_storeu(a2_set, f32x4_set_all(a[2]));
+    f32x4_storeu(a3_set, f32x4_set_all(a[3]));
+    f32x4_storeu(b0_set, f32x4_set_all(b[0]));
+    f32x4_storeu(b1_set, f32x4_set_all(b[1]));
+    f32x4_storeu(b2_set, f32x4_set_all(b[2]));
+    f32x4_storeu(b3_set, f32x4_set_all(b[3]));
     
     bad_test_check(is_qnan(a0_set[0]) && is_qnan(a0_set[1]) && is_qnan(a0_set[2]) && is_qnan(a0_set[3])
                 && a1_set[0] == a[1] && a1_set[1] == a[1] && a1_set[2] == a[1] && a1_set[3] == a[1]
@@ -158,15 +158,15 @@ void test_f32x4_blend()
 }
 
 
-void test_f32x4_cast_mask128()
+void test_f32x4_as_mask128()
 {
     const f32x4 a = f32x4_set(snanf, qnanf, -inff, denormf);
     const f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.608f);
 
     mask_elem cast_a_store[4];
     mask_elem cast_b_store[4];
-    mask128_storeu(cast_a_store, f32x4_cast_mask128(a));
-    mask128_storeu(cast_b_store, f32x4_cast_mask128(b));
+    mask128_storeu(cast_a_store, f32x4_as_mask128(a));
+    mask128_storeu(cast_b_store, f32x4_as_mask128(b));
 
     const mask_elem expected_a_cast[4] = {snan, qnan, ninf, denorm};
     const mask_elem expected_b_cast[4] = {0x00000000, 0x80000000, 0x4129999A, 0xC615EE6F};

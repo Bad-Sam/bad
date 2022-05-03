@@ -9,37 +9,101 @@
 
 BAD_NAMESPACE_START
 
-void test_f32x4_hadd()
+void test_f32x4_hadd3()
 {
-    const f32x4 a0 = f32x4_set(snanf, -1.f, .0f, 8.f);
-    const f32x4 a1 = f32x4_set(-inff, -1.f, .0f, 8.f);
-    const f32x4 a2 = f32x4_set(inff, -1.f, .0f, 8.f);
-    const f32x4 a3 = f32x4_set(denormf, -1.f, .0f, 8.f);
+    f32x4 a0 = f32x4_set(-1.f,   snanf, .0f, 8.f);
+    f32x4 a1 = f32x4_set(-1.f,   -inff, .0f, 8.f);
+    f32x4 a2 = f32x4_set(-1.f,    inff, .0f, 8.f);
+    f32x4 a3 = f32x4_set(-1.f, denormf, .0f, 8.f);
 
-    //const f32 expected_hadd0 = snan;
-    const f32 expected_hadd1 = -inff;
-    const f32 expected_hadd2 = inff;
-    const f32 expected_hadd3 = denormf + 7.f;
+    f32 expected_hadd[4] = {qnanf, -inff, inff, denormf - 1.f};
 
-    const f32 hadd0_store = f32x4_hadd(a0);
-    const f32 hadd1_store = f32x4_hadd(a1);
-    const f32 hadd2_store = f32x4_hadd(a2);
-    const f32 hadd3_store = f32x4_hadd(a3);
+    f32 hadd0_store[4], hadd1_store[4], hadd2_store[4], hadd3_store[4];
 
-    bad_test_check(is_snan(hadd0_store)
-                && hadd1_store == expected_hadd1
-                && hadd2_store == expected_hadd2
-                && hadd3_store == expected_hadd3);
+    f32x4_store(hadd0_store, f32x4_hadd3(a0));
+    f32x4_store(hadd1_store, f32x4_hadd3(a1));
+    f32x4_store(hadd2_store, f32x4_hadd3(a2));
+    f32x4_store(hadd3_store, f32x4_hadd3(a3));
+
+    bad_test_check(is_qnan(hadd0_store[0])
+                && hadd1_store[0] == expected_hadd[1]
+                && hadd2_store[0] == expected_hadd[2]
+                && hadd3_store[0] == expected_hadd[3]);
+}
+
+
+void test_f32x4_hadd4()
+{
+    f32x4 a0 = f32x4_set(snanf,   -1.f, .0f, 8.f);
+    f32x4 a1 = f32x4_set(-inff,   -1.f, .0f, 8.f);
+    f32x4 a2 = f32x4_set(inff,    -1.f, .0f, 8.f);
+    f32x4 a3 = f32x4_set(denormf, -1.f, .0f, 8.f);
+
+    f32 expected_hadd[4] = {qnanf, -inff, inff, denormf + 7.f};
+
+    f32 hadd0_store[4], hadd1_store[4], hadd2_store[4], hadd3_store[4];
+
+    f32x4_store(hadd0_store, f32x4_hadd4(a0));
+    f32x4_store(hadd1_store, f32x4_hadd4(a1));
+    f32x4_store(hadd2_store, f32x4_hadd4(a2));
+    f32x4_store(hadd3_store, f32x4_hadd4(a3));
+
+    bad_test_check(is_qnan(hadd0_store[0])
+                && hadd1_store[0] == expected_hadd[1]
+                && hadd2_store[0] == expected_hadd[2]
+                && hadd3_store[0] == expected_hadd[3]);
+}
+
+
+void test_f32x4_sum3()
+{
+    f32x4 a0 = f32x4_set(-1.f,   snanf, .0f, 8.f);
+    f32x4 a1 = f32x4_set(-1.f,   -inff, .0f, 8.f);
+    f32x4 a2 = f32x4_set(-1.f,    inff, .0f, 8.f);
+    f32x4 a3 = f32x4_set(-1.f, denormf, .0f, 8.f);
+
+    f32 expected_sum[4] = {qnanf, -inff, inff, denormf - 1.f};
+
+    f32 sum0_store = f32x4_sum3(a0);
+    f32 sum1_store = f32x4_sum3(a1);
+    f32 sum2_store = f32x4_sum3(a2);
+    f32 sum3_store = f32x4_sum3(a3);
+
+    bad_test_check(is_qnan(sum0_store)
+                && sum1_store == expected_sum[1]
+                && sum2_store == expected_sum[2]
+                && sum3_store == expected_sum[3]);
+}
+
+
+void test_f32x4_sum4()
+{
+    f32x4 a0 = f32x4_set(snanf,   -1.f, .0f, 8.f);
+    f32x4 a1 = f32x4_set(-inff,   -1.f, .0f, 8.f);
+    f32x4 a2 = f32x4_set(inff,    -1.f, .0f, 8.f);
+    f32x4 a3 = f32x4_set(denormf, -1.f, .0f, 8.f);
+
+    f32 expected_sum[4] = {qnan, -inff, inff, denormf + 7.f};
+
+    f32 sum0_store = f32x4_sum4(a0);
+    f32 sum1_store = f32x4_sum4(a1);
+    f32 sum2_store = f32x4_sum4(a2);
+    f32 sum3_store = f32x4_sum4(a3);
+
+    bad_test_check(is_qnan(sum0_store)
+                && sum1_store == expected_sum[1]
+                && sum2_store == expected_sum[2]
+                && sum3_store == expected_sum[3]);
 }
 
 
 void test_f32x4_abs()
 {
-    const f32x4 a = f32x4_set(qnanf, -inff, inff, -denormf);
-    const f32x4 b = f32x4_set(-10.26f, -.0f, .0f, 3.56f);
+    f32x4 a = f32x4_set(qnanf, -inff, inff, -denormf);
+    f32x4 b = f32x4_set(-10.26f, -.0f, .0f, 3.56f);
 
-    const f32 expected_a[4] = {snanf, inff, inff, -denormf};
-    const f32 expected_b[4] = {10.26f, .0f, .0f, 3.56f};
+    f32 expected_a[4] = {snanf, inff, inff, -denormf};
+    f32 expected_b[4] = {10.26f, .0f, .0f, 3.56f};
 
     f32 a_abs_out[4];
     f32 b_abs_out[4];
@@ -59,11 +123,11 @@ void test_f32x4_abs()
 
 void test_f32x4_sign()
 {
-    const f32x4 a = f32x4_set(qnanf, -inff, inff, denormf);
-    const f32x4 b = f32x4_set(-10.26f, -.0f, .0f, 3.56f);
+    f32x4 a = f32x4_set(-qnanf, -inff, inff, denormf);
+    f32x4 b = f32x4_set(-10.26f, -.0f, .0f, 3.56f);
 
-    const f32 expected_a[4] = {-1.f, -1.f, 1.f, -1.f};
-    const f32 expected_b[4] = {-1.f, -1.f, 1.f, 1.f};
+    f32 expected_a[4] = {-1.f, -1.f, 1.f, -1.f};
+    f32 expected_b[4] = {-1.f, -1.f, 1.f, 1.f};
 
     f32 a_sign_out[4];
     f32 b_sign_out[4];
@@ -83,11 +147,11 @@ void test_f32x4_sign()
 
 void test_f32x4_neg()
 {
-    const f32x4 a = f32x4_set(snanf, inff, -inff, -denormf);
-    const f32x4 b = f32x4_set(-10.f, -.0f, 12.f, 3.f);
+    f32x4 a = f32x4_set(snanf, inff, -inff, -denormf);
+    f32x4 b = f32x4_set(-10.f, -.0f, 12.f, 3.f);
 
-    const f32 expected_a_neg[4] = {qnanf, -inff, inff, denormf};
-    const f32 expected_b_neg[4] = {10.f, .0f, -12.f, -3.f};
+    f32 expected_a_neg[4] = {qnanf, -inff, inff, denormf};
+    f32 expected_b_neg[4] = {10.f, .0f, -12.f, -3.f};
 
     f32 a_neg_out[4];
     f32 b_neg_out[4];
@@ -105,18 +169,42 @@ void test_f32x4_neg()
 }
 
 
+void test_f32x4_frac()
+{
+    f32x4 a = f32x4_set(snanf, inff, ninff, -denormf);
+    f32x4 b = f32x4_set(-10.f, -.9f, .1f, 3.868f);
+
+    f32 expected_a_frac[4] = {qnanf, qnanf, qnanf, -denormf};
+    f32 expected_b_frac[4] = {.0f, -.9f, .1f, .868000030517578125f};
+
+    f32 a_frac_out[4];
+    f32 b_frac_out[4];
+    f32x4_storeu(a_frac_out, f32x4_frac(a));
+    f32x4_storeu(b_frac_out, f32x4_frac(b));
+
+    bad_test_check(is_qnan(a_frac_out[0])
+                && is_qnan(a_frac_out[1])
+                && is_qnan(a_frac_out[2])
+                && a_frac_out[3] == expected_a_frac[3]
+                && b_frac_out[0] == expected_b_frac[0]
+                && b_frac_out[1] == expected_b_frac[1]
+                && b_frac_out[2] == expected_b_frac[2]
+                && b_frac_out[3] == expected_b_frac[3]);
+}
+
+
 void test_f32x4_mod()
 {
-    const f32x4 a = f32x4_set(qnanf, inff, -inff, denormf);
-    const f32x4 b = f32x4_set(-10.f, 5.f, 12.f, 3.25f);
-    const f32x4 m = f32x4_set(3.f, 5.f, 5.25f, 1.f);
+    f32x4 a = f32x4_set(qnanf, inff, -inff, denormf);
+    f32x4 b = f32x4_set(-10.f, 5.f, 12.f, 3.25f);
+    f32x4 m = f32x4_set(3.f, 5.f, 5.25f, 1.f);
 
 #if defined(__SSE__)
-    const f32 expected_a[4] = {qnanf, qnanf, qnanf, denormf};
+    f32 expected_a[4] = {qnanf, qnanf, qnanf, denormf};
 #else
-    const f32 expected_a[4] = {qnanf, inff, -inff, denormf};
+    f32 expected_a[4] = {qnanf, inff, -inff, denormf};
 #endif
-    const f32 expected_b[4] = {-1.f, .0f, 1.5f, .25f};
+    f32 expected_b[4] = {-1.f, .0f, 1.5f, .25f};
 
     f32 a_mod_m_store[4];
     f32 b_mod_m_store[4];
@@ -143,8 +231,8 @@ void test_f32x4_mod()
 void test_f32x4_trunc()
 {
     // Edge cases can be handled with f32x4_is_finite() + f32x4_blend()
-    const f32x4 a             = f32x4_set(-10.5f, -.9f, .1f, 3.268f);
-    const f32   expected_a[4] = {-10.f, -.0f, .0f, 3.f};
+    f32x4 a             = f32x4_set(-10.5f, -.9f, .1f, 3.268f);
+    f32   expected_a[4] = {-10.f, -.0f, .0f, 3.f};
 
     f32 trunc_a_out[4];
     f32x4_storeu(trunc_a_out, f32x4_trunc(a));
@@ -159,8 +247,8 @@ void test_f32x4_trunc()
 void test_f32x4_round()
 {
     // Edge cases can be handled with f32x4_is_finite() + f32x4_blend()
-    const f32x4 a             = f32x4_set(-10.5f, -.9f, .2f, .0f);
-    const f32   expected_a[4] = {-10.f, -1.f, .0f, .0f};
+    f32x4 a             = f32x4_set(-10.5f, -.9f, .2f, .0f);
+    f32   expected_a[4] = {-10.f, -1.f, .0f, .0f};
 
     f32 round_a_store[4];
     f32x4_storeu(round_a_store, f32x4_round(a));
@@ -175,8 +263,8 @@ void test_f32x4_round()
 void test_f32x4_floor()
 {
     // Edge cases can be handled with f32x4_is_finite() + f32x4_blend()
-    const f32x4 a             = f32x4_set(-10.5f, -.9f, .1f, 3.868f);
-    const f32   expected_a[4] = {-11.f, -1.f, .0f, 3.f};
+    f32x4 a             = f32x4_set(-10.5f, -.9f, .1f, 3.868f);
+    f32   expected_a[4] = {-11.f, -1.f, .0f, 3.f};
 
     f32 trunc_a_out[4];
     f32x4_storeu(trunc_a_out, f32x4_floor(a));
@@ -191,8 +279,8 @@ void test_f32x4_floor()
 void test_f32x4_ceil()
 {
     // Edge cases can be handled with f32x4_is_finite() + f32x4_blend()
-    const f32x4 a             = f32x4_set(-10.5f, -.9f, .1f, 3.868f);
-    const f32   expected_a[4] = {-10.f, -.0f, 1.f, 4.f};
+    f32x4 a             = f32x4_set(-10.5f, -.9f, .1f, 3.868f);
+    f32   expected_a[4] = {-10.f, -.0f, 1.f, 4.f};
 
     f32 ceil_a_out[4];
     f32x4_storeu(ceil_a_out, f32x4_ceil(a));
@@ -206,40 +294,66 @@ void test_f32x4_ceil()
 
 void test_f32x4_clamp()
 {
-    const f32x4 a0  = f32x4_set(snanf, -inff, inff, denormf);
-    const f32x4 a1  = f32x4_set(-.0f, .0f, -11.f, -56.25f);
-    const f32x4 min = f32x4_set(.0f, -inff, -10.f, -56.8f);
-    const f32x4 max = f32x4_set(1.f, 75.56f, 10.f, -56.f);
+    f32x4 a0  = f32x4_set(snanf, -inff, inff, denormf);
+    f32x4 a1  = f32x4_set(-.0f, .0f, -11.f, -56.25f);
+    f32x4 min = f32x4_set(.0f, -inff, -10.f, -56.8f);
+    f32x4 max = f32x4_set(1.f, 75.56f, 10.f, -56.f);
 
-    const f32 expected_clamp1[4] = {.0f, -inff, 10.f, -56.f};
-    const f32 expected_clamp2[4] = {.0f, .0f, -10.f, -56.25f};
+    f32 expected_clamp0[4] = {.0f, -inff, 10.f, -56.f};
+    f32 expected_clamp1[4] = {.0f, .0f, -10.f, -56.25f};
 
+    f32 clamp0_store[4];
     f32 clamp1_store[4];
-    f32 clamp2_store[4];
 
-    f32x4_storeu(clamp1_store, f32x4_clamp(a0, min, max));
-    f32x4_storeu(clamp2_store, f32x4_clamp(a1, min, max));
+    f32x4_storeu(clamp0_store, f32x4_clamp(a0, min, max));
+    f32x4_storeu(clamp1_store, f32x4_clamp(a1, min, max));
 
-    bad_test_check(clamp1_store[0] == expected_clamp1[0]
+    bad_test_check(clamp0_store[0] == expected_clamp0[0]
+                && clamp0_store[1] == expected_clamp0[1]
+                && clamp0_store[2] == expected_clamp0[2]
+                && clamp0_store[3] == expected_clamp0[3]
+                && clamp1_store[0] == expected_clamp1[0]
                 && clamp1_store[1] == expected_clamp1[1]
                 && clamp1_store[2] == expected_clamp1[2]
-                && clamp1_store[3] == expected_clamp1[3]
-                && clamp2_store[0] == expected_clamp2[0]
-                && clamp2_store[1] == expected_clamp2[1]
-                && clamp2_store[2] == expected_clamp2[2]
-                && clamp2_store[3] == expected_clamp2[3]);
+                && clamp1_store[3] == expected_clamp1[3]);
+}
+
+
+void test_f32x4_lerp()
+{
+    f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
+    f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
+    f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.6083984375f);
+    f32x4 t  = f32x4_set(.0f, .25f, .5f, 1.f);
+
+    f32 expected_lerp0[4] = {qnanf, -inff, inff, -9595.6083984375f};
+    f32 expected_lerp1[4] = {10.1f, .0f, 3.875f, -9595.6083984375f};
+
+    f32 lerp0_store[4];
+    f32 lerp1_store[4];
+    f32x4_storeu(lerp0_store, f32x4_lerp(a0, b, t));
+    f32x4_storeu(lerp1_store, f32x4_lerp(a1, b, t));
+
+    bad_test_check(is_qnan(lerp0_store[0])
+                && lerp0_store[1] == expected_lerp0[1]
+                && lerp0_store[2] == expected_lerp0[2]
+                && lerp0_store[3] == expected_lerp0[3]
+                && lerp1_store[0] == expected_lerp1[0]
+                && lerp1_store[1] == expected_lerp1[1]
+                && are_equal_ulp(lerp1_store[2], expected_lerp1[2])
+                && lerp1_store[3] == expected_lerp1[3]);
 }
 
 
 void test_f32x4_mul_add()
 {
-    const f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
-    const f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
-    const f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.608f);
-    const f32x4 c  = f32x4_set(.0f, 1000.f, -6.2f, .0f);
+    f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
+    f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
+    f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.6083984375f);
+    f32x4 c  = f32x4_set(.0f, 1000.f, -6.2f, .0f);
 
-    const f32 expected_fma0[4] = {snanf, snanf, inff, -denormf * 9595.608f};
-    const f32 expected_fma1[4] = {10.1f, 1000.f, -36.41f, -62371.453125f /* closest f32 */};
+    f32 expected_fma0[4] = {qnanf, qnanf, inff, -denormf * 9595.6083984375f};
+    f32 expected_fma1[4] = {10.1f, 1000.f, -36.41f, -62371.453125f /* closest f32 */};
 
     f32 fma0_store[4];
     f32 fma1_store[4];
@@ -247,8 +361,8 @@ void test_f32x4_mul_add()
     f32x4_storeu(fma0_store, f32x4_mul_add(a0, b, c));
     f32x4_storeu(fma1_store, f32x4_mul_add(a1, b, c));
 
-    bad_test_check(is_snan(fma0_store[0])
-                && is_snan(fma0_store[1])
+    bad_test_check(is_qnan(fma0_store[0])
+                && is_qnan(fma0_store[1])
                 && fma0_store[2] == expected_fma0[2]
                 && fma0_store[3] == expected_fma0[3]
 #if defined(__FMA__)
@@ -268,13 +382,13 @@ void test_f32x4_mul_add()
 
 void test_f32x4_mul_sub()
 {
-    const f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
-    const f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
-    const f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.608f);
-    const f32x4 c  = f32x4_set(.0f, 1000.f, -6.2f, .0f);
+    f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
+    f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
+    f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.6083984375f);
+    f32x4 c  = f32x4_set(.0f, 1000.f, -6.2f, .0f);
 
-    const f32 expected_fms1[4] = {snanf, snanf, inff, -denormf * 9595.608f};
-    const f32 expected_fms2[4] = {10.1f, -1000.f, -24.01f, -62371.453125f /* closest f32 */};
+    f32 expected_fms1[4] = {qnanf, qnanf, inff, -denormf * 9595.6083984375f};
+    f32 expected_fms2[4] = {10.1f, -1000.f, -24.01f, -62371.453125f /* closest f32 */};
 
     f32 fms1_store[4];
     f32 fms2_store[4];
@@ -282,8 +396,8 @@ void test_f32x4_mul_sub()
     f32x4_storeu(fms1_store, f32x4_mul_sub(a0, b, c));
     f32x4_storeu(fms2_store, f32x4_mul_sub(a1, b, c));
 
-    bad_test_check(is_snan(fms1_store[0])
-                && is_snan(fms1_store[1])
+    bad_test_check(is_qnan(fms1_store[0])
+                && is_qnan(fms1_store[1])
                 && fms1_store[2] == expected_fms1[2]
                 && fms1_store[3] == expected_fms1[3]
 #if defined(__FMA__)
@@ -303,13 +417,13 @@ void test_f32x4_mul_sub()
 
 void test_f32x4_nmul_add()
 {
-    const f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
-    const f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
-    const f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.608f);
-    const f32x4 c  = f32x4_set(.0f, 1000.f, -6.2f, .0f);
+    f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
+    f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
+    f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.6083984375f);
+    f32x4 c  = f32x4_set(.0f, 1000.f, -6.2f, .0f);
 
-    const f32 expected_fnma0[4] = {qnanf, snanf, -inff, denormf * 9595.608f};
-    const f32 expected_fnma1[4] = {-10.1f, 1000.f, 24.01f, 62371.453125f /* closest f32 */};
+    f32 expected_fnma0[4] = {qnanf, qnanf, -inff, denormf * 9595.6083984375f};
+    f32 expected_fnma1[4] = {-10.1f, 1000.f, 24.01f, 62371.453125f /* closest f32 */};
 
     f32 fnma0_store[4];
     f32 fnma1_store[4];
@@ -320,7 +434,7 @@ void test_f32x4_nmul_add()
     // Behaviour with nan slightly differs between FMA3 and SSE operations
     bad_test_check(is_qnan(fnma0_store[0])
 #if defined(__FMA__)
-                && is_snan(fnma0_store[1])
+                && is_qnan(fnma0_store[1])
                 && fnma0_store[2] == expected_fnma0[2]
                 && fnma0_store[3] == expected_fnma0[3]
                 && fnma1_store[0] == expected_fnma1[0]
@@ -342,13 +456,13 @@ void test_f32x4_nmul_add()
 
 void test_f32x4_nmul_sub()
 {
-    const f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
-    const f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
-    const f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.608f);
-    const f32x4 c  = f32x4_set(.0f, 1000.f, -6.2f, .0f);
+    f32x4 a0 = f32x4_set(snanf, -inff, inff, denormf);
+    f32x4 a1 = f32x4_set(10.1f, .0f, -2.85f, 6.5f);
+    f32x4 b  = f32x4_set(1.f, -.0f, 10.6f, -9595.6083984375f);
+    f32x4 c  = f32x4_set(.0f, 1000.f, -6.2f, .0f);
 
-    const f32 expected_fnms1[4] = {qnanf, snanf, -inff, denormf * 9595.608f};
-    const f32 expected_fnms2[4] = {-10.1f, -1000.f, 36.41f, 62371.453125f};
+    f32 expected_fnms1[4] = {qnanf, qnanf, -inff, denormf * 9595.6083984375f};
+    f32 expected_fnms2[4] = {-10.1f, -1000.f, 36.41f, 62371.453125f};
 
     f32 fnms1_store[4];
     f32 fnms2_store[4];
@@ -359,7 +473,7 @@ void test_f32x4_nmul_sub()
     // Behaviour with nan slightly differs between FMA3 and SSE operations
     bad_test_check(is_qnan(fnms1_store[0])
 #if defined(__FMA__)
-                && is_snan(fnms1_store[1])
+                && is_qnan(fnms1_store[1])
                 && fnms1_store[2] == expected_fnms1[2]
                 && fnms1_store[3] == expected_fnms1[3]
                 && fnms2_store[0] == expected_fnms2[0]
@@ -379,19 +493,46 @@ void test_f32x4_nmul_sub()
 }
 
 
+// =========== Trigonometry ===========
+void test_f32x4_sin()
+{
+    f32x4 a = f32x4_set(qnanf, ninff, inff, denormf);
+    //  0, pi, pi / 4, pi / 2
+    f32x4 b = f32x4_set(.0f, 3.14159265358979323846f, .78539816339744830962f, 1.57079632679489661923f);
+
+    f32 sin0_store[4];
+    f32 sin1_store[4];
+    f32x4_store(sin0_store, f32x4_sin(a));
+    f32x4_store(sin1_store, f32x4_sin(b));
+
+    f32 expected_sin0[4] = {qnanf, qnanf, qnanf, denormf};
+    f32 expected_sin1[4] = {.0f, -.0f, .7071067811865475244f, 1.f};
+
+    bad_test_check(is_qnan(sin0_store[0])
+                && is_qnan(sin0_store[1])
+                && is_qnan(sin0_store[2])
+                && are_equal_n_ulp(sin0_store[3], expected_sin0[3], 5.f)
+                && are_equal_n_ulp(sin1_store[0], expected_sin1[0], 5.f)
+                && are_equal_n_ulp(sin1_store[1], expected_sin1[1], 5.f)
+                && are_equal_n_ulp(sin1_store[2], expected_sin1[2], 5.f)
+                && are_equal_n_ulp(sin1_store[3], expected_sin1[3], 5.f));
+}
+
+
+// ============ Comparison ============
 void test_f32x4_neq()
 {
-    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
-    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
-    const f32x4 b  = f32x4_set(qnanf, qnanf, -inff, -denormf);
+    f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    f32x4 b  = f32x4_set(qnanf, qnanf, -inff, -denormf);
 
     u32 neq0_store[4];
     u32 neq1_store[4];
     mask128_storeu(neq0_store, f32x4_neq(a0, b));
     mask128_storeu(neq1_store, f32x4_neq(a1, b));
 
-    const u32 expected_neq0[4] = {all1, all1, zero, all1};
-    const u32 expected_neq1[4] = {all1, all1, all1, zero};
+    u32 expected_neq0[4] = {all1, all1, zero, all1};
+    u32 expected_neq1[4] = {all1, all1, all1, zero};
 
     bad_test_check(neq0_store[0] == expected_neq0[0]
                 && neq0_store[1] == expected_neq0[1]
@@ -406,17 +547,17 @@ void test_f32x4_neq()
 
 void test_f32x4_eq()
 {
-    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
-    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
-    const f32x4 b  = f32x4_set(qnanf, qnanf, -inff, -denormf);
+    f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    f32x4 b  = f32x4_set(qnanf, qnanf, -inff, -denormf);
 
     u32 eq0_store[4];
     u32 eq1_store[4];
     mask128_storeu(eq0_store, f32x4_eq(a0, b));
     mask128_storeu(eq1_store, f32x4_eq(a1, b));
 
-    const u32 expected_eq0[4] = {zero, zero, all1, zero};
-    const u32 expected_eq1[4] = {zero, zero, zero, all1};
+    u32 expected_eq0[4] = {zero, zero, all1, zero};
+    u32 expected_eq1[4] = {zero, zero, zero, all1};
 
     bad_test_check(eq0_store[0] == expected_eq0[0]
                 && eq0_store[1] == expected_eq0[1]
@@ -431,17 +572,17 @@ void test_f32x4_eq()
 
 void test_f32x4_ge()
 {
-    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
-    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
-    const f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
+    f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
 
     u32 ge0_store[4];
     u32 ge1_store[4];
     mask128_storeu(ge0_store, f32x4_ge(a0, b));
     mask128_storeu(ge1_store, f32x4_ge(a1, b));
 
-    const u32 expected_ge0[4] = {zero, zero, all1, zero};
-    const u32 expected_ge1[4] = {zero, all1, all1, all1};
+    u32 expected_ge0[4] = {zero, zero, all1, zero};
+    u32 expected_ge1[4] = {zero, all1, all1, all1};
 
     bad_test_check(ge0_store[0] == expected_ge0[0]
                 && ge0_store[1] == expected_ge0[1]
@@ -456,17 +597,17 @@ void test_f32x4_ge()
 
 void test_f32x4_gt()
 {
-    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
-    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
-    const f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
+    f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
 
     u32 gt0_store[4];
     u32 gt1_store[4];
     mask128_storeu(gt0_store, f32x4_gt(a0, b));
     mask128_storeu(gt1_store, f32x4_gt(a1, b));
 
-    const u32 expected_gt0[4] = {zero, zero, zero, zero};
-    const u32 expected_gt1[4] = {zero, zero, all1, all1};
+    u32 expected_gt0[4] = {zero, zero, zero, zero};
+    u32 expected_gt1[4] = {zero, zero, all1, all1};
 
     bad_test_check(gt0_store[0] == expected_gt0[0]
                 && gt0_store[1] == expected_gt0[1]
@@ -481,17 +622,17 @@ void test_f32x4_gt()
 
 void test_f32x4_le()
 {
-    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
-    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
-    const f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
+    f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
 
     u32 le0_store[4];
     u32 le1_store[4];
     mask128_storeu(le0_store, f32x4_le(a0, b));
     mask128_storeu(le1_store, f32x4_le(a1, b));
 
-    const u32 expected_le0[4] = {zero, zero, all1, all1};
-    const u32 expected_le1[4] = {all1, all1, zero, zero};
+    u32 expected_le0[4] = {zero, zero, all1, all1};
+    u32 expected_le1[4] = {all1, all1, zero, zero};
 
     bad_test_check(le0_store[0] == expected_le0[0]
                 && le0_store[1] == expected_le0[1]
@@ -506,17 +647,17 @@ void test_f32x4_le()
 
 void test_f32x4_lt()
 {
-    const f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
-    const f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
-    const f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
+    f32x4 a0 = f32x4_set(snanf, qnanf, -inff, denormf);
+    f32x4 a1 = f32x4_set(.0f, 2.f, -1.f, -denormf);
+    f32x4 b  = f32x4_set(1.f, 2.f, -inff, .0f);
 
     u32 lt0_store[4];
     u32 lt1_store[4];
     mask128_storeu(lt0_store, f32x4_lt(a0, b));
     mask128_storeu(lt1_store, f32x4_lt(a1, b));
 
-    const u32 expected_lt0[4] = {zero, zero, zero, all1};
-    const u32 expected_lt1[4] = {all1, zero, zero, zero};
+    u32 expected_lt0[4] = {zero, zero, zero, all1};
+    u32 expected_lt1[4] = {all1, zero, zero, zero};
 
     bad_test_check(lt0_store[0] == expected_lt0[0]
                 && lt0_store[1] == expected_lt0[1]
@@ -531,16 +672,16 @@ void test_f32x4_lt()
 
 void test_f32x4_is_nan()
 {
-    const f32x4 a = f32x4_set(snanf, qnanf, -inff, denormf);
-    const f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.608f);
+    f32x4 a = f32x4_set(snanf, qnanf, -inff, denormf);
+    f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.6083984375f);
 
     mask_elem a_is_nan[4];
     mask_elem b_is_nan[4];
     mask128_storeu(a_is_nan, f32x4_is_nan(a));
     mask128_storeu(b_is_nan, f32x4_is_nan(b));
 
-    const mask_elem expected_a_is_nan[4] = {all1, all1, zero, zero};
-    const mask_elem expected_b_is_nan[4] = {zero, zero, zero, zero};
+    mask_elem expected_a_is_nan[4] = {all1, all1, zero, zero};
+    mask_elem expected_b_is_nan[4] = {zero, zero, zero, zero};
 
     bad_test_check(a_is_nan[0] == expected_a_is_nan[0]
                 && a_is_nan[1] == expected_a_is_nan[1]
@@ -555,16 +696,16 @@ void test_f32x4_is_nan()
 
 void test_f32x4_is_infinite()
 {
-    const f32x4 a = f32x4_set(snanf, -inff, inff, denormf);
-    const f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.608f);
+    f32x4 a = f32x4_set(snanf, -inff, inff, denormf);
+    f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.6083984375f);
 
     mask_elem a_store[4];
     mask_elem b_store[4];
     mask128_storeu(a_store, f32x4_is_infinite(a));
     mask128_storeu(b_store, f32x4_is_infinite(b));
 
-    const mask_elem expected_a_is_inffinity[4] = {zero, all1, all1, zero};
-    const mask_elem expected_b_is_inffinity[4] = {zero, zero, zero, zero};
+    mask_elem expected_a_is_inffinity[4] = {zero, all1, all1, zero};
+    mask_elem expected_b_is_inffinity[4] = {zero, zero, zero, zero};
 
     bad_test_check(a_store[0] == expected_a_is_inffinity[0]
                 && a_store[1] == expected_a_is_inffinity[1]
@@ -579,16 +720,16 @@ void test_f32x4_is_infinite()
 
 void test_f32x4_is_finite()
 {
-    const f32x4 a = f32x4_set(snanf, -inff, inff, denormf);
-    const f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.608f);
+    f32x4 a = f32x4_set(snanf, -inff, inff, denormf);
+    f32x4 b = f32x4_set(.0f, -.0f, 10.6f, -9595.6083984375f);
 
     mask_elem a_store[4];
     mask_elem b_store[4];
     mask128_storeu(a_store, f32x4_is_finite(a));
     mask128_storeu(b_store, f32x4_is_finite(b));
 
-    const mask_elem expected_a_is_finite[4] = {zero, zero, zero, all1};
-    const mask_elem expected_b_is_finite[4] = {all1, all1, all1, all1};
+    mask_elem expected_a_is_finite[4] = {zero, zero, zero, all1};
+    mask_elem expected_b_is_finite[4] = {all1, all1, all1, all1};
 
     bad_test_check(a_store[0] == expected_a_is_finite[0]
                 && a_store[1] == expected_a_is_finite[1]

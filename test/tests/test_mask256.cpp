@@ -62,15 +62,15 @@ void test_mask256_set()
 }
 
 
-void test_mask256_set1()
+void test_mask256_set_all()
 {
     const u32 a = all1;
     const u32 b = 0xF9182765;
 
     u32 a_out[8];
     u32 b_out[8];
-    mask256_storeu(a_out, mask256_set1(a));
-    mask256_storeu(b_out, mask256_set1(b));
+    mask256_storeu(a_out, mask256_set_all(a));
+    mask256_storeu(b_out, mask256_set_all(b));
     
     bad_test_check(a == a_out[0] && a == a_out[1] && a == a_out[2] && a == a_out[3]
                 && a == a_out[4] && a == a_out[5] && a == a_out[6] && a == a_out[7]

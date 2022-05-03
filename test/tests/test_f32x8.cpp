@@ -46,10 +46,10 @@ void test_f32x8_one()
 
 void test_f32x8_load_store()
 {
-    bad_align(16) const f32 a[8] = {qnanf, inff, -inff, denormf, snanf, .0f, -.0f, 1.f};
-    bad_align(16) const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
-    bad_align(16) f32 a_load_store[8];
-    bad_align(16) f32 b_load_store[8];
+    bad_align(32) const f32 a[8] = {qnanf, inff, -inff, denormf, snanf, .0f, -.0f, 1.f};
+    bad_align(32) const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
+    bad_align(32) f32 a_load_store[8];
+    bad_align(32) f32 b_load_store[8];
 
     f32x8_store(a_load_store, f32x8_load(a));
     f32x8_store(b_load_store, f32x8_load(b));
@@ -131,7 +131,7 @@ void test_f32x8_set()
 }
 
 
-void test_f32x8_set1()
+void test_f32x8_set_all()
 {
     const f32 a[4] = {qnanf, inff, -inff, denormf};
     const f32 b[4] = {-10.f, 1.f, -2.f, 10.f};
@@ -144,14 +144,14 @@ void test_f32x8_set1()
     f32 b2_set[8];
     f32 b3_set[8];
 
-    f32x8_storeu(a0_set, f32x8_set1(a[0]));
-    f32x8_storeu(a1_set, f32x8_set1(a[1]));
-    f32x8_storeu(a2_set, f32x8_set1(a[2]));
-    f32x8_storeu(a3_set, f32x8_set1(a[3]));
-    f32x8_storeu(b0_set, f32x8_set1(b[0]));
-    f32x8_storeu(b1_set, f32x8_set1(b[1]));
-    f32x8_storeu(b2_set, f32x8_set1(b[2]));
-    f32x8_storeu(b3_set, f32x8_set1(b[3]));
+    f32x8_storeu(a0_set, f32x8_set_all(a[0]));
+    f32x8_storeu(a1_set, f32x8_set_all(a[1]));
+    f32x8_storeu(a2_set, f32x8_set_all(a[2]));
+    f32x8_storeu(a3_set, f32x8_set_all(a[3]));
+    f32x8_storeu(b0_set, f32x8_set_all(b[0]));
+    f32x8_storeu(b1_set, f32x8_set_all(b[1]));
+    f32x8_storeu(b2_set, f32x8_set_all(b[2]));
+    f32x8_storeu(b3_set, f32x8_set_all(b[3]));
     
     bad_test_check(is_qnan(a0_set[0]) && is_qnan(a0_set[1]) && is_qnan(a0_set[2]) && is_qnan(a0_set[3])
                 && is_qnan(a0_set[4]) && is_qnan(a0_set[5]) && is_qnan(a0_set[6]) && is_qnan(a0_set[7])
@@ -208,7 +208,7 @@ void test_f32x8_blend()
 }
 
 
-void test_f32x8_cast_mask256()
+void test_f32x8_as_mask256()
 {
     const f32 a[8] = {qnanf, inff, -inff, denormf, snanf, .0f, -.0f, 1.f};
     const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
@@ -218,8 +218,8 @@ void test_f32x8_cast_mask256()
 
     u32 cast_a_store[8];
     u32 cast_b_store[8];
-    mask256_storeu(cast_a_store, f32x8_cast_mask256(f32x8_loadu(a)));
-    mask256_storeu(cast_b_store, f32x8_cast_mask256(f32x8_loadu(b)));
+    mask256_storeu(cast_a_store, f32x8_as_mask256(f32x8_loadu(a)));
+    mask256_storeu(cast_b_store, f32x8_as_mask256(f32x8_loadu(b)));
 
     bad_test_check(cast_a_store[0] == expected_a_cast[0]
                 && cast_a_store[1] == expected_a_cast[1]
