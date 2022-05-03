@@ -23,9 +23,16 @@ static bad_forceinline f32x8 bad_veccall f32x8_div(f32x8_vec0 a, f32x8_vec1 b)
 }
 
 
-static bad_forceinline f32 bad_veccall f32x8_hadd(f32x8_vec0 a)
+static bad_forceinline f32x8 bad_veccall f32x8_hadd4(f32x8_vec0 a)
 {
-    return f32x4_hadd(a.a) + f32x4_hadd(a.b);
+    f32x4 hadd8 = f32x4_add(f32x4_hadd4(a.a), f32x4_hadd4(a.b));
+
+    return (f32x8){hadd4, hadd4};
+}
+
+static bad_forceinline f32 bad_veccall f32x4_sum4(f32x8_vec0 a)
+{
+    return f32x4_sum4(a.a) + f32x4_sum4(a.b);
 }
 
 
@@ -68,15 +75,16 @@ static bad_forceinline f32x8 bad_veccall f32x8_abs(f32x8_vec0 a)
 
 static bad_forceinline f32x8 bad_veccall f32x8_sign(f32x8_vec0 a)
 {
-          mask128 b_sign = vceqq_u32(vreinterpretq_u32_f32(a.a), vreinterpretq_u32_f32(a.a));
-    const mask128 one    = vshlq_n_u32(vshrq_n_u32(b_sign, 25), 23);
-          mask128 a_sign = vshlq_n_u32(vshrq_n_u32(vreinterpretq_u32_f32(a.a), 31), 31);
-                  b_sign = vshlq_n_u32(vshrq_n_u32(vreinterpretq_u32_f32(a.b), 31), 31);
+    mask128 b_sign = vceqq_u32(vreinterpretq_u32_f32(a.a), vreinterpretq_u32_f32(a.a));
+    mask128 one    = vshlq_n_u32(vshrq_n_u32(b_sign, 25), 23);
+    mask128 a_sign = mask128_keep_highbit32(f32x4_as_mask128(a.a));
+
+    b_sign = mask128_keep_highbit32(f32x4_as_mask128(a.b));
 
     return (f32x8)
     {
-        vvreinterpretq_f32_u32(vorq_u32(one, a_sign)),
-        vvreinterpretq_f32_u32(vorq_u32(one, b_sign))
+        vreinterpretq_f32_u32(vorq_u32(one, a_sign)),
+        vreinterpretq_f32_u32(vorq_u32(one, b_sign))
     };
 }
 
@@ -84,6 +92,12 @@ static bad_forceinline f32x8 bad_veccall f32x8_sign(f32x8_vec0 a)
 static bad_forceinline f32x8 bad_veccall f32x8_neg(f32x8_vec0 a)
 {
     return (f32x8){f32x4_neg(a.a, b.a), f32x4_neg(a.b, b.b)};
+}
+
+
+static bad_forceinline f32x8 bad_veccall f32x8_frac(f32x8_vec0 a)
+{
+    return f32x8_sub(a, f32x8_trunc(a));
 }
 
 
@@ -122,6 +136,39 @@ static bad_forceinline f32x8 bad_veccall f32x8_clamp(f32x8_vec0 a, f32x8_vec1 mi
     return (f32x8){f32x4_clamp(a.a), f32x4_clamp(a.b)};
 }
 
+
+static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 t)
+{
+    f32x4 one = f32x4_one();
+
+    return (f32x8)
+    {
+        f32x4_add(f32x4_mul(f32x4_sub(one, t.a), a.a), f32x4_mul(t.a, b.a)),
+        f32x4_add(f32x4_mul(f32x4_sub(one, t.b), a.b), f32x4_mul(t.b, b.b))
+    };
+}
+
+
+// ========== Trigonometry ===========
+static bad_forceinline f32x8 bad_veccall f32x8_cos(f32x8_vec0 a)
+{
+    return (f32x8){f32x4_cos(a.a), f32x4_cos(a.b)};
+}
+
+
+static bad_forceinline f32x8 bad_veccall f32x8_sin(f32x8_vec0 a)
+{
+    return (f32x8){f32x4_sin(a.a), f32x4_sin(a.b)};
+}
+
+
+static bad_forceinline f32x8 bad_veccall f32x8_tan(f32x8_vec0 a)
+{
+    return (f32x8){f32x4_tan(a.a), f32x4_tan(a.b)};
+}
+
+
+// ======== Fused operations ========
 // a * b + c
 static bad_forceinline f32x8 bad_veccall f32x8_mul_add(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c)
 {
@@ -195,9 +242,9 @@ static bad_forceinline mask128 bad_veccall f32x8_is_nan(f32x8_vec0 a)
 static bad_forceinline mask128 bad_veccall f32x8_is_infinite(f32x8_vec0 a)
 {
     // +inf is 0x7F800000, -inf is 0xFF800000
-    const mask128 inf_mask   = mask128_all1();
-    const mask128 value_mask = vshrq_n_u32(all1_mask, 1);
-                  inf_mask   = vshrq_n_u32(vshlq_n_u32(all1_mask, 24), 1);
+    mask128 inf_mask   = mask128_all1();
+    mask128 value_mask = vshrq_n_u32(all1_mask, 1);
+            inf_mask   = vshrq_n_u32(vshlq_n_u32(all1_mask, 24), 1);
 
     return (f32x8)
     {
@@ -209,7 +256,7 @@ static bad_forceinline mask128 bad_veccall f32x8_is_infinite(f32x8_vec0 a)
 
 static bad_forceinline mask128 bad_veccall f32x8_is_finite(f32x8_vec0 a)
 {
-    const mask128 exp = mask128_exponent32();
+    mask128 exp = mask128_exponent32();
 
     return (f32x8)
     {

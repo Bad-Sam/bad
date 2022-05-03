@@ -17,9 +17,9 @@ static bad_forceinline mask256 mask256_set(mask_elem a, mask_elem b, mask_elem c
 }
 
 
-static bad_forceinline mask256 mask256_set1(mask_elem k)
+static bad_forceinline mask256 mask256_set_all(mask_elem k)
 {
-    return (mask256){mask128_set1(k), mask128_set1(k)};
+    return (mask256){mask128_set_all(k), mask128_set_all(k)};
 }
 
 
@@ -112,7 +112,19 @@ static bad_forceinline mask256 bad_veccall mask256_xor(mask256_vec0 a, mask256_v
 
 
 // ============ Conversion =============
-static bad_forceinline f32x8 bad_veccall mask256_cast_f32x8(mask256_vec0 a)
+static bad_forceinline f32x8 bad_veccall mask256_as_f32x8(mask256_vec0 a)
 {
-    return (mask256){mask128_cast_f32x4(a.a, b.a), mask128_cast_f32x4(a.b, b.b)};
+    return (mask256){mask128_as_f32x4(a.a), mask128_as_f32x4(a.b)};
+}
+
+
+static bad_forceinline f32x8 bad_veccall mask256_u32x8_to_f32x8(mask256_vec0 a)
+{
+    return (mask256){mask128_u32x4_to_f32x4(a.a), mask128_u32x4_to_f32x4(a.b)};
+}
+
+
+static bad_forceinline f32x8 bad_veccall mask256_s32x8_to_f32x8(mask256_vec0 a)
+{
+    return (mask256){mask128_s32x4_to_f32x4(a.a), mask128_s32x4_to_f32x4(a.b)};;
 }

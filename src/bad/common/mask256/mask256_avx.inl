@@ -19,7 +19,7 @@ static bad_forceinline mask256 mask256_set(u32 a, u32 b, u32 c, u32 d,
 }
 
 
-static bad_forceinline mask256 mask256_set1(u32 k)
+static bad_forceinline mask256 mask256_set_all(u32 k)
 {
     return _mm256_set1_epi32(k);
 }
@@ -114,6 +114,63 @@ static bad_forceinline mask256 mask256_exponent32()
 }
 
 
+
+
+// ======= Masking operations =======
+static bad_forceinline mask256 bad_veccall mask256_keep_highbit32(mask256_vec0 a)
+{
+#if defined(__AVX2__)
+    return _mm256_slli_epi32(_mm256_srli_epi32(a, 31), 31);
+#else
+    return mask256_and(a, mask256_highbit32());
+#endif
+}
+
+
+static bad_forceinline mask256 bad_veccall mask256_keep_lowbit32(mask256_vec0 a)
+{
+#if defined(__AVX2__)
+    return _mm256_srli_epi32(_mm256_slli_epi32(a, 31), 31);
+#else
+    return mask256_and(a, mask256_lowbit32());
+#endif
+}
+
+
+static bad_forceinline mask256 bad_veccall mask256_shift_left32(mask256_vec0 a, s32 shift)
+{
+#if defined(__AVX2__)
+    return _mm256_slli_epi32(a, shift);
+#else
+    mask128 store[2];
+    _mm256_store_si256((mask256*)store, a);
+
+    store[0] = mask128_shift_left32(store[0], shift);
+    store[1] = mask128_shift_left32(store[1], shift);
+
+    return _mm256_set_m128i(store[1], store[0]);
+#endif
+}
+
+
+static bad_forceinline mask256 bad_veccall mask256_shift_right32(mask256_vec0 a, s32 shift)
+{
+#if defined(__AVX2__)
+    return _mm256_srli_epi32(a, shift);
+#else
+    mask128 store[2];
+    _mm256_store_si256((mask256*)store, a);
+
+    store[0] = mask128_shift_right32(store[0], shift);
+    store[1] = mask128_shift_right32(store[1], shift);
+    
+    return _mm256_set_m128i(store[1], store[0]);
+#endif
+}
+
+
+
+
 // ========== Comparison ==========
 static bad_forceinline mask256 mask256_eq(mask256_vec0 a, mask256_vec1 b)
 {
@@ -195,7 +252,32 @@ static bad_forceinline mask256 bad_veccall mask256_not(mask256_vec0 a)
 
 
 // ============ Conversion =============
-static bad_forceinline f32x8 bad_veccall mask256_cast_f32x8(mask256_vec0 a)
+static bad_forceinline f32x8 bad_veccall mask256_as_f32x8(mask256_vec0 a)
 {
     return _mm256_castsi256_ps(a);
+}
+
+static bad_forceinline f32x8 bad_veccall mask256_u32x8_to_f32x8(mask256_vec0 a)
+{
+    bad_align(32) s32 store[8];
+    bad_align(32) f32 load[8];
+
+    mask256_store((mask_elem*)store, a);
+
+    load[0] = (f32)*(u32*)(store + 0);
+    load[1] = (f32)*(u32*)(store + 1);
+    load[2] = (f32)*(u32*)(store + 2);
+    load[3] = (f32)*(u32*)(store + 3);
+    load[4] = (f32)*(u32*)(store + 4);
+    load[5] = (f32)*(u32*)(store + 5);
+    load[6] = (f32)*(u32*)(store + 6);
+    load[7] = (f32)*(u32*)(store + 7);
+
+    return _mm256_load_si256((const mask256*)load);
+}
+
+
+static bad_forceinline f32x8 bad_veccall mask256_s32x8_to_f32x8(mask256_vec0 a)
+{
+    return _mm256_cvtepi32_ps(a);
 }
