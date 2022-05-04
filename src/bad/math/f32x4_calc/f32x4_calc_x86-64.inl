@@ -258,6 +258,8 @@ static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4_vec0 a, f32x4_vec1 b, 
 
 
 // ========== Trigonometry ===========
+// TODO(improve): surely there is a better way to do range reduction
+//                and assign the correct sign
 static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4_vec0 x)
 {
     static const f32x4 vhalf_pi_rcp = f32x4_set_all(half_pi_rcp);
