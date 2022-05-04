@@ -6,6 +6,7 @@
 #include <bad/qualifiers.h>
 
 #include "f32x4_calc.h"
+#include "f32_calc.h"
 #include "vec3.h"
 
 BAD_NAMESPACE_START
@@ -20,8 +21,10 @@ typedef f32x4 quat;
 #define quat_storeu f32x4_storeu
 
 bad_forceinline quat        quat_identity       ();
-bad_inline quat             quat_from_axis_angle(f32x4_vec0 unit_axis, f32 angle);
-bad_inline quat             quat_conjugate      (f32x4_vec0 q);
+
+bad_inline quat bad_veccall quat_from_axis_angle(f32x4_vec0 unit_axis, f32 angle);
+bad_inline quat bad_veccall quat_from_euler     (f32x4_vec0 xyz_angles);
+bad_inline quat bad_veccall quat_conjugate      (f32x4_vec0 q);
 bad_inline quat bad_veccall quat_mul            (f32x4_vec0 q0, f32x4_vec1 q1);
 bad_inline vec3 bad_veccall quat_rot            (f32x4_vec0 q, f32x4_vec1 v);
 

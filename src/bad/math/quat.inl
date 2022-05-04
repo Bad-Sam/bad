@@ -8,23 +8,56 @@ bad_forceinline quat quat_identity()
 
 
 // axis_angle = (x, y, z, angle)
-bad_inline quat quat_from_axis_angle(f32x4_vec0 unit_axis, f32 angle)
+bad_inline quat bad_veccall quat_from_axis_angle(f32x4_vec0 unit_axis, f32 angle)
 {
     // Compute cos(angle * 0.5) and sin(angle * 0.5)
-    f32x4 half       = f32x4_half();
-    f32x4 half_angle = f32x4_set_all(angle);
-          half_angle = f32x4_mul(half_angle, half);
-    f32x4 sin_angle  = f32x4_sin(half_angle);
-    f32x4 cos_angle  = f32x4_cos(half_angle);
+    f32 half_angle = angle * .5f;
+    f32 sin_angle = f32_sin(half_angle);
+    f32 cos_angle = f32_cos(half_angle);
 
     // Apply to axis
-    f32x4 q = f32x4_mul(unit_axis, sin_angle);
+    f32x4 q = f32x4_mul(unit_axis, f32x4_set_all(sin_angle));
 
-    return f32x4_copy_3(q, cos_angle);
+    return f32x4_set_3(q, cos_angle);
 }
 
 
-bad_inline quat quat_conjugate(f32x4_vec0 q)
+bad_inline quat bad_veccall quat_from_euler(f32x4_vec0 xyz_angles)
+{
+    static const f32x4   half            = f32x4_half();
+    static const mask128 right_sign_mask = mask128_set(0x80000000, 0x80000000, 0x00000000, 0x00000000);
+
+    f32x4 half_angles = f32x4_mul(xyz_angles, half);
+    f32x4 cos_angles  = f32x4_cos(half_angles);
+    f32x4 sin_angles  = f32x4_sin(half_angles);
+
+    // ========== v1 ==========
+    //        (1)    (2)    (3)    (4)    (5)    (6)
+    // q.x = sinX * cosY * cosZ - cosX * sinY * sinZ;
+    // q.y = sinY * cosX * cosZ - cosY * sinX * sinZ;
+    // q.z = sinZ * cosY * cosX + cosZ * sinX * sinY;
+    // q.w = cosY * cosX * cosZ + sinZ * sinX * sinY
+    f32x4 cosYXYX = _mm_shuffle_ps(cos_angles, cos_angles, _MM_SHUFFLE(0, 1, 0, 1)); // (2)
+    f32x4 cosZZXZ = _mm_shuffle_ps(cos_angles, cos_angles, _MM_SHUFFLE(2, 0, 2, 2)); // (3)
+    f32x4 sinYXXX = _mm_shuffle_ps(sin_angles, sin_angles, _MM_SHUFFLE(0, 0, 0, 1)); // (5)
+    f32x4 sinZZYY = _mm_shuffle_ps(sin_angles, sin_angles, _MM_SHUFFLE(1, 1, 2, 2)); // (6)
+    f32x4 cosY_3  = _mm_shuffle_ps(cos_angles, cos_angles, _MM_SHUFFLE(1, 0, 3, 2));
+    f32x4 sinZ_3  = _mm_shuffle_ps(sin_angles, sin_angles, _MM_SHUFFLE(2, 3, 0, 1));
+
+    sin_angles = f32x4_copy_3(sin_angles, cosY_3); // (1)
+    cos_angles = f32x4_copy_3(cos_angles, sinZ_3); // (4)
+
+    f32x4   left         = f32x4_mul(sin_angles, f32x4_mul(cosYXYX, cosZZXZ));
+    f32x4   right        = f32x4_mul(sinYXXX, sinZZYY);
+    mask128 signed_right = mask128_xor(f32x4_as_mask128(right), right_sign_mask);
+
+    right = mask128_as_f32x4(signed_right);
+
+    return f32x4_mul_add(right, cos_angles, left);
+}
+
+
+bad_inline quat bad_veccall quat_conjugate(f32x4_vec0 q)
 {
     // TODO: compare performance with mask128_all1() and bitshifts
     mask128 conj_mask = mask128_set(0x80000000, 0x80000000, 0x80000000, 0x00000000);
