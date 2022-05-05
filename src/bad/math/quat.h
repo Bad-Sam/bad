@@ -27,6 +27,7 @@ bad_inline quat bad_veccall quat_from_euler     (f32x4_vec0 xyz_angles);
 bad_inline quat bad_veccall quat_conjugate      (f32x4_vec0 q);
 bad_inline quat bad_veccall quat_mul            (f32x4_vec0 q0, f32x4_vec1 q1);
 bad_inline vec3 bad_veccall quat_rot            (f32x4_vec0 q, f32x4_vec1 v);
+bad_inline f32  bad_veccall quat_dot            (f32x4_vec0 q0, f32x4_vec1 q1);
 
 #include "quat.inl"
 

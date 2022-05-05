@@ -31,7 +31,6 @@ bad_inline quat bad_veccall quat_from_euler(f32x4_vec0 xyz_angles)
     f32x4 cos_angles  = f32x4_cos(half_angles);
     f32x4 sin_angles  = f32x4_sin(half_angles);
 
-    // ========== v1 ==========
     //        (1)    (2)    (3)    (4)    (5)    (6)
     // q.x = sinX * cosY * cosZ - cosX * sinY * sinZ;
     // q.y = sinY * cosX * cosZ - cosY * sinX * sinZ;
@@ -48,7 +47,7 @@ bad_inline quat bad_veccall quat_from_euler(f32x4_vec0 xyz_angles)
     cos_angles = f32x4_copy_3(cos_angles, sinZ_3); // (4)
 
     f32x4   left         = f32x4_mul(sin_angles, f32x4_mul(cosYXYX, cosZZXZ));
-    f32x4   right        = f32x4_mul(sinYXXX, sinZZYY);
+    f32x4   right        = f32x4_mul(cos_angles, f32x4_mul(sinYXXX, sinZZYY));
     mask128 signed_right = mask128_xor(f32x4_as_mask128(right), right_sign_mask);
 
     right = mask128_as_f32x4(signed_right);
@@ -117,4 +116,14 @@ bad_inline vec3 bad_veccall quat_rot(f32x4_vec0 q, f32x4_vec1 v)
           res = f32x4_mul_add(cross, q_w, res);
 
     return f32x4_mul(two, res);
+}
+
+
+bad_inline f32 bad_veccall quat_dot(f32x4_vec0 q0, f32x4_vec1 q1)
+{
+#if defined(__SSE4_1__)
+    return f32x4_get_0(_mm_dp_ps(q0, q1, 0b11111111));
+#else
+    return f32x4_sum4(f32x4_mul(q0, q1));
+#endif
 }
