@@ -73,7 +73,7 @@ static bad_forceinline f32x4 f32x4_set_lower(f32 a)
 }
 
 
-static bad_forceinline void f32x4_store(f32* mem_addr, f32x4_vec0 a)
+static bad_forceinline void f32x4_store(f32* mem_addr, f32x4 a)
 {
     mem_addr[0] = a.e[0];
     mem_addr[1] = a.e[1];
@@ -82,129 +82,129 @@ static bad_forceinline void f32x4_store(f32* mem_addr, f32x4_vec0 a)
 }
 
 
-static bad_forceinline void f32x4_storeu(f32* mem_addr, f32x4_vec0 a)
+static bad_forceinline void f32x4_storeu(f32* mem_addr, f32x4 a)
 {
     return f32x4_store(mem_addr, a);
 }
 
 
-static bad_forceinline void bad_veccall f32x4_store_lower(f32* mem_addr, f32x4_vec0 a)
+static bad_forceinline void bad_veccall f32x4_store_lower(f32* mem_addr, f32x4 a)
 {
     mem_addr[0] = f32x4_get_0(a);
 }
 
 
 // ============== Getter ==============
-static bad_forceinline f32 f32x4_get_0(f32x4_vec0 a)
+static bad_forceinline f32 f32x4_get_0(f32x4 a)
 {
     return a.e[0];
 }
 
 
-static bad_forceinline f32 f32x4_get_1(f32x4_vec0 a)
+static bad_forceinline f32 f32x4_get_1(f32x4 a)
 {
     return a.e[1];
 }
 
-static bad_forceinline f32 f32x4_get_2(f32x4_vec0 a)
+static bad_forceinline f32 f32x4_get_2(f32x4 a)
 {
     return a.e[2];
 }
 
 
-static bad_forceinline f32 f32x4_get_3(f32x4_vec0 a)
+static bad_forceinline f32 f32x4_get_3(f32x4 a)
 {
     return a.e[3];
 }
 
-static bad_forceinline f32 f32x4_get_i(f32x4_vec0 a, s32 i)
+static bad_forceinline f32 f32x4_get_i(f32x4 a, s32 i)
 {
     return a.e[i];
 }
 
 
-static bad_forceinline f32 f32x4_get_f32(f32x4_vec0 a, s32 i)
+static bad_forceinline f32 f32x4_get_f32(f32x4 a, s32 i)
 {
     return a.e[i];
 }
 
 
 // ============== Setters =============
-static bad_forceinline f32x4 f32x4_copy_0(f32x4_vec0 a, f32x4 origin)
+static bad_forceinline f32x4 f32x4_copy_0(f32x4 a, f32x4 origin)
 {
     return (f32x4){origin.e[0], a.e[1], a.e[2], a.e[3]};
 }
 
 
-static bad_forceinline f32x4 f32x4_copy_1(f32x4_vec0 a, f32x4 origin)
+static bad_forceinline f32x4 f32x4_copy_1(f32x4 a, f32x4 origin)
 {
     return (f32x4){a.e[0], origin.e[1], a.e[2], a.e[3]};
 }
 
 
-static bad_forceinline f32x4 f32x4_copy_2(f32x4_vec0 a, f32x4 origin)
+static bad_forceinline f32x4 f32x4_copy_2(f32x4 a, f32x4 origin)
 {
     return (f32x4){a.e[0], a.e[1], origin.e[2], a.e[3]};
 }
 
 
-static bad_forceinline f32x4 f32x4_copy_3(f32x4_vec0 a, f32x4 origin)
+static bad_forceinline f32x4 f32x4_copy_3(f32x4 a, f32x4 origin)
 {
     return (f32x4){a.e[0], a.e[1], a.e[2], origin.e[3]};
 }
 
 
-static bad_forceinline f32x4 f32x4_set_0(f32x4_vec0 a, f32 value)
+static bad_forceinline f32x4 f32x4_set_0(f32x4 a, f32 value)
 {
     return (f32x4){value, a.e[1], a.e[2], a.e[3]}
 }
 
 
-static bad_forceinline f32x4 f32x4_set_1(f32x4_vec0 a, f32 value)
+static bad_forceinline f32x4 f32x4_set_1(f32x4 a, f32 value)
 {
     return (f32x4){a.e[0], value, a.e[2], a.e[3]};
 }
 
 
-static bad_forceinline f32x4 f32x4_set_2(f32x4_vec0 a, f32 value)
+static bad_forceinline f32x4 f32x4_set_2(f32x4 a, f32 value)
 {
     return (f32x4){a.e[0], a.e[1], value, a.e[3]};
 }
 
 
-static bad_forceinline f32x4 f32x4_set_3(f32x4_vec0 a, f32 value)
+static bad_forceinline f32x4 f32x4_set_3(f32x4 a, f32 value)
 {
     return (f32x4){a.e[0], a.e[1], a.e[2], value};
 }
 
 
 // ===== Vector element broadcast =====
-static bad_forceinline f32x4 f32x4_broadcast_0(f32x4_vec0 a)
+static bad_forceinline f32x4 f32x4_broadcast_0(f32x4 a)
 {
     return (f32x4){a.e[0], a.e[0], a.e[0], a.e[0]};
 }
 
 
-static bad_forceinline f32x4 f32x4_broadcast_1(f32x4_vec0 a)
+static bad_forceinline f32x4 f32x4_broadcast_1(f32x4 a)
 {
     return (f32x4){a.e[1], a.e[1], a.e[1], a.e[1]};
 }
 
 
-static bad_forceinline f32x4 f32x4_broadcast_2(f32x4_vec0 a)
+static bad_forceinline f32x4 f32x4_broadcast_2(f32x4 a)
 {
     return (f32x4){a.e[2], a.e[2], a.e[2], a.e[2]};
 }
 
 
-static bad_forceinline f32x4 f32x4_broadcast_3(f32x4_vec0 a)
+static bad_forceinline f32x4 f32x4_broadcast_3(f32x4 a)
 {
     return (f32x4){a.e[3], a.e[3], a.e[3], a.e[3]};
 }
 
 
 // ============ Selection =============
-static bad_forceinline f32x4 f32x4_blend(f32x4_vec0 a, f32x4_vec1 b, mask128_vec2 m)
+static bad_forceinline f32x4 f32x4_blend(f32x4 a, f32x4 b, mask128 m)
 {
     mask128 a_mask = f32x4_as_mask128(a);
     mask128 b_mask = f32x4_as_mask128(b);
@@ -215,7 +215,7 @@ static bad_forceinline f32x4 f32x4_blend(f32x4_vec0 a, f32x4_vec1 b, mask128_vec
 
 
 // =========== Conversion =============
-static bad_forceinline mask128 f32x4_as_mask128(f32x4_vec0 a)
+static bad_forceinline mask128 f32x4_as_mask128(f32x4 a)
 {
     mask128 res;
 
@@ -228,7 +228,7 @@ static bad_forceinline mask128 f32x4_as_mask128(f32x4_vec0 a)
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_to_s32x4(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_to_s32x4(f32x4 a)
 {
     mask128 res;
 
@@ -241,7 +241,7 @@ static bad_forceinline mask128 bad_veccall f32x4_to_s32x4(f32x4_vec0 a)
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_to_u32x4(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_to_u32x4(f32x4 a)
 {
     mask128 res;
 

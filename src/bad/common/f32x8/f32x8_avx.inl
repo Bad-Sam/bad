@@ -84,7 +84,7 @@ static bad_forceinline f32x8 f32x8_set_all(f32 a)
 }
 
 
-static bad_forceinline void bad_veccall f32x8_store(f32* mem_addr, f32x8_vec0 a)
+static bad_forceinline void bad_veccall f32x8_store(f32* mem_addr, f32x8 a)
 {
     bad_assert_avx_aligned(mem_addr);
 
@@ -93,7 +93,7 @@ static bad_forceinline void bad_veccall f32x8_store(f32* mem_addr, f32x8_vec0 a)
 }
 
 
-static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8_vec0 a)
+static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8 a)
 {
     // NOTE: si128 version has a better throughput
     return _mm256_storeu_si256((__m256i*)mem_addr, a);
@@ -101,7 +101,7 @@ static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8_vec0 a
 
 
 // ============== Getter ==============
-static bad_forceinline f32 bad_veccall f32x8_get_0(f32x8_vec0 a)
+static bad_forceinline f32 bad_veccall f32x8_get_0(f32x8 a)
 {
     return _mm256_cvtss_f32(a);
 }
@@ -109,20 +109,20 @@ static bad_forceinline f32 bad_veccall f32x8_get_0(f32x8_vec0 a)
 
 // =========== Selection ============
 // (a & m) | (b & ~m)
-static bad_forceinline f32x8 bad_veccall f32x8_blend(f32x8_vec0 a, f32x8_vec1 b, mask256_vec2 m)
+static bad_forceinline f32x8 bad_veccall f32x8_blend(f32x8 a, f32x8 b, mask256 m)
 {
     return _mm256_blendv_ps(b, a, _mm256_castsi256_ps(m));
 }
 
 
 // ============ Conversion =============
-static bad_forceinline mask256 bad_veccall f32x8_as_mask256(f32x8_vec0 a)
+static bad_forceinline mask256 bad_veccall f32x8_as_mask256(f32x8 a)
 {
     return _mm256_castps_si256(a);
 }
 
 
-static bad_forceinline mask256 bad_veccall f32x8_to_s32x8(f32x8_vec0 a)
+static bad_forceinline mask256 bad_veccall f32x8_to_s32x8(f32x8 a)
 {
 #if defined(___SSE2__)
     return _mm256_cvtps_epi32(a);
@@ -146,7 +146,7 @@ static bad_forceinline mask256 bad_veccall f32x8_to_s32x8(f32x8_vec0 a)
 }
 
 
-static bad_forceinline mask256 bad_veccall f32x8_to_u32x8(f32x8_vec0 a)
+static bad_forceinline mask256 bad_veccall f32x8_to_u32x8(f32x8 a)
 {
     bad_align(32) f32 store[8];
     bad_align(32) u32 load[8];

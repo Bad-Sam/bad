@@ -1,31 +1,31 @@
 // =========== Arithmetic ===========
-static bad_forceinline f32x4 bad_veccall f32x4_add(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_add(f32x4 a, f32x4 b)
 {
     return _mm_add_ps(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_sub(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_sub(f32x4 a, f32x4 b)
 {
     return _mm_sub_ps(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_mul(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_mul(f32x4 a, f32x4 b)
 {
     return _mm_mul_ps(a, b);
 }
 
 
 // NOTE: using _mm_rcp_ps + _mm_mul_ps brings significant imprecision
-static bad_forceinline f32x4 bad_veccall f32x4_div(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_div(f32x4 a, f32x4 b)
 {
     return _mm_div_ps(a, b);
 }
 
 
 // See Peter Cordes' very comprehensive explanation: https://stackoverflow.com/a/35270026/15315204
-static bad_forceinline f32x4 bad_veccall f32x4_hadd3(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_hadd3(f32x4 a)
 {
     // shuf = (a[1], a[1], a[3], x)
 #if defined(__SSE3__)
@@ -44,7 +44,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_hadd3(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_hadd4(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_hadd4(f32x4 a)
 {
     // shuf = (a[1], a[1], a[3], x)
 #if defined(__SSE3__)
@@ -63,50 +63,50 @@ static bad_forceinline f32x4 bad_veccall f32x4_hadd4(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32 bad_veccall f32x4_sum3(f32x4_vec0 a)
+static bad_forceinline f32 bad_veccall f32x4_sum3(f32x4 a)
 {
     return f32x4_get_0(f32x4_hadd3(a));
 }
 
 
-static bad_forceinline f32 bad_veccall f32x4_sum4(f32x4_vec0 a)
+static bad_forceinline f32 bad_veccall f32x4_sum4(f32x4 a)
 {
     return f32x4_get_0(f32x4_hadd4(a));
 }
 
 
 // ====== Advanced arithmetic =======
-static bad_forceinline f32x4 bad_veccall f32x4_rcp(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_rcp(f32x4 a)
 {
     return _mm_rcp_ps(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_sqrt(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_sqrt(f32x4 a)
 {
     return _mm_sqrt_ps(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_rsqrt(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_rsqrt(f32x4 a)
 {
     return _mm_rsqrt_ps(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_min(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_min(f32x4 a, f32x4 b)
 {
     return _mm_min_ps(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_max(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_max(f32x4 a, f32x4 b)
 {
     return _mm_max_ps(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4 a)
 {
 #if defined(__SSE2__)
     // Shift out the sign bit, shift in zero instead
@@ -117,7 +117,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4 a)
 {
 #if defined(__SSE2__)
     mask128 a_sign = _mm_cmpeq_epi32(_mm_castps_si128(a), _mm_castps_si128(a));
@@ -135,7 +135,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_neg(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_neg(f32x4 a)
 {
 #if defined(__SSE2__)
     // si128 version has a better throughput
@@ -146,13 +146,13 @@ static bad_forceinline f32x4 bad_veccall f32x4_neg(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_frac(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_frac(f32x4 a)
 {
     return f32x4_sub(a, f32x4_trunc(a));
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4 a, f32x4 b)
 {
     f32x4 trunc = _mm_div_ps(a, b);
           trunc = f32x4_trunc(trunc);
@@ -161,7 +161,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4_vec0 a, f32x4_vec1 b)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4 a)
 {
 #if defined(__SSE4_1__)
     return _mm_round_ps(a, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC);
@@ -176,7 +176,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_round(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_round(f32x4 a)
 {
 #if defined(__SSE4_1__)
     return _mm_round_ps(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
@@ -191,7 +191,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_round(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_floor(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_floor(f32x4 a)
 {
 #if defined(__SSE4_2__)
     return _mm_floor_ps(a);
@@ -215,7 +215,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_floor(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_ceil(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_ceil(f32x4 a)
 {
 #if defined(__SSE4_2__)
     return _mm_ceil_ps(a);
@@ -239,13 +239,13 @@ static bad_forceinline f32x4 bad_veccall f32x4_ceil(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_clamp(f32x4_vec0 a, f32x4_vec1 min, f32x4_vec2 max)
+static bad_forceinline f32x4 bad_veccall f32x4_clamp(f32x4 a, f32x4 min, f32x4 max)
 {
     return _mm_min_ps(_mm_max_ps(a, min), max);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 t)
+static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4 a, f32x4 b, f32x4 t)
 {
     f32x4 one_min_t = f32x4_sub(f32x4_one(), t);
 
@@ -260,7 +260,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4_vec0 a, f32x4_vec1 b, 
 // ========== Trigonometry ===========
 // TODO(improve): surely there is a better way to do range reduction
 //                and assign the correct sign
-static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4_vec0 x)
+static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4 x)
 {
     static const f32x4 vhalf_pi_rcp = f32x4_set_all(half_pi_rcp);
     static const f32x4 vhalf_pi     = f32x4_set_all(half_pi);
@@ -334,7 +334,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4_vec0 x)
 
 
 // Expects values in [-pi, pi]
-static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4_vec0 x)
+static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4 x)
 {
     static const f32x4 vpi_rcp  = f32x4_set_all(pi_rcp);
     static const f32x4 vpi      = f32x4_set_all(pi);
@@ -355,7 +355,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4_vec0 x)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4 a)
 {
 /*
     // Constants
@@ -425,7 +425,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4_vec0 a)
 
 
 // Expects inputs in [0, pi/2]
-static bad_forceinline f32x4 bad_veccall f32x4_cos_0_halfpi(f32x4_vec0 x)
+static bad_forceinline f32x4 bad_veccall f32x4_cos_0_halfpi(f32x4 x)
 {
     static const f32x4 a2  = f32x4_set_all(-.4999999963f);
     static const f32x4 a4  = f32x4_set_all( .0416666418f);
@@ -446,7 +446,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_cos_0_halfpi(f32x4_vec0 x)
 
 
 // Expects inputs in [-pi, pi]
-static bad_forceinline f32x4 bad_veccall f32x4_sin_npi_pi(f32x4_vec0 x)
+static bad_forceinline f32x4 bad_veccall f32x4_sin_npi_pi(f32x4 x)
 {
     static const f32x4 c1  = f32x4_set_all(-.10132118f),
                        c3  = f32x4_set_all( .0066208798f),
@@ -471,7 +471,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_sin_npi_pi(f32x4_vec0 x)
 
 // ======== Fused operations ========
 // a * b + c
-static bad_forceinline f32x4 bad_veccall f32x4_mul_add(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c)
+static bad_forceinline f32x4 bad_veccall f32x4_mul_add(f32x4 a, f32x4 b, f32x4 c)
 {
 #if defined(__FMA__)
     return _mm_fmadd_ps(a, b, c);
@@ -482,7 +482,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_mul_add(f32x4_vec0 a, f32x4_vec1 
 
 
 // a * b - c
-static bad_forceinline f32x4 bad_veccall f32x4_mul_sub(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c)
+static bad_forceinline f32x4 bad_veccall f32x4_mul_sub(f32x4 a, f32x4 b, f32x4 c)
 {
 #if defined(__FMA__)
     return _mm_fmsub_ps(a, b, c);
@@ -493,7 +493,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_mul_sub(f32x4_vec0 a, f32x4_vec1 
 
 
 // -a * b + c
-static bad_forceinline f32x4 bad_veccall f32x4_nmul_add(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c)
+static bad_forceinline f32x4 bad_veccall f32x4_nmul_add(f32x4 a, f32x4 b, f32x4 c)
 {
 #if defined(__FMA__)
     return _mm_fnmadd_ps(a, b, c);
@@ -504,7 +504,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_nmul_add(f32x4_vec0 a, f32x4_vec1
 
 
 // -a * b - c
-static bad_forceinline f32x4 bad_veccall f32x4_nmul_sub(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c)
+static bad_forceinline f32x4 bad_veccall f32x4_nmul_sub(f32x4 a, f32x4 b, f32x4 c)
 {
 #if defined(__FMA__)
     return _mm_fnmsub_ps(a, b, c);
@@ -515,37 +515,37 @@ static bad_forceinline f32x4 bad_veccall f32x4_nmul_sub(f32x4_vec0 a, f32x4_vec1
 
 
 // ============ Comparison ============
-static bad_forceinline mask128 bad_veccall f32x4_neq(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_neq(f32x4 a, f32x4 b)
 {
     return f32x4_as_mask128(_mm_cmpneq_ps(a, b));
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_eq(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_eq(f32x4 a, f32x4 b)
 {
     return f32x4_as_mask128(_mm_cmpeq_ps(a, b));
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_ge(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_ge(f32x4 a, f32x4 b)
 {
     return f32x4_as_mask128(_mm_cmpge_ps(a, b));
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_gt(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_gt(f32x4 a, f32x4 b)
 {
     return f32x4_as_mask128(_mm_cmpgt_ps(a, b));
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_le(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_le(f32x4 a, f32x4 b)
 {
     return f32x4_as_mask128(_mm_cmple_ps(a, b));
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4 a, f32x4 b)
 {
     return f32x4_as_mask128(_mm_cmplt_ps(a, b));
 }
@@ -553,7 +553,7 @@ static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4_vec0 a, f32x4_vec1 b)
 
 
 // ============= Tests ==============
-static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4 a)
 {
     // nan is the only value for which a == a returns false
     // NOTE: I have not found any faster implementation
@@ -562,7 +562,7 @@ static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4_vec0 a)
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4 a)
 {
     // +inf is 0x7F800000, -inf is 0xFF800000
 #if defined(__SSE2__)
@@ -579,7 +579,7 @@ static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4_vec0 a)
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_is_finite(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_is_finite(f32x4 a)
 {
     // a is finite if its exponent is not all 1
     mask128 exp = mask128_exponent32();

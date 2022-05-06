@@ -1,29 +1,29 @@
 // =========== Arithmetic ===========
-static bad_forceinline f32x4 bad_veccall f32x4_add(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_add(f32x4 a, f32x4 b)
 {
     return vaddq_f32(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_sub(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_sub(f32x4 a, f32x4 b)
 {
     return vsubq_f32(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_mul(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_mul(f32x4 a, f32x4 b)
 {
     return vmulq_f32(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_div(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_div(f32x4 a, f32x4 b)
 {
     return vdivq_f32(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_hadd3(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_hadd3(f32x4 a)
 {
     f32x4 sum = vpaddq_f32(a, a);
 
@@ -31,7 +31,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_hadd3(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_hadd4(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_hadd4(f32x4 a)
 {
     f32x4 sum = vpaddq_f32(a, a);
 
@@ -39,56 +39,56 @@ static bad_forceinline f32x4 bad_veccall f32x4_hadd4(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32 bad_veccall f32x4_sum3(f32x4_vec0 a)
+static bad_forceinline f32 bad_veccall f32x4_sum3(f32x4 a)
 {
     return f32x4_get_0(f32x4_hadd3(a));
 }
 
 
-static bad_forceinline f32 bad_veccall f32x4_sum4(f32x4_vec0 a)
+static bad_forceinline f32 bad_veccall f32x4_sum4(f32x4 a)
 {
     return vaddvq_f32(a);
 }
 
 
 // ====== Advanced arithmetic =======
-static bad_forceinline f32x4 bad_veccall f32x4_rcp(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_rcp(f32x4 a)
 {
     return vrecpeq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_sqrt(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_sqrt(f32x4 a)
 {
     return vsqrtq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_rsqrt(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_rsqrt(f32x4 a)
 {
     return vrsqrteq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_min(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_min(f32x4 a, f32x4 b)
 {
     return vminq_f32(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_max(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_max(f32x4 a, f32x4 b)
 {
     return vmaxq_f32(a, b);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4 a)
 {
     return vabsq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4 a)
 {
     mask128 a_sign = vceqq_u32(vreinterpretq_u32_f32(a), vreinterpretq_u32_f32(a));
     mask128 one    = vshlq_n_u32(vshrq_n_u32(a_sign, 25), 23);
@@ -99,19 +99,19 @@ static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_neg(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_neg(f32x4 a)
 {
     return vnegq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_frac(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_frac(f32x4 a)
 {
     return f32x4_sub(a, f32x4_trunc(a));
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4 a, f32x4 b)
 {
     // TODO: test vmulq_f32(a, vrecpeq_f32(b))
     f32x4 truncated = vdivq_f32(a, b);
@@ -121,37 +121,37 @@ static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4_vec0 a, f32x4_vec1 b)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4 a)
 {
     return vrndq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_round(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_round(f32x4 a)
 {
     return vrndnq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_floor(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_floor(f32x4 a)
 {
     return vrndmq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_ceil(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_ceil(f32x4 a)
 {
     return vrndpq_f32(a);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_clamp(f32x4_vec0 a, f32x4_vec1 min, f32x4_vec2 max)
+static bad_forceinline f32x4 bad_veccall f32x4_clamp(f32x4 a, f32x4 min, f32x4 max)
 {
     return vminq_f32(vmax_f32(a, min), max);
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 t)
+static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4 a, f32x4 b, f32x4 t)
 {
     f32x4 one_min_t = f32x4_sub(f32x4_one(), t);
 
@@ -160,13 +160,13 @@ static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4_vec0 a, f32x4_vec1 b, 
 
 
 // ========== Trigonometry ===========
-static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4 a)
 {
     return a;
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4 a)
 {
     // Based on Chebyshev polynomials
     static const f32x4 c0     = f32x4_set_all(-.10132118f),
@@ -205,7 +205,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4 a)
 {
     return a;
 }
@@ -213,7 +213,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4_vec0 a)
 
 // ======== Fused operations ========
 // a * b + c
-static bad_forceinline f32x4 bad_veccall f32x4_mul_add(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c)
+static bad_forceinline f32x4 bad_veccall f32x4_mul_add(f32x4 a, f32x4 b, f32x4 c)
 {
 #if defined(__ARM_FEATURE_FMA)
     return vfmaq_f32(c, a, b);
@@ -223,7 +223,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_mul_add(f32x4_vec0 a, f32x4_vec1 
 }
 
 // a * b - c
-static bad_forceinline f32x4 bad_veccall f32x4_mul_sub(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c)
+static bad_forceinline f32x4 bad_veccall f32x4_mul_sub(f32x4 a, f32x4 b, f32x4 c)
 {
 #if defined(__ARM_FEATURE_FMA)
     return vnegq_f32(vfmsq_f32(c, a, b));
@@ -233,7 +233,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_mul_sub(f32x4_vec0 a, f32x4_vec1 
 }
 
 // -a * b + c
-static bad_forceinline f32x4 bad_veccall f32x4_nmul_add(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c)
+static bad_forceinline f32x4 bad_veccall f32x4_nmul_add(f32x4 a, f32x4 b, f32x4 c)
 {
 #if defined(__ARM_FEATURE_FMA)
     return vfmsq_f32(c, a, b);
@@ -243,7 +243,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_nmul_add(f32x4_vec0 a, f32x4_vec1
 }
 
 // -a * b - c
-static bad_forceinline f32x4 bad_veccall f32x4_nmul_sub(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c)
+static bad_forceinline f32x4 bad_veccall f32x4_nmul_sub(f32x4 a, f32x4 b, f32x4 c)
 {
 #if defined(__ARM_FEATURE_FMA)
     return vnegq_f32(vfmaq_f32(c, a, b));
@@ -254,37 +254,37 @@ static bad_forceinline f32x4 bad_veccall f32x4_nmul_sub(f32x4_vec0 a, f32x4_vec1
 
 
 // ============ Comparison ============
-static bad_forceinline mask128 bad_veccall f32x4_neq(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_neq(f32x4 a, f32x4 b)
 {
     return vmvnq_u32(vceqq_f32(a, b));
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_eq(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_eq(f32x4 a, f32x4 b)
 {
     return vceqq_f32(a, b);
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_ge(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_ge(f32x4 a, f32x4 b)
 {
     return vcgeq_f32(a, b);
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_gt(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_gt(f32x4 a, f32x4 b)
 {
     return vcgtq_f32(a, b);
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_le(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_le(f32x4 a, f32x4 b)
 {
     return vcleq_f32(a, b);
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4_vec0 a, f32x4_vec1 b)
+static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4 a, f32x4 b)
 {
     return vcltq_f32(a, b);
 }
@@ -292,14 +292,14 @@ static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4_vec0 a, f32x4_vec1 b)
 
 
 // ======= Selection & tests ========
-static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4 a)
 {
     // nan is the only value for which a == a returns false
     return f32x4_neq(a, a);
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4 a)
 {
     // +inf is 0x7F800000, -inf is 0xFF800000
     mask128 all1_mask  = mask128_all1();
@@ -310,7 +310,7 @@ static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4_vec0 a)
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_is_finite(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_is_finite(f32x4 a)
 {
     mask128 exp = mask128_exponent32();
 

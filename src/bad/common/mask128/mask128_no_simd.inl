@@ -33,7 +33,7 @@ static bad_forceinline mask128 mask128_set_all(mask_elem k)
 }
 
 
-static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128 a)
 {
     mem_addr[0] = a.e[0];
     mem_addr[1] = a.e[1];
@@ -42,7 +42,7 @@ static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128_vec0 a)
 }
 
 
-static bad_forceinline void mask128_storeu(mask_elem* mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_storeu(mask_elem* mem_addr, mask128 a)
 {
     return mask128_store(mem_addr, a);
 }
@@ -127,7 +127,7 @@ static bad_forceinline mask128 mask128_exponent32()
 
 
 // ======= Masking operations =======
-static bad_forceinline mask128 mask128_keep_highbit32(mask128_vec0 a)
+static bad_forceinline mask128 mask128_keep_highbit32(mask128 a)
 {
     const u32 mask = 0x80000000;
 
@@ -141,7 +141,7 @@ static bad_forceinline mask128 mask128_keep_highbit32(mask128_vec0 a)
 }
 
 
-static bad_forceinline mask128 mask128_keep_lowbit32(mask128_vec0 a)
+static bad_forceinline mask128 mask128_keep_lowbit32(mask128 a)
 {
     const u32 mask = 0x00000001;
 
@@ -155,7 +155,7 @@ static bad_forceinline mask128 mask128_keep_lowbit32(mask128_vec0 a)
 }
 
 
-static bad_forceinline mask128 mask128_shift_left32(mask128_vec0 a, s32 shift)
+static bad_forceinline mask128 mask128_shift_left32(mask128 a, s32 shift)
 {
     mask128 res;
     
@@ -168,7 +168,7 @@ static bad_forceinline mask128 mask128_shift_left32(mask128_vec0 a, s32 shift)
 }
 
 
-static bad_forceinline mask128 mask128_shift_right32(mask128_vec0 a, s32 shift)
+static bad_forceinline mask128 mask128_shift_right32(mask128 a, s32 shift)
 {
     mask128 res;
     
@@ -184,7 +184,7 @@ static bad_forceinline mask128 mask128_shift_right32(mask128_vec0 a, s32 shift)
 
 
 // ========== Comparison ==========
-static bad_forceinline mask128 mask128_eq(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_eq(mask128 a, mask128 b)
 {
     mask128 res;
 
@@ -197,7 +197,7 @@ static bad_forceinline mask128 mask128_eq(mask128_vec0 a, mask128_vec1 b)
 }
 
 
-static bad_forceinline mask128 mask128_neq(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_neq(mask128 a, mask128 b)
 {
     mask128 res;
 
@@ -213,7 +213,7 @@ static bad_forceinline mask128 mask128_neq(mask128_vec0 a, mask128_vec1 b)
 
 
 // ============= Logical ==============
-static bad_forceinline mask128 mask128_and(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_and(mask128 a, mask128 b)
 {
     mask128 res;
 
@@ -226,7 +226,7 @@ static bad_forceinline mask128 mask128_and(mask128_vec0 a, mask128_vec1 b)
 }
 
 
-static bad_forceinline mask128 mask128_and_not(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_and_not(mask128 a, mask128 b)
 {
     mask128 res;
 
@@ -239,7 +239,7 @@ static bad_forceinline mask128 mask128_and_not(mask128_vec0 a, mask128_vec1 b)
 }
 
 
-static bad_forceinline mask128 mask128_or(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_or(mask128 a, mask128 b)
 {
     mask128 res;
 
@@ -252,7 +252,7 @@ static bad_forceinline mask128 mask128_or(mask128_vec0 a, mask128_vec1 b)
 }
 
 
-static bad_forceinline mask128 mask128_xor(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_xor(mask128 a, mask128 b)
 {
     mask128 res;
 
@@ -265,7 +265,7 @@ static bad_forceinline mask128 mask128_xor(mask128_vec0 a, mask128_vec1 b)
 }
 
 
-static bad_forceinline mask128 mask128_not(mask128_vec0 a)
+static bad_forceinline mask128 mask128_not(mask128 a)
 {
     mask128 res;
 
@@ -279,7 +279,7 @@ static bad_forceinline mask128 mask128_not(mask128_vec0 a)
 
 
 // ============ Conversion =============
-static bad_forceinline f32x4 mask128_as_f32x4(mask128_vec0 a)
+static bad_forceinline f32x4 mask128_as_f32x4(mask128 a)
 {
     f32x4 res;
 
@@ -292,7 +292,7 @@ static bad_forceinline f32x4 mask128_as_f32x4(mask128_vec0 a)
 }
 
 
-static bad_forceinline f32x4 mask128_u32x4_to_f32x4(mask128_vec0 a)
+static bad_forceinline f32x4 mask128_u32x4_to_f32x4(mask128 a)
 {
     f32x4 res;
 
@@ -305,7 +305,7 @@ static bad_forceinline f32x4 mask128_u32x4_to_f32x4(mask128_vec0 a)
 }
 
 
-static bad_forceinline f32x4 mask128_s32x4_to_f32x4(mask128_vec0 a)
+static bad_forceinline f32x4 mask128_s32x4_to_f32x4(mask128 a)
 {
     return mask128_u32x4_to_f32x4(a);
 }

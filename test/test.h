@@ -5,7 +5,6 @@
 #include <bad/types/simd_types.h>
 #include <bad/detect/os.h>
 #include <bad/qualifiers.h>
-#include <bad/args.h>
 
 #include <stdio.h>
 

@@ -3,7 +3,6 @@
 
 #include <bad/bad.h>
 #include <bad/qualifiers.h>
-#include <bad/args.h>
 
 #include <bad/types/simd_types.h>
 
@@ -29,20 +28,20 @@ static bad_forceinline f32x8 f32x8_loadu(const f32* mem_addr);
 static bad_forceinline f32x8 f32x8_set(f32 a, f32 b, f32 c, f32 d,
                                        f32 e, f32 f, f32 g, f32 h);
 static bad_forceinline f32x8 f32x8_set_all(f32 a);            
-static bad_forceinline void bad_veccall f32x8_store(f32* mem_addr, f32x8_vec0 a);
-static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8_vec0 a);
+static bad_forceinline void bad_veccall f32x8_store(f32* mem_addr, f32x8 a);
+static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8 a);
 
 
 // ============== Getter ==============
-static bad_forceinline f32 bad_veccall f32x8_get_0(f32x8_vec0 a);
+static bad_forceinline f32 bad_veccall f32x8_get_0(f32x8 a);
 
 
 // ======== Selection & tests =========
-static bad_forceinline f32x8 bad_veccall f32x8_blend(f32x8_vec0 a, f32x8_vec1 b, mask256_vec2 m);
+static bad_forceinline f32x8 bad_veccall f32x8_blend(f32x8 a, f32x8 b, mask256 m);
 
 
 // ========= Cast/reinterpret =========
-static bad_forceinline mask256 bad_veccall f32x8_as_mask256(f32x8_vec0 a);
+static bad_forceinline mask256 bad_veccall f32x8_as_mask256(f32x8 a);
 
 
 #if defined(__AVX__)

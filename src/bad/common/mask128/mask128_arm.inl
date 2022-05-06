@@ -25,13 +25,13 @@ static bad_forceinline mask128 mask128_set_all(mask_elem k)
 }
 
 
-static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128 a)
 {
     vst1q_u32(mem_addr, a);
 }
 
 
-static bad_forceinline void mask128_storeu(mask_elem* mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_storeu(mask_elem* mem_addr, mask128 a)
 {
     return mask128_store(mem_addr, a);
 }
@@ -76,25 +76,25 @@ static bad_forceinline mask128 mask128_exponent32()
 
 
 // ======= Masking operations =======
-static bad_forceinline mask128 bad_veccall mask128_keep_highbit32(mask128_vec0 a)
+static bad_forceinline mask128 bad_veccall mask128_keep_highbit32(mask128 a)
 {
     return vshlq_n_u32(vshrq_n_u32(a, 31), 31);
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_keep_lowbit32(mask128_vec0 a)
+static bad_forceinline mask128 bad_veccall mask128_keep_lowbit32(mask128 a)
 {
     return vshrq_n_u32(vshlq_n_u32(a, 31), 31);
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_shift_left32(mask128_vec0 a, s32 shift)
+static bad_forceinline mask128 bad_veccall mask128_shift_left32(mask128 a, s32 shift)
 {
     return vshlq_n_u32(a, shift);
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_shift_right32(mask128_vec0 a, s32 shift)
+static bad_forceinline mask128 bad_veccall mask128_shift_right32(mask128 a, s32 shift)
 {
     return vshrq_n_u32(a, shift);
 }
@@ -103,25 +103,25 @@ static bad_forceinline mask128 bad_veccall mask128_shift_right32(mask128_vec0 a,
 
 
 // ============== Getters =============
-static bad_forceinline mask_elem bad_veccall mask128_get_0(mask128_vec0 a)
+static bad_forceinline mask_elem bad_veccall mask128_get_0(mask128 a)
 {
     return vgetq_lane_f32(a, 0);
 }
 
 
-static bad_forceinline mask_elem bad_veccall mask128_get_1(mask128_vec0 a)
+static bad_forceinline mask_elem bad_veccall mask128_get_1(mask128 a)
 {
     return vgetq_lane_f32(a, 1);
 }
 
 
-static bad_forceinline mask_elem bad_veccall mask128_get_2(mask128_vec0 a)
+static bad_forceinline mask_elem bad_veccall mask128_get_2(mask128 a)
 {
     return vgetq_lane_f32(a, 2);
 }
 
 
-static bad_forceinline mask_elem bad_veccall mask128_get_3(mask128_vec0 a)
+static bad_forceinline mask_elem bad_veccall mask128_get_3(mask128 a)
 {
     return vgetq_lane_f32(a, 3);
 }
@@ -130,50 +130,50 @@ static bad_forceinline mask_elem bad_veccall mask128_get_3(mask128_vec0 a)
 
 
 // ========== Comparison ==========
-static bad_forceinline mask128 mask128_eq(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_eq(mask128 a, mask128 b)
 {
     return vceqq_u32(a, b);
 }
 
 
-static bad_forceinline mask128 mask128_neq(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_neq(mask128 a, mask128 b)
 {
     return vmvnq_u32(vceqq_u32(a, b));
 }
 
 
 // ============= Logical ==============
-static bad_forceinline mask128 bad_veccall mask128_and(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 bad_veccall mask128_and(mask128 a, mask128 b)
 {
     return vandq_u32(a, b);
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_and_not(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 bad_veccall mask128_and_not(mask128 a, mask128 b)
 {
     return vbicq_u32(a, b);
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_or(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 bad_veccall mask128_or(mask128 a, mask128 b)
 {
     return vorq_u32(a, b);
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_xor(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 bad_veccall mask128_xor(mask128 a, mask128 b)
 {
     return veorq_u32(a, b);
 }
 
-static bad_forceinline mask128 bad_veccall mask128_not(mask128_vec0 a)
+static bad_forceinline mask128 bad_veccall mask128_not(mask128 a)
 {
     return vmvnq_u32(a);
 }
 
 
 // ============ Conversion =============
-static bad_forceinline f32x4 bad_veccall mask128_as_f32x4(mask128_vec0 a)
+static bad_forceinline f32x4 bad_veccall mask128_as_f32x4(mask128 a)
 {
     return vreinterpretq_f32_u32(a);
 }

@@ -33,7 +33,6 @@ Because I am working on this library primarily to learn, it is a work in progres
     - [`detect/`](src/bad/detect/): context detection around the library
     - [`math/`](src/bad/math/): math functions
     - [`types/`](src/bad/types/): where scalar, simd and math types are defined. No functions are contained here, only declarations
-    - [`args.h`](src/bad/args.h): the way arguments are passed to functions has an influence on performance. `arg.h` wraps behind macros the ideal argument passing method for all types
     - [`bad.h`](src/bad/bad.h): included accross all headers, currently used solely for wrapping sources in an optional namespace
     - [`debug.h`](src/bad/debug.h): debug-mode runtime checks through macros
     - [`qualifiers.h`](src/bad/qualifiers.h): a variety of qualifiers used to affect how the compiler generates code

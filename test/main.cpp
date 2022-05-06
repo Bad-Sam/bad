@@ -9,11 +9,9 @@
 #include "tests/test_vec4.h"
 #include "tests/test_vec4_kernel.h"
 
-
 #if defined(__cplusplus)
 using namespace bad;
 #endif
-
 
 int main()
 {

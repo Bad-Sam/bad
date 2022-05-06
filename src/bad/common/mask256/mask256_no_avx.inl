@@ -23,14 +23,14 @@ static bad_forceinline mask256 mask256_set_all(mask_elem k)
 }
 
 
-static bad_forceinline void mask256_store(mask_elem* mem_addr, mask256_vec0 a)
+static bad_forceinline void mask256_store(mask_elem* mem_addr, mask256 a)
 {
     mask128_store(mem_addr, a.a);
     mask128_store(mem_addr + 4, a.b);
 }
 
 
-static bad_forceinline void mask256_storeu(mask_elem* mem_addr, mask256_vec0 a)
+static bad_forceinline void mask256_storeu(mask_elem* mem_addr, mask256 a)
 {
     mask128_storeu(mem_addr, a.a);
     mask128_storeu(mem_addr + 4, a.b);
@@ -74,57 +74,57 @@ static bad_forceinline mask256 mask256_exponent32()
 
 
 // ========== Comparison ==========
-static bad_forceinline mask256 mask256_eq(mask256_vec0 a, mask256_vec1 b)
+static bad_forceinline mask256 mask256_eq(mask256 a, mask256 b)
 {
     return (mask256){mask128_eq(a.a, b.a), mask128_eq(a.b, b.b)};
 }
 
 
-static bad_forceinline mask256 mask256_neq(mask256_vec0 a, mask256_vec1 b)
+static bad_forceinline mask256 mask256_neq(mask256 a, mask256 b)
 {
     return (mask256){mask128_neq(a.a, b.a), mask128_neq(a.b, b.b)};
 }
 
 
 // ============= Logical ==============
-static bad_forceinline mask256 bad_veccall mask256_and(mask256_vec0 a, mask256_vec1 b)
+static bad_forceinline mask256 bad_veccall mask256_and(mask256 a, mask256 b)
 {
     return (mask256){mask128_and(a.a, b.a), mask128_and(a.b, b.b)};
 }
 
 
-static bad_forceinline mask256 bad_veccall mask256_and_not(mask256_vec0 a, mask256_vec1 b)
+static bad_forceinline mask256 bad_veccall mask256_and_not(mask256 a, mask256 b)
 {
     return (mask256){mask128_and_not(a.a, b.a), mask128_and_not(a.b, b.b)};
 }
 
 
-static bad_forceinline mask256 bad_veccall mask256_or(mask256_vec0 a, mask256_vec1 b)
+static bad_forceinline mask256 bad_veccall mask256_or(mask256 a, mask256 b)
 {
     return (mask256){mask128_or(a.a, b.a), mask128_or(a.b, b.b)};
 }
 
 
-static bad_forceinline mask256 bad_veccall mask256_xor(mask256_vec0 a, mask256_vec1 b)
+static bad_forceinline mask256 bad_veccall mask256_xor(mask256 a, mask256 b)
 {
     return (mask256){mask128_xor(a.a, b.a), mask128_xor(a.b, b.b)};
 }
 
 
 // ============ Conversion =============
-static bad_forceinline f32x8 bad_veccall mask256_as_f32x8(mask256_vec0 a)
+static bad_forceinline f32x8 bad_veccall mask256_as_f32x8(mask256 a)
 {
     return (mask256){mask128_as_f32x4(a.a), mask128_as_f32x4(a.b)};
 }
 
 
-static bad_forceinline f32x8 bad_veccall mask256_u32x8_to_f32x8(mask256_vec0 a)
+static bad_forceinline f32x8 bad_veccall mask256_u32x8_to_f32x8(mask256 a)
 {
     return (mask256){mask128_u32x4_to_f32x4(a.a), mask128_u32x4_to_f32x4(a.b)};
 }
 
 
-static bad_forceinline f32x8 bad_veccall mask256_s32x8_to_f32x8(mask256_vec0 a)
+static bad_forceinline f32x8 bad_veccall mask256_s32x8_to_f32x8(mask256 a)
 {
     return (mask256){mask128_s32x4_to_f32x4(a.a), mask128_s32x4_to_f32x4(a.b)};;
 }

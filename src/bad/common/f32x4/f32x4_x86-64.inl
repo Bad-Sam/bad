@@ -91,7 +91,7 @@ static bad_forceinline f32x4 f32x4_set_lower(f32 a)
 }
 
 
-static bad_forceinline void bad_veccall f32x4_store(f32* mem_addr, f32x4_vec0 a)
+static bad_forceinline void bad_veccall f32x4_store(f32* mem_addr, f32x4 a)
 {
     bad_assert_sse_aligned(mem_addr);
 
@@ -103,7 +103,7 @@ static bad_forceinline void bad_veccall f32x4_store(f32* mem_addr, f32x4_vec0 a)
 }
 
 
-static bad_forceinline void bad_veccall f32x4_storeu(f32* mem_addr, f32x4_vec0 a)
+static bad_forceinline void bad_veccall f32x4_storeu(f32* mem_addr, f32x4 a)
 {
 #if defined(__SSE2__)
     return _mm_storeu_si128((__m128i*)mem_addr, a);
@@ -113,38 +113,38 @@ static bad_forceinline void bad_veccall f32x4_storeu(f32* mem_addr, f32x4_vec0 a
 }
 
 
-static bad_forceinline void bad_veccall f32x4_store_lower(f32* mem_addr, f32x4_vec0 a)
+static bad_forceinline void bad_veccall f32x4_store_lower(f32* mem_addr, f32x4 a)
 {
     mem_addr[0] = f32x4_get_0(a);
 }
 
 
 // ============== Getter ==============
-static bad_forceinline f32 bad_veccall f32x4_get_0(f32x4_vec0 a)
+static bad_forceinline f32 bad_veccall f32x4_get_0(f32x4 a)
 {
     return _mm_cvtss_f32(a);
 }
 
 
-static bad_forceinline f32 bad_veccall f32x4_get_1(f32x4_vec0 a)
+static bad_forceinline f32 bad_veccall f32x4_get_1(f32x4 a)
 {
     return _mm_cvtss_f32(_mm_shuffle_ps(a, a, _MM_SHUFFLE(1, 1, 1, 1)));
 }
 
 
-static bad_forceinline f32 bad_veccall f32x4_get_2(f32x4_vec0 a)
+static bad_forceinline f32 bad_veccall f32x4_get_2(f32x4 a)
 {
     return _mm_cvtss_f32(_mm_shuffle_ps(a, a, _MM_SHUFFLE(2, 2, 2, 2)));
 }
 
 
-static bad_forceinline f32 bad_veccall f32x4_get_3(f32x4_vec0 a)
+static bad_forceinline f32 bad_veccall f32x4_get_3(f32x4 a)
 {
     return _mm_cvtss_f32(_mm_shuffle_ps(a, a, _MM_SHUFFLE(3, 3, 3, 3)));
 }
 
 
-static bad_forceinline f32 bad_veccall f32x4_get_i(f32x4_vec0 a, s32 idx)
+static bad_forceinline f32 bad_veccall f32x4_get_i(f32x4 a, s32 idx)
 {
 #if defined(__AVX__)
     mask128 vidx     = _mm_cvtsi32_si128(idx);
@@ -171,7 +171,7 @@ static bad_forceinline f32 bad_veccall f32x4_get_i(f32x4_vec0 a, s32 idx)
 
 
 // ============== Setters =============
-static bad_forceinline f32x4 bad_veccall f32x4_copy_0(f32x4_vec0 a, f32x4 origin)
+static bad_forceinline f32x4 bad_veccall f32x4_copy_0(f32x4 a, f32x4 origin)
 {
 #if defined(__SSE4_1__)
     return _mm_blend_ps(a, origin, 0b0001);
@@ -181,7 +181,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_copy_0(f32x4_vec0 a, f32x4 origin
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_copy_1(f32x4_vec0 a, f32x4 origin)
+static bad_forceinline f32x4 bad_veccall f32x4_copy_1(f32x4 a, f32x4 origin)
 {
 #if defined(__SSE4_1__)
     return _mm_blend_ps(a, origin, 0b0010);
@@ -193,7 +193,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_copy_1(f32x4_vec0 a, f32x4 origin
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_copy_2(f32x4_vec0 a, f32x4 origin)
+static bad_forceinline f32x4 bad_veccall f32x4_copy_2(f32x4 a, f32x4 origin)
 {
 #if defined(__SSE4_1__)
     return _mm_blend_ps(a, origin, 0b0100);
@@ -205,7 +205,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_copy_2(f32x4_vec0 a, f32x4 origin
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_copy_3(f32x4_vec0 a, f32x4 origin)
+static bad_forceinline f32x4 bad_veccall f32x4_copy_3(f32x4 a, f32x4 origin)
 {
 #if defined(__SSE4_1__)
     return _mm_blend_ps(a, origin, 0b1000);
@@ -217,51 +217,51 @@ static bad_forceinline f32x4 bad_veccall f32x4_copy_3(f32x4_vec0 a, f32x4 origin
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_set_0(f32x4_vec0 a, f32 value)
+static bad_forceinline f32x4 bad_veccall f32x4_set_0(f32x4 a, f32 value)
 {
     return f32x4_copy_0(a, _mm_set_ss(value));
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_set_1(f32x4_vec0 a, f32 value)
+static bad_forceinline f32x4 bad_veccall f32x4_set_1(f32x4 a, f32 value)
 {
     return f32x4_copy_1(a, f32x4_set_all(value));
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_set_2(f32x4_vec0 a, f32 value)
+static bad_forceinline f32x4 bad_veccall f32x4_set_2(f32x4 a, f32 value)
 {
     return f32x4_copy_2(a, f32x4_set_all(value));
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_set_3(f32x4_vec0 a, f32 value)
+static bad_forceinline f32x4 bad_veccall f32x4_set_3(f32x4 a, f32 value)
 {
     return f32x4_copy_3(a, f32x4_set_all(value));
 }
 
 
 // ==== Vector element broadcast =====
-static bad_forceinline f32x4 bad_veccall f32x4_broadcast_0(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_broadcast_0(f32x4 a)
 {
     // vbroadcastss xmm, xmm doesn't seem to have an intrinsics
     return _mm_shuffle_ps(a, a, _MM_SHUFFLE(0, 0, 0, 0));
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_broadcast_1(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_broadcast_1(f32x4 a)
 {
     return _mm_shuffle_ps(a, a, _MM_SHUFFLE(1, 1, 1, 1));
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_broadcast_2(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_broadcast_2(f32x4 a)
 {
     return _mm_shuffle_ps(a, a, _MM_SHUFFLE(2, 2, 2, 2));
 }
 
 
-static bad_forceinline f32x4 bad_veccall f32x4_broadcast_3(f32x4_vec0 a)
+static bad_forceinline f32x4 bad_veccall f32x4_broadcast_3(f32x4 a)
 {
     return _mm_shuffle_ps(a, a, _MM_SHUFFLE(3, 3, 3, 3));
 }
@@ -269,7 +269,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_broadcast_3(f32x4_vec0 a)
 
 // =========== Selection ============
 // (a & m) | (b & ~m)
-static bad_forceinline f32x4 bad_veccall f32x4_blend(f32x4_vec0 a, f32x4_vec1 b, mask128_vec2 m)
+static bad_forceinline f32x4 bad_veccall f32x4_blend(f32x4 a, f32x4 b, mask128 m)
 {
 #if defined(__SSE4_1__)
     return _mm_blendv_ps(b, a, _mm_castsi128_ps(m));
@@ -283,7 +283,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_blend(f32x4_vec0 a, f32x4_vec1 b,
 
 
 // ============ Cast and conversion =============
-static bad_forceinline mask128 bad_veccall f32x4_as_mask128(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_as_mask128(f32x4 a)
 {
 #if defined(__SSE2__)
     return _mm_castps_si128(a);
@@ -292,7 +292,7 @@ static bad_forceinline mask128 bad_veccall f32x4_as_mask128(f32x4_vec0 a)
 #endif
 }
 
-static bad_forceinline mask128 bad_veccall f32x4_to_s32x4(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_to_s32x4(f32x4 a)
 {
 #if defined(___SSE2__)
     return _mm_cvtps_epi32(a);
@@ -312,7 +312,7 @@ static bad_forceinline mask128 bad_veccall f32x4_to_s32x4(f32x4_vec0 a)
 }
 
 
-static bad_forceinline mask128 bad_veccall f32x4_to_u32x4(f32x4_vec0 a)
+static bad_forceinline mask128 bad_veccall f32x4_to_u32x4(f32x4 a)
 {
     bad_align(16) f32 store[4];
     bad_align(16) u32 load[4];

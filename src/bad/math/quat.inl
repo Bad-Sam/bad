@@ -8,7 +8,7 @@ bad_forceinline quat quat_identity()
 
 
 // axis_angle = (x, y, z, angle)
-bad_inline quat bad_veccall quat_from_axis_angle(f32x4_vec0 unit_axis, f32 angle)
+bad_inline quat bad_veccall quat_from_axis_angle(f32x4 unit_axis, f32 angle)
 {
     // Compute cos(angle * 0.5) and sin(angle * 0.5)
     f32 half_angle = angle * .5f;
@@ -22,7 +22,7 @@ bad_inline quat bad_veccall quat_from_axis_angle(f32x4_vec0 unit_axis, f32 angle
 }
 
 
-bad_inline quat bad_veccall quat_from_euler(f32x4_vec0 xyz_angles)
+bad_inline quat bad_veccall quat_from_euler(f32x4 xyz_angles)
 {
     static const f32x4   half            = f32x4_half();
     static const mask128 right_sign_mask = mask128_set(0x80000000, 0x80000000, 0x00000000, 0x00000000);
@@ -56,7 +56,7 @@ bad_inline quat bad_veccall quat_from_euler(f32x4_vec0 xyz_angles)
 }
 
 
-bad_inline quat bad_veccall quat_conjugate(f32x4_vec0 q)
+bad_inline quat bad_veccall quat_conjugate(f32x4 q)
 {
     // TODO: compare performance with mask128_all1() and bitshifts
     mask128 conj_mask = mask128_set(0x80000000, 0x80000000, 0x80000000, 0x00000000);
@@ -67,7 +67,7 @@ bad_inline quat bad_veccall quat_conjugate(f32x4_vec0 q)
 
 // xyz = (q1.w * q0.xyz) + (q0.w * q1.xyz) + vec3_cross(q0.xyz, q1.xyz)
 // w   = (q0.w * q1.w) - vec3_dot(q0.axis, q1.axis)
-bad_inline quat bad_veccall quat_mul(f32x4_vec0 q0, f32x4_vec1 q1)
+bad_inline quat bad_veccall quat_mul(f32x4 q0, f32x4 q1)
 {
     vec3  new_axis = vec3_cross(q0, q1);
 
@@ -88,7 +88,7 @@ bad_inline quat bad_veccall quat_mul(f32x4_vec0 q0, f32x4_vec1 q1)
 
 
 // 2.f * (v * (q.w² - 0.5) + (q.axis * dot(q.axis, v)) + (cross(q.axis, v) * q.w))
-bad_inline vec3 bad_veccall quat_rot(f32x4_vec0 q, f32x4_vec1 v)
+bad_inline vec3 bad_veccall quat_rot(f32x4 q, f32x4 v)
 {
 // dot(q.axis, v)
 #if defined(__SSE4_1__)
@@ -119,7 +119,7 @@ bad_inline vec3 bad_veccall quat_rot(f32x4_vec0 q, f32x4_vec1 v)
 }
 
 
-bad_inline f32 bad_veccall quat_dot(f32x4_vec0 q0, f32x4_vec1 q1)
+bad_inline f32 bad_veccall quat_dot(f32x4 q0, f32x4 q1)
 {
 #if defined(__SSE4_1__)
     return f32x4_get_0(_mm_dp_ps(q0, q1, 0b11111111));

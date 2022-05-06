@@ -34,7 +34,7 @@ static bad_forceinline mask128 mask128_set_all(mask_elem k)
 }
 
 
-static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128 a)
 {
 #if defined(__SSE2__)
     _mm_store_si128((__m128i*)mem_addr, a);
@@ -44,7 +44,7 @@ static bad_forceinline void mask128_store(mask_elem* mem_addr, mask128_vec0 a)
 }
 
 
-static bad_forceinline void mask128_storeu(mask_elem* mem_addr, mask128_vec0 a)
+static bad_forceinline void mask128_storeu(mask_elem* mem_addr, mask128 a)
 {
 #if defined(__SSE2__)
     _mm_storeu_si128((__m128i*)mem_addr, a);
@@ -138,7 +138,7 @@ static bad_forceinline mask128 mask128_exponent32()
 
 
 // ======= Masking operations =======
-static bad_forceinline mask128 bad_veccall mask128_keep_highbit32(mask128_vec0 a)
+static bad_forceinline mask128 bad_veccall mask128_keep_highbit32(mask128 a)
 {
 #if defined(__SSE2__)
     return _mm_slli_epi32(_mm_srli_epi32(a, 31), 31);
@@ -148,7 +148,7 @@ static bad_forceinline mask128 bad_veccall mask128_keep_highbit32(mask128_vec0 a
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_keep_lowbit32(mask128_vec0 a)
+static bad_forceinline mask128 bad_veccall mask128_keep_lowbit32(mask128 a)
 {
 #if defined(__SSE2__)
     return _mm_srli_epi32(_mm_slli_epi32(a, 31), 31);
@@ -158,7 +158,7 @@ static bad_forceinline mask128 bad_veccall mask128_keep_lowbit32(mask128_vec0 a)
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_shift_left32(mask128_vec0 a, s32 shift)
+static bad_forceinline mask128 bad_veccall mask128_shift_left32(mask128 a, s32 shift)
 {
 #if defined(__SSE2__)
     return _mm_slli_epi32(a, shift);
@@ -176,7 +176,7 @@ static bad_forceinline mask128 bad_veccall mask128_shift_left32(mask128_vec0 a, 
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_shift_right32(mask128_vec0 a, s32 shift)
+static bad_forceinline mask128 bad_veccall mask128_shift_right32(mask128 a, s32 shift)
 {
 #if defined(__SSE2__)
     return _mm_srli_epi32(a, shift);
@@ -197,7 +197,7 @@ static bad_forceinline mask128 bad_veccall mask128_shift_right32(mask128_vec0 a,
 
 
 // ============== Getters =============
-static bad_forceinline mask_elem bad_veccall mask128_get_0(mask128_vec0 a)
+static bad_forceinline mask_elem bad_veccall mask128_get_0(mask128 a)
 {
 #if defined(__SSE2__)
     f32 first = _mm_cvtss_f32(mask128_as_f32x4(a));
@@ -209,7 +209,7 @@ static bad_forceinline mask_elem bad_veccall mask128_get_0(mask128_vec0 a)
 }
 
 
-static bad_forceinline mask_elem bad_veccall mask128_get_1(mask128_vec0 a)
+static bad_forceinline mask_elem bad_veccall mask128_get_1(mask128 a)
 {
 #if defined(__SSE2__)
     mask128 shuf   = _mm_shuffle_epi32(a, _MM_SHUFFLE(1, 1, 1, 1));
@@ -224,7 +224,7 @@ static bad_forceinline mask_elem bad_veccall mask128_get_1(mask128_vec0 a)
 }
 
 
-static bad_forceinline mask_elem bad_veccall mask128_get_2(mask128_vec0 a)
+static bad_forceinline mask_elem bad_veccall mask128_get_2(mask128 a)
 {
 #if defined(__SSE2__)
     mask128 shuf   = _mm_shuffle_epi32(a, _MM_SHUFFLE(2, 2, 2, 2));
@@ -239,7 +239,7 @@ static bad_forceinline mask_elem bad_veccall mask128_get_2(mask128_vec0 a)
 }
 
 
-static bad_forceinline mask_elem bad_veccall mask128_get_3(mask128_vec0 a)
+static bad_forceinline mask_elem bad_veccall mask128_get_3(mask128 a)
 {
 #if defined(__SSE2__)
     mask128 shuf   = _mm_shuffle_epi32(a, _MM_SHUFFLE(3, 3, 3, 3));
@@ -255,7 +255,7 @@ static bad_forceinline mask_elem bad_veccall mask128_get_3(mask128_vec0 a)
 
 
 // ========== Comparison ==========
-static bad_forceinline mask128 mask128_eq(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_eq(mask128 a, mask128 b)
 {
 #if defined(__SSE2__)
     return _mm_cmpeq_epi32(a, b);
@@ -270,7 +270,7 @@ static bad_forceinline mask128 mask128_eq(mask128_vec0 a, mask128_vec1 b)
 }
 
 
-static bad_forceinline mask128 mask128_neq(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 mask128_neq(mask128 a, mask128 b)
 {
 #if defined(__SSE2__)
     const mask128 eq = _mm_cmpeq_epi32(a, b);
@@ -286,7 +286,7 @@ static bad_forceinline mask128 mask128_neq(mask128_vec0 a, mask128_vec1 b)
 
 
 // ============= Logical ==============
-static bad_forceinline mask128 bad_veccall mask128_and(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 bad_veccall mask128_and(mask128 a, mask128 b)
 {
 #if defined(__SSE2__)
     return _mm_and_si128(a, b);
@@ -296,7 +296,7 @@ static bad_forceinline mask128 bad_veccall mask128_and(mask128_vec0 a, mask128_v
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_and_not(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 bad_veccall mask128_and_not(mask128 a, mask128 b)
 {
 #if defined(__SSE2__)
     return _mm_andnot_si128(b, a);
@@ -306,7 +306,7 @@ static bad_forceinline mask128 bad_veccall mask128_and_not(mask128_vec0 a, mask1
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_or(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 bad_veccall mask128_or(mask128 a, mask128 b)
 {
 #if defined(__SSE2__)
     return _mm_or_si128(a, b);
@@ -316,7 +316,7 @@ static bad_forceinline mask128 bad_veccall mask128_or(mask128_vec0 a, mask128_ve
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_xor(mask128_vec0 a, mask128_vec1 b)
+static bad_forceinline mask128 bad_veccall mask128_xor(mask128 a, mask128 b)
 {
 #if defined(__SSE2__)
     return _mm_xor_si128(a, b);
@@ -326,7 +326,7 @@ static bad_forceinline mask128 bad_veccall mask128_xor(mask128_vec0 a, mask128_v
 }
 
 
-static bad_forceinline mask128 bad_veccall mask128_not(mask128_vec0 a)
+static bad_forceinline mask128 bad_veccall mask128_not(mask128 a)
 {
 #if defined(__SSE2__)
     return _mm_xor_si128(a, _mm_cmpeq_epi32(a, a));
@@ -337,7 +337,7 @@ static bad_forceinline mask128 bad_veccall mask128_not(mask128_vec0 a)
 
 
 // ============ Conversion =============
-static bad_forceinline f32x4 bad_veccall mask128_as_f32x4(mask128_vec0 a)
+static bad_forceinline f32x4 bad_veccall mask128_as_f32x4(mask128 a)
 {
 #if defined(__SSE2__)
     return _mm_castsi128_ps(a);
@@ -347,7 +347,7 @@ static bad_forceinline f32x4 bad_veccall mask128_as_f32x4(mask128_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall mask128_u32x4_to_f32x4(mask128_vec0 a)
+static bad_forceinline f32x4 bad_veccall mask128_u32x4_to_f32x4(mask128 a)
 {
     bad_align(16) s32 store[4];
     bad_align(16) f32 load[4];
@@ -363,7 +363,7 @@ static bad_forceinline f32x4 bad_veccall mask128_u32x4_to_f32x4(mask128_vec0 a)
 }
 
 
-static bad_forceinline f32x4 bad_veccall mask128_s32x4_to_f32x4(mask128_vec0 a)
+static bad_forceinline f32x4 bad_veccall mask128_s32x4_to_f32x4(mask128 a)
 {
 #if defined(__SSE2__)
     return _mm_cvtepi32_ps(a);

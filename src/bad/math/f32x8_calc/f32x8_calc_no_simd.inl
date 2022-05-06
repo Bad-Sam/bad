@@ -1,29 +1,29 @@
 // ==== Arithmetic & math functions ===
-static bad_forceinline f32x8 f32x8_add(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline f32x8 f32x8_add(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_add(a.a, b.a), f32x4_add(a.b, b.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_sub(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline f32x8 f32x8_sub(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_sub(a.a, b.a), f32x4_sub(a.b, b.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_mul(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline f32x8 f32x8_mul(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_mul(a.a, b.a), f32x4_mul(a.b, b.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_div(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline f32x8 f32x8_div(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_div(a.a, b.a), f32x4_div(a.b, b.b)};
 }
 
 
-static bad_forceinline f32 f32x8_hadd4(f32x8_vec0 a)
+static bad_forceinline f32 f32x8_hadd4(f32x8 a)
 {
     f32x8 res;
 
@@ -33,43 +33,43 @@ static bad_forceinline f32 f32x8_hadd4(f32x8_vec0 a)
 }
 
 
-static bad_forceinline f32 f32x4_sum4(f32x8_vec0 a)
+static bad_forceinline f32 f32x4_sum4(f32x8 a)
 {
     return f32x4_sum4(a.a) + f32x4_sum4(a.b);
 }
 
 
-static bad_forceinline f32x8 f32x8_rcp(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_rcp(f32x8 a)
 {
     return (f32x8){f32x4_rcp(a.a), f32x4_rcp(a.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_sqrt(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_sqrt(f32x8 a)
 {
     return (f32x8){f32x4_sqrt(a.a), f32x4_sqrt(a.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_rsqrt(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_rsqrt(f32x8 a)
 {
     return (f32x8){f32x4_rsqrt(a.a), f32x4_rsqrt(a.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_min(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline f32x8 f32x8_min(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_min(a.a, b.a), f32x4_min(a.b, b.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_max(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline f32x8 f32x8_max(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_max(a.a, b.a), f32x4_max(a.b, b.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_value(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_value(f32x8 a)
 {
     const u32 value_mask = 0x7FFFFFFF;
     mask128   a_mask     = f32x4_as_mask128(a.a);
@@ -88,7 +88,7 @@ static bad_forceinline f32x8 f32x8_value(f32x8_vec0 a)
 }
 
 
-static bad_forceinline f32x8 f32x8_sign(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_sign(f32x8 a)
 {
     const u32 sign_mask = 0x80000000;
     const u32 one_mask  = 0x3F800000;
@@ -108,7 +108,7 @@ static bad_forceinline f32x8 f32x8_sign(f32x8_vec0 a)
 }
 
 
-static bad_forceinline f32x8 f32x8_neg(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_neg(f32x8 a)
 {
     const u32 neg_mask = 0x80000000;
     mask128   a_mask   = f32x4_as_mask128(a.a);
@@ -127,31 +127,31 @@ static bad_forceinline f32x8 f32x8_neg(f32x8_vec0 a)
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_frac(f32x8_vec0 a)
+static bad_forceinline f32x8 bad_veccall f32x8_frac(f32x8 a)
 {
     return f32x8_sub(a, f32x8_trunc(a));
 }
 
 
-static bad_forceinline f32x8 f32x8_mod(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline f32x8 f32x8_mod(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_mod(a.a, b.a), f32x4_mod(a.b, b.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_trunc(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_trunc(f32x8 a)
 {
     return (f32x8){f32x4_trunc(a.a), f32x4_trunc(a.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_round(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_round(f32x8 a)
 {
     return (f32x8){f32x4_round(a.a), f32x4_round(a.b)};
 }
 
 
-static bad_forceinline f32x8 f32x8_floor(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_floor(f32x8 a)
 {
     const u32 one = 0x3F800000;
     
@@ -175,7 +175,7 @@ static bad_forceinline f32x8 f32x8_floor(f32x8_vec0 a)
 }
 
 
-static bad_forceinline f32x8 f32x8_ceil(f32x8_vec0 a)
+static bad_forceinline f32x8 f32x8_ceil(f32x8 a)
 {
     const u32 one = 0x3F800000;
 
@@ -199,7 +199,7 @@ static bad_forceinline f32x8 f32x8_ceil(f32x8_vec0 a)
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_clamp(f32x8_vec0 a, f32x8_vec1 min, f32x8_vec2 max)
+static bad_forceinline f32x8 bad_veccall f32x8_clamp(f32x8 a, f32x8 min, f32x8 max)
 {
     return (f32x8)
     {
@@ -209,7 +209,7 @@ static bad_forceinline f32x8 bad_veccall f32x8_clamp(f32x8_vec0 a, f32x8_vec1 mi
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 t)
+static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8 a, f32x8 b, f32x8 t)
 {
     f32x8 res;
 
@@ -228,94 +228,94 @@ static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8_vec0 a, f32x8_vec1 b, 
 
 
 // ========== Trigonometry ===========
-static bad_forceinline f32x8 bad_veccall f32x8_cos(f32x8_vec0 a)
+static bad_forceinline f32x8 bad_veccall f32x8_cos(f32x8 a)
 {
     return a;
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_sin(f32x8_vec0 a)
+static bad_forceinline f32x8 bad_veccall f32x8_sin(f32x8 a)
 {
     return a;
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_tan(f32x8_vec0 a)
+static bad_forceinline f32x8 bad_veccall f32x8_tan(f32x8 a)
 {
     return a;
 }
 
 
 // ======== Fused operations ========
-static bad_forceinline f32x8 bad_veccall f32x8_mul_add(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c)
+static bad_forceinline f32x8 bad_veccall f32x8_mul_add(f32x8 a, f32x8 b, f32x8 c)
 {
     return (f32x8){f32x4_mul_add(a.a, b.a, c.a), f32x4_mul_add(a.b, b.b, c.b)};
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_mul_sub(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c)
+static bad_forceinline f32x8 bad_veccall f32x8_mul_sub(f32x8 a, f32x8 b, f32x8 c)
 {
     return (f32x8){f32x8_mul_sub(a.a, b.a, c.a), f32x8_mul_sub(a.b, b.b, c.b)};
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_nmul_add(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c)
+static bad_forceinline f32x8 bad_veccall f32x8_nmul_add(f32x8 a, f32x8 b, f32x8 c)
 {
     return (f32x8){f32x8_nmul_add(a.a, b.a, c.a), f32x8_nmul_add(a.b, b.b, c.b)};
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_nmul_sub(f32x8_vec0 a, f32x8_vec1 b, f32x8_vec2 c)
+static bad_forceinline f32x8 bad_veccall f32x8_nmul_sub(f32x8 a, f32x8 b, f32x8 c)
 {
     return (f32x8){f32x8_nmul_sub(a.a, b.a, c.a), f32x8_nmul_sub(a.b, b.b, c.b)};
 }
 
 
 // ============ Comparison ============
-static bad_forceinline mask128 f32x8_neq(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline mask128 f32x8_neq(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_neq(a.a, b.a), f32x4_neq(a.b, b.b)};
 }
 
 
-static bad_forceinline mask128 f32x8_eq(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline mask128 f32x8_eq(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_eq(a.a, b.a), f32x4_eq(a.b, b.b)};
 }
 
 
-static bad_forceinline mask128 f32x8_ge(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline mask128 f32x8_ge(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_ge(a.a, b.a), f32x4_ge(a.b, b.b)};
 }
 
 
-static bad_forceinline mask128 f32x8_gt(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline mask128 f32x8_gt(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_gt(a.a, b.a), f32x4_gt(a.b, b.b)};
 }
 
 
-static bad_forceinline mask128 f32x8_le(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline mask128 f32x8_le(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_le(a.a, b.a), f32x4_le(a.b, b.b)};
 }
 
 
-static bad_forceinline mask128 f32x8_lt(f32x8_vec0 a, f32x8_vec1 b)
+static bad_forceinline mask128 f32x8_lt(f32x8 a, f32x8 b)
 {
     return (f32x8){f32x4_lt(a.a, b.a), f32x4_lt(a.b, b.b)};
 }
 
 
 // ======= Selection & swizzling ========
-static bad_forceinline mask128 f32x8_is_nan(f32x8_vec0 a)
+static bad_forceinline mask128 f32x8_is_nan(f32x8 a)
 {
     return (f32x8){f32x4_is_nan(a.a, a.a), f32x4_is_nan(a.b, a.b)};
 }
 
 
-static bad_forceinline mask128 f32x8_is_infinite(f32x8_vec0 a)
+static bad_forceinline mask128 f32x8_is_infinite(f32x8 a)
 {
     const u32 value_mask = 0x7FFFFFFF;
     const u32 inf_mask   = 0x7F800000;
@@ -344,7 +344,7 @@ static bad_forceinline mask128 f32x8_is_infinite(f32x8_vec0 a)
 }
 
 
-static bad_forceinline mask128 f32x8_is_finite(f32x8_vec0 a)
+static bad_forceinline mask128 f32x8_is_finite(f32x8 a)
 {
     const u32 exp_mask = 0x7F800000;
     mask128   a_mask   = f32x4_as_mask128(a.a);

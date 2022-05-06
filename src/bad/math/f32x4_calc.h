@@ -12,65 +12,65 @@
 BAD_NAMESPACE_START
 
 /* =========== Arithmetic =========== */
-static bad_forceinline f32x4 bad_veccall f32x4_add(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline f32x4 bad_veccall f32x4_sub(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline f32x4 bad_veccall f32x4_mul(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline f32x4 bad_veccall f32x4_div(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline f32x4 bad_veccall f32x4_hadd3(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_hadd4(f32x4_vec0 a);
-static bad_forceinline f32   bad_veccall f32x4_sum3(f32x4_vec0 a);
-static bad_forceinline f32   bad_veccall f32x4_sum4(f32x4_vec0 a);
+static bad_forceinline f32x4 bad_veccall f32x4_add(f32x4 a, f32x4 b);
+static bad_forceinline f32x4 bad_veccall f32x4_sub(f32x4 a, f32x4 b);
+static bad_forceinline f32x4 bad_veccall f32x4_mul(f32x4 a, f32x4 b);
+static bad_forceinline f32x4 bad_veccall f32x4_div(f32x4 a, f32x4 b);
+static bad_forceinline f32x4 bad_veccall f32x4_hadd3(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_hadd4(f32x4 a);
+static bad_forceinline f32   bad_veccall f32x4_sum3(f32x4 a);
+static bad_forceinline f32   bad_veccall f32x4_sum4(f32x4 a);
 
 
 /* ====== Advanced arithmetic ======= */
-static bad_forceinline f32x4 bad_veccall f32x4_rcp(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_sqrt(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_rsqrt(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_min(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline f32x4 bad_veccall f32x4_max(f32x4_vec0 a, f32x4_vec1 b);
+static bad_forceinline f32x4 bad_veccall f32x4_rcp(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_sqrt(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_rsqrt(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_min(f32x4 a, f32x4 b);
+static bad_forceinline f32x4 bad_veccall f32x4_max(f32x4 a, f32x4 b);
 
-static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_neg(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_frac(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_round(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_floor(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_ceil(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_clamp(f32x4_vec0 a, f32x4_vec1 min, f32x4_vec2 max);
-static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 t);
+static bad_forceinline f32x4 bad_veccall f32x4_abs(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_sign(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_neg(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_frac(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4 a, f32x4 b);
+static bad_forceinline f32x4 bad_veccall f32x4_trunc(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_round(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_floor(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_ceil(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_clamp(f32x4 a, f32x4 min, f32x4 max);
+static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4 a, f32x4 b, f32x4 t);
 
 
 /* ========== Trigonometry =========== */
-static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4_vec0 a);
+static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4 a);
 
-static bad_forceinline f32x4 bad_veccall f32x4_cos_0_halfpi(f32x4_vec0 a);
-static bad_forceinline f32x4 bad_veccall f32x4_sin_npi_pi(f32x4_vec0 a);
+static bad_forceinline f32x4 bad_veccall f32x4_cos_0_halfpi(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_sin_npi_pi(f32x4 a);
 
 
 /* ======== Fused operations ======== */
-static bad_forceinline f32x4 bad_veccall f32x4_mul_add(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c);
-static bad_forceinline f32x4 bad_veccall f32x4_mul_sub(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c);
-static bad_forceinline f32x4 bad_veccall f32x4_nmul_add(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c);
-static bad_forceinline f32x4 bad_veccall f32x4_nmul_sub(f32x4_vec0 a, f32x4_vec1 b, f32x4_vec2 c);
+static bad_forceinline f32x4 bad_veccall f32x4_mul_add(f32x4 a, f32x4 b, f32x4 c);
+static bad_forceinline f32x4 bad_veccall f32x4_mul_sub(f32x4 a, f32x4 b, f32x4 c);
+static bad_forceinline f32x4 bad_veccall f32x4_nmul_add(f32x4 a, f32x4 b, f32x4 c);
+static bad_forceinline f32x4 bad_veccall f32x4_nmul_sub(f32x4 a, f32x4 b, f32x4 c);
 
 
 /* ============ Comparison ============ */
-static bad_forceinline mask128 bad_veccall f32x4_neq(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline mask128 bad_veccall f32x4_eq(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline mask128 bad_veccall f32x4_ge(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline mask128 bad_veccall f32x4_gt(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline mask128 bad_veccall f32x4_le(f32x4_vec0 a, f32x4_vec1 b);
-static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4_vec0 a, f32x4_vec1 b);
+static bad_forceinline mask128 bad_veccall f32x4_neq(f32x4 a, f32x4 b);
+static bad_forceinline mask128 bad_veccall f32x4_eq(f32x4 a, f32x4 b);
+static bad_forceinline mask128 bad_veccall f32x4_ge(f32x4 a, f32x4 b);
+static bad_forceinline mask128 bad_veccall f32x4_gt(f32x4 a, f32x4 b);
+static bad_forceinline mask128 bad_veccall f32x4_le(f32x4 a, f32x4 b);
+static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4 a, f32x4 b);
 
 
 /* ======= Tests ======== */
-static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4_vec0 a);
-static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4_vec0 a);
-static bad_forceinline mask128 bad_veccall f32x4_is_finite(f32x4_vec0 a);
+static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4 a);
+static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4 a);
+static bad_forceinline mask128 bad_veccall f32x4_is_finite(f32x4 a);
 
 #if defined(__SSE__)
 #   include "f32x4_calc/f32x4_calc_x86-64.inl"

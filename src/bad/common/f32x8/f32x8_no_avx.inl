@@ -59,13 +59,13 @@ static bad_forceinline f32x8 f32x8_set_all(f32 a)
 }
 
 
-static bad_forceinline void bad_veccall f32x8_store(f32* mem_addr, f32x8_vec0 a)
+static bad_forceinline void bad_veccall f32x8_store(f32* mem_addr, f32x8 a)
 {
     return (f32x8){f32x4_store(mem_addr, a.a), f32x4_store(mem_addr + 4, a.b)};
 }
 
 
-static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8_vec0 a)
+static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8 a)
 {
     return (f32x8){f32x4_storeu(mem_addr, a.a), f32x4_storeu(mem_addr + 4, a.b)};
 }
@@ -73,7 +73,7 @@ static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8_vec0 a
 
 
 // ============== Getter ==============
-static bad_forceinline f32 f32x8_get_0(f32x8_vec0 a)
+static bad_forceinline f32 f32x8_get_0(f32x8 a)
 {
     return f32x4_get_0(a.a);
 }
@@ -81,26 +81,26 @@ static bad_forceinline f32 f32x8_get_0(f32x8_vec0 a)
 
 // =========== Selection ============
 // (a & m) | (b & ~m)
-static bad_forceinline f32x8 bad_veccall f32x8_blend(f32x8_vec0 a, f32x8_vec1 b, mask256_vec2 m)
+static bad_forceinline f32x8 bad_veccall f32x8_blend(f32x8 a, f32x8 b, mask256 m)
 {
     (f32x8){f32x4_blend(a.a, b.a, m.a), f32x4_blend(a.b, b.b, m.b)};
 }
 
 
 // ============ Conversion =============
-static bad_forceinline mask256 bad_veccall f32x8_as_mask256(f32x8_vec0 a)
+static bad_forceinline mask256 bad_veccall f32x8_as_mask256(f32x8 a)
 {
     return (mask256){f32x4_as_mask128(a.a), f32x4_as_mask128(a.b)};
 }
 
 
-static bad_forceinline mask256 bad_veccall f32x8_to_s32x8(f32x8_vec0 a)
+static bad_forceinline mask256 bad_veccall f32x8_to_s32x8(f32x8 a)
 {
     return (mask256){f32x8_to_s32x8(a.a), f32x8_to_s32x8(a.b)};
 }
 
 
-static bad_forceinline mask256 bad_veccall f32x8_to_u32x8(f32x8_vec0 a)
+static bad_forceinline mask256 bad_veccall f32x8_to_u32x8(f32x8 a)
 {
     return (mask256){f32x8_to_u32x8(a.a), f32x8_to_u32x8(a.b)};
 }
