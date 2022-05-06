@@ -1,11 +1,11 @@
 #ifndef BAD_F32_CALC_H
 #define BAD_F32_CALC_H
 
-#include <bad/types.h>
-#include <bad/detect/builtin.h>
 #include <bad/common/f32.h>
 #include <bad/common/u32.h>
+#include <bad/detect/builtin.h>
 #include <bad/math/constants.h>
+#include <bad/types/scalar_types.h>
 
 // TODO: ARM's Neon
 #if defined(__SSE__)

@@ -2,7 +2,6 @@
 #include "../test.h"
 #include "../test_values.h" // qnan, inff, -inff, denormf, all1
 
-#include <bad/types.h>
 #include <bad/qualifiers.h>
 #include <bad/common/f32x8.h>
 

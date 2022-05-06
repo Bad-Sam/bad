@@ -2,7 +2,7 @@
 #define BAD_F32_VALUES_H
 
 #include <bad/bad.h>
-#include <bad/types.h>
+#include <bad/types/scalar_types.h>
 
 BAD_NAMESPACE_START
 

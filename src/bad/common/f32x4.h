@@ -5,7 +5,7 @@
 #include <bad/qualifiers.h>
 #include <bad/args.h>
 
-#include <bad/types.h>
+#include <bad/types/simd_types.h>
 
 #include "mask128.h"
 

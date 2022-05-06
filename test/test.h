@@ -2,7 +2,7 @@
 #define BAD_TEST_H
 
 #include <bad/bad.h>
-#include <bad/types.h>
+#include <bad/types/simd_types.h>
 #include <bad/detect/os.h>
 #include <bad/qualifiers.h>
 #include <bad/args.h>
@@ -24,8 +24,8 @@ extern s32 test_results[2];
 #   define bad_test_check(cond)                                                            \
     do                                                                                     \
     {                                                                                      \
-        bool test_res = (cond);                                                            \
-        test_results[(s32)test_res]++;                                                     \
+        u32 test_res = (cond);                                                            \
+        test_results[test_res]++;                                                     \
         HANDLE err = GetStdHandle(STD_ERROR_HANDLE);                                       \
         WriteFile(err, "\n[", 2, NULL, NULL);                                              \
         if (test_res)                                                                      \
@@ -48,8 +48,8 @@ extern s32 test_results[2];
 #   define bad_test_check(cond)                                                         \
     do                                                                                  \
     {                                                                                   \
-        bool test_res = (cond);                                                         \
-        test_results[(s32)test_res]++;                                                  \
+        u32 test_res = (cond);                                                         \
+        test_results[test_res]++;                                                  \
         fprintf(stderr, "\n[%s] %s", test_res ? BAD_PASSED : BAD_FAILED, __FUNCTION__); \
     } while (0)
 #endif

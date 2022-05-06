@@ -26,6 +26,8 @@
 #   define bad_align(x) _Alignas((x))
 #endif
 
+#define bad_align_to_f32xn bad_align(f32xn_width * 4)
+
 // bad_restrict
 #if defined(__cplusplus)
 #   define bad_restrict __restrict

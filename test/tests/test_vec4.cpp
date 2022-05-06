@@ -2,7 +2,6 @@
 #include "../test.h"
 #include "../test_values.h"
 
-#include <bad/types.h>
 #include <bad/common/f32x4.h>
 #include <bad/math/vec4.h>
 

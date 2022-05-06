@@ -3,7 +3,6 @@
 #include "../test.h"
 #include "../test_values.h"
 
-#include <bad/types.h>
 #include <bad/math/vec4_kernel.h>
 
 BAD_NAMESPACE_START

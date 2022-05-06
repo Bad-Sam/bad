@@ -5,7 +5,7 @@
 #include <bad/qualifiers.h>
 #include <bad/args.h>
 
-#include <bad/types.h>
+#include <bad/types/simd_types.h>
 
 #if !defined(__AVX2__)
 #   include "f32x4.h"

@@ -2,7 +2,7 @@
 #define BAD_VEC3_H
 
 #include <bad/args.h>
-#include <bad/types.h>
+#include <bad/types/math_types.h>
 #include <bad/qualifiers.h>
 
 #include <bad/math/f32x4_calc.h>

@@ -9,13 +9,11 @@
 #include "tests/test_vec4.h"
 #include "tests/test_vec4_kernel.h"
 
-#include <bad/math/vec3.h>
-#include <bad/math/quat.h>
-#include <bad/math/constants.h>
 
 #if defined(__cplusplus)
 using namespace bad;
 #endif
+
 
 int main()
 {
@@ -76,7 +74,35 @@ int main()
     test_f32x8_set_all();
     test_f32x8_blend();
     test_f32x8_as_mask256();
-    
+
+    fprintf(stderr, "\n\n========== f32x8_calc.h ==========");
+    test_f32x8_hadd();
+    test_f32x8_hadd();
+    test_f32x8_abs();
+    test_f32x8_sign();
+    test_f32x8_neg();
+    test_f32x8_frac();
+    test_f32x8_mod();
+    test_f32x8_trunc();
+    test_f32x8_round();
+    test_f32x8_floor();
+    test_f32x8_ceil();
+    test_f32x8_clamp();
+    test_f32x8_lerp();
+    test_f32x8_mul_add();
+    test_f32x8_mul_sub();
+    test_f32x8_nmul_add();
+    test_f32x8_nmul_sub();
+    test_f32x8_neq();
+    test_f32x8_eq();
+    test_f32x8_ge();
+    test_f32x8_gt();
+    test_f32x8_le();
+    test_f32x8_lt();
+    test_f32x8_is_nan();
+    test_f32x8_is_infinite();
+    test_f32x8_is_finite();
+
     fprintf(stderr, "\n\n========== f32x4_calc.h ==========");
     test_f32x4_hadd3();
     test_f32x4_hadd4();
@@ -108,34 +134,6 @@ int main()
     test_f32x4_is_infinite();
     test_f32x4_is_finite();
 
-    fprintf(stderr, "\n\n========== f32x8_calc.h ==========");
-    test_f32x8_hadd();
-    test_f32x8_hadd();
-    test_f32x8_abs();
-    test_f32x8_sign();
-    test_f32x8_neg();
-    test_f32x8_frac();
-    test_f32x8_mod();
-    test_f32x8_trunc();
-    test_f32x8_round();
-    test_f32x8_floor();
-    test_f32x8_ceil();
-    test_f32x8_clamp();
-    test_f32x8_lerp();
-    test_f32x8_mul_add();
-    test_f32x8_mul_sub();
-    test_f32x8_nmul_add();
-    test_f32x8_nmul_sub();
-    test_f32x8_neq();
-    test_f32x8_eq();
-    test_f32x8_ge();
-    test_f32x8_gt();
-    test_f32x8_le();
-    test_f32x8_lt();
-    test_f32x8_is_nan();
-    test_f32x8_is_infinite();
-    test_f32x8_is_finite();
-
     fprintf(stderr, "\n\n========== vec3.h ==========");
     test_vec3_cross();
     
@@ -152,9 +150,10 @@ int main()
 
     test_report();
 
+    //__int32 a;
+
     return 0;
 }
-
 
 /*
 // ========== Tests ==========
@@ -258,5 +257,4 @@ void mesure_perf(f32 start, f32 end, f32 step)
                 elem_count,
                 functions[i].perf);
     }
-}
-*/
+}*/

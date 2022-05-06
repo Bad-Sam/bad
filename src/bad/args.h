@@ -5,39 +5,39 @@
 #include <bad/detect/isa.h>
 #include <bad/detect/os.h>
 
-#include "types.h"
+#include "types/simd_types.h"
 
 #if defined(BAD_x86)
     // Under x86 architectures, Windows or Linux, up to 3 SIMD variables can be passed in registers
 #   define f32x4_vec0 f32x4
 #   define f32x4_vec1 f32x4
 #   define f32x4_vec2 f32x4
-#   define f32x4_vec3 const f32x4&
+#   define f32x4_vec3 const f32x4*
 #   if defined(__AVX__)
 #       define f32x8_vec0 f32x8
 #       define f32x8_vec1 f32x8
 #       define f32x8_vec2 f32x8
-#       define f32x8_vec3 const f32x8&
+#       define f32x8_vec3 const f32x8*
 #   else // No AVX means f32x8 is made of 2 __m128
 #       define f32x8_vec0 f32x8
-#       define f32x8_vec1 const f32x8&
-#       define f32x8_vec2 const f32x8&
-#       define f32x8_vec3 const f32x8&
+#       define f32x8_vec1 const f32x8*
+#       define f32x8_vec2 const f32x8*
+#       define f32x8_vec3 const f32x8*
 #   endif
 #   define mask128_vec0 mask128
 #   define mask128_vec1 mask128
 #   define mask128_vec2 mask128
-#   define mask128_vec3 const mask128&
+#   define mask128_vec3 const mask128*
 #   if defined(__AVX__)
 #       define mask256_vec0 mask256
 #       define mask256_vec1 mask256
 #       define mask256_vec2 mask256
-#       define mask256_vec3 const mask256&
+#       define mask256_vec3 const mask256*
 #   else
 #       define mask256_vec0 mask256
-#       define mask256_vec1 const mask256&
-#       define mask256_vec2 const mask256&
-#       define mask256_vec3 const mask256&
+#       define mask256_vec1 const mask256*
+#       define mask256_vec2 const mask256*
+#       define mask256_vec3 const mask256*
 #   endif
 #elif defined(BAD_x64)
 #   if defined(BAD_WINDOWS)
@@ -61,22 +61,22 @@
 #           define mask256_vec3 mask256
         // Without __vectorcall, all SIMD variables are passed by pointer/reference
 #       else // TODO: adapt to C, pointers and restrict
-#           define f32x4_vec0 const f32x4&
-#           define f32x4_vec1 const f32x4&
-#           define f32x4_vec2 const f32x4&
-#           define f32x4_vec3 const f32x4&
-#           define f32x8_vec0 const f32x8&
-#           define f32x8_vec1 const f32x8&
-#           define f32x8_vec2 const f32x8&
-#           define f32x8_vec3 const f32x8&
-#           define mask128_vec0 const mask128&
-#           define mask128_vec1 const mask128&
-#           define mask128_vec2 const mask128&
-#           define mask128_vec3 const mask128&
-#           define mask256_vec0 const mask256&
-#           define mask256_vec1 const mask256&
-#           define mask256_vec2 const mask256&
-#           define mask256_vec3 const mask256&
+#           define f32x4_vec0 const f32x4*
+#           define f32x4_vec1 const f32x4*
+#           define f32x4_vec2 const f32x4*
+#           define f32x4_vec3 const f32x4*
+#           define f32x8_vec0 const f32x8*
+#           define f32x8_vec1 const f32x8*
+#           define f32x8_vec2 const f32x8*
+#           define f32x8_vec3 const f32x8*
+#           define mask128_vec0 const mask128*
+#           define mask128_vec1 const mask128*
+#           define mask128_vec2 const mask128*
+#           define mask128_vec3 const mask128*
+#           define mask256_vec0 const mask256*
+#           define mask256_vec1 const mask256*
+#           define mask256_vec2 const mask256*
+#           define mask256_vec3 const mask256*
 #       endif
     // Under x64 Linux, up to 8 vector variables can be passed in registers
 #   elif defined(BAD_LINUX)

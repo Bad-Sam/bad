@@ -32,14 +32,15 @@ Because I am working on this library primarily to learn, it is a work in progres
     - [`common/`](src/bad/common/): common operations likely to be used throughout the rest of the library
     - [`detect/`](src/bad/detect/): context detection around the library
     - [`math/`](src/bad/math/): math functions
+    - [`types/`](src/bad/types/): where scalar, simd and math types are defined. No functions are contained here, only declarations
     - [`args.h`](src/bad/args.h): the way arguments are passed to functions has an influence on performance. `arg.h` wraps behind macros the ideal argument passing method for all types
     - [`bad.h`](src/bad/bad.h): included accross all headers, currently used solely for wrapping sources in an optional namespace
     - [`debug.h`](src/bad/debug.h): debug-mode runtime checks through macros
     - [`qualifiers.h`](src/bad/qualifiers.h): a variety of qualifiers used to affect how the compiler generates code
-    - [`types.h`](src/bad/types.h): where data types available to the library are included, declared and typedef'ed
 - [`test/`](test/): unit tests on important and/or non-trivial functions
 - [`build.bat`](build.bat/): custom compilation script for Windows 10 with Clang. Can be called with `build`, `build run`, `build clean` or `build asm`
-- [`RESOURCES.md`](RESOURCES.md): a collection knowledge that helped me learn
+- [`RESOURCES.md`](RESOURCES.md): a collection of knowledge that helped me learn
+
 
 ## To do
 General:
@@ -73,12 +74,11 @@ Math:
 
 Collisions & intersections:
 - [ ] Implement shapes
-- [ ] Implementation collision algorithms
+- [ ] Implement collision algorithms
 
 Physics:
 - [ ] Implement kinematic
 
 
 ## License
-
 `bad` is licensed under the [MIT license](LICENSE)

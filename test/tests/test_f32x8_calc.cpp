@@ -3,7 +3,6 @@
 #include "../test.h"
 #include "../test_values.h"
 
-#include <bad/types.h>
 #include <bad/qualifiers.h>
 #include <bad/math/f32x8_calc.h>
 
