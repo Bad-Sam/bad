@@ -37,15 +37,19 @@ bad_inline f32 bad_veccall vec3_dot(vec3 v0, vec3 v1)
 // ||v||² = x² + y² + z²
 bad_inline f32 bad_veccall vec3_length_squared(vec3 v)
 {
-    return f32x4_sum3(f32x4_mul(v, v));
+    return vec3_dot(v, v);
 }
 
 
 // ||v|| = sqrt(x² + y² + z²)
 bad_inline f32 bad_veccall vec3_length(vec3 v)
 {
+#if defined(__SSE4_1__)
+    f32x4 len_sqr = _mm_dp_ps(v, v, 0b01110111);
+#else
     f32x4 len_sqr = f32x4_mul(v, v);
           len_sqr = f32x4_hadd3(len_sqr);
+#endif
     
     return f32x4_get_0(f32x4_sqrt(len_sqr));
 }
@@ -61,7 +65,12 @@ bad_inline vec3 bad_veccall vec3_unit(vec3 v)
           len2 = f32x4_hadd3(len2);
           len2 = f32x4_broadcast_0(len2);
 #endif
+
+#if defined(__SSE__)
+    f32x4 len_rcp = _mm_rsqrt_ss(len2);
+#else
     f32x4 len_rcp = f32x4_rsqrt(len2);
+#endif
 
     return f32x4_mul(v, len_rcp);
 }
@@ -100,18 +109,22 @@ bad_inline vec3 bad_veccall vec3_cross(vec3 v0, vec3 v1)
 bad_inline vec3 bad_veccall vec3_project_on(vec3 v, vec3 axis)
 {
 #if defined(__SSE4_1__)
-    f32x4 dot = _mm_dp_ps(v, axis, 0b01110111);
-#else
-    f32x4 dot = f32x4_hadd3(f32x4_mul(v, axis));
-#endif
+    f32x4 dot       = _mm_dp_ps(v, axis, 0b01110111);
+    f32x4 axis_len2 = _mm_dp_ps(axis, axis, 0b01110111);
 
+    f32x4 proj = _mm_div_ss(dot, axis_len2);
+#else
+    f32x4 dot       = f32x4_hadd3(f32x4_mul(v, axis));
     f32x4 axis_len2 = f32x4_hadd3(f32x4_mul(axis, axis));
 
-    // Compute the projected quantity and prepare it for multiplication
+#   if defined(__SSE__)
+    f32x4 proj = _mm_div_ss(dot, axis_len2);
+#   else
     f32x4 proj = f32x4_div(dot, axis_len2);
+#   endif
           proj = f32x4_broadcast_0(proj);
+#endif
 
-    // Apply projection
     return f32x4_mul(proj, axis);
 }
 
@@ -123,6 +136,7 @@ bad_inline vec3 bad_veccall vec3_project_on_unit(vec3 v, vec3 unit_axis)
     f32x4 dot = _mm_dp_ps(v, unit_axis, 0b01110111);
 #else
     f32x4 dot = f32x4_hadd3(f32x4_mul(v, unit_axis));
+          dot = f32x4_broadcast_0(dot);
 #endif
 
     // Apply projection
@@ -164,9 +178,8 @@ bad_inline vec3 bad_veccall vec3_rot_around_axis(vec3 v, vec3 unit_axis, f32 ang
           axis_dot_v = f32x4_broadcast_0(axis_dot_v);
 #endif
 
-    f32x4 vangle    = f32x4_set_all(angle);
-    f32x4 cos_angle = f32x4_cos(vangle);
-    f32x4 sin_angle = f32x4_sin(vangle);
+    f32x4 cos_angle = f32x4_set_all(f32_cos(angle));
+    f32x4 sin_angle = f32x4_set_all(f32_sin(angle));
     f32x4 one       = f32x4_one();
     f32x4 last_comp = f32x4_mul(axis_dot_v, f32x4_sub(one, cos_angle));
 
