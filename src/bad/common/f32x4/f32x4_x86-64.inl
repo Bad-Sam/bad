@@ -7,7 +7,7 @@ static bad_forceinline f32x4 f32x4_any()
 
 static bad_forceinline f32x4 f32x4_zero()
 {
-    return _mm_setzero_ps();
+    return mask128_as_f32x4(mask128_zero());
 }
 
 
@@ -244,7 +244,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_set_3(f32x4 a, f32 value)
 // ==== Vector element broadcast =====
 static bad_forceinline f32x4 bad_veccall f32x4_broadcast_0(f32x4 a)
 {
-    // vbroadcastss xmm, xmm doesn't seem to have an intrinsics
+    // vbroadcastss xmm, xmm doesn't seem to have an intrinsic
     return _mm_shuffle_ps(a, a, _MM_SHUFFLE(0, 0, 0, 0));
 }
 

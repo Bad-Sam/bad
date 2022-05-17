@@ -7,7 +7,7 @@ static bad_forceinline f32x8 f32x8_any()
 
 static bad_forceinline f32x8 f32x8_zero()
 {
-    return _mm256_setzero_ps();
+    return mask256_as_f32x8(mask256_zero());
 }
 
 
