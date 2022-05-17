@@ -6,7 +6,7 @@
 
 #include <bad/math/f32x4_calc.h>
 #include <bad/math/f32_calc.h>
-#include <bad/debug.h>
+#include <bad/debug_checks.h>
 
 BAD_NAMESPACE_START
 

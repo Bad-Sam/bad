@@ -5,7 +5,7 @@
 #include <bad/qualifiers.h>
 
 #include <bad/types/simd_types.h>
-#include <bad/debug.h>
+#include <bad/debug_checks.h>
 
 #if !defined(__AVX__)
 #   include "mask128.h"

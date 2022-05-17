@@ -1,5 +1,7 @@
 static bad_forceinline vec3 vec3_load(const f32* mem_addr)
 {
+    bad_assert(mem_addr != NULL);
+
     return vec3_set(mem_addr[0], mem_addr[1], mem_addr[2]);
 }
 
@@ -14,6 +16,8 @@ static bad_forceinline vec3 vec3_set(f32 x, f32 y, f32 z)
 
 static bad_forceinline void bad_veccall vec3_store(f32* mem_addr, vec3 a)
 {
+    bad_assert(mem_addr != NULL);
+
     bad_align(16) f32 store[4];
     f32x4_store(store, a);
 
@@ -58,6 +62,8 @@ bad_inline f32 bad_veccall vec3_length(vec3 v)
 // v / ||v||
 bad_inline vec3 bad_veccall vec3_unit(vec3 v)
 {
+    bad_assert(vec3_length_squared(v) != .0f);
+    
 #if defined(__SSE4_1__)
     f32x4 len2 = _mm_dp_ps(v, v, 0b01110111);
 #else
@@ -116,6 +122,8 @@ bad_inline vec3 bad_veccall vec3_project_on(vec3 v, vec3 axis)
 #else
     f32x4 dot       = f32x4_hadd3(f32x4_mul(v, axis));
     f32x4 axis_len2 = f32x4_hadd3(f32x4_mul(axis, axis));
+
+    bad_assert(f32x4_get_0(axis_len2) != .0f);
 
 #   if defined(__SSE__)
     f32x4 proj = _mm_div_ss(dot, axis_len2);

@@ -1,7 +1,7 @@
 #ifndef BAD_VEC4_H
 #define BAD_VEC4_H
 
-#include <bad/debug.h>
+#include <bad/debug_checks.h>
 #include <bad/qualifiers.h>
 #include <bad/math/f32x4_calc.h>
 #include <bad/types/math_types.h>

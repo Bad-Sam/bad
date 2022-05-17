@@ -1,32 +1,29 @@
-#ifndef BAD_DEBUG_H
-#define BAD_DEBUG_H
+#ifndef BAD_DEBUG_CHECKS_H
+#define BAD_DEBUG_CHECKS_H
 
 #if defined(DEBUG) || defined(_DEBUG)
 #   include <bad/detect/isa.h>
 #endif
 
-# define bad_func __func__
-
 // bad_interrupt
-#if defined(_MSC_VER)
+#if defined(__clang__) || defined(__GNUC__)
+#   define bad_interrupt() do { __asm__("int3"); } while (0)
+#elif defined(_MSC_VER)
 #   if defined(BAD_x64)
         // NOTE: Assembly block seem to be forbidden with x64 MSVC?
 #       include <intrin.h>
-#       define bad_interrupt(x) __debugbreak()
+#       define bad_interrupt() do { __debugbreak(); } while (0)
 #   elif defined(BAD_x86)
-#       define bad_interrupt(x) __asm { int (x) }
+#       define bad_interrupt(x) do { __asm { int3 }; } while (0)
 #   endif
-#elif defined(__clang__) || defined(__GNUC__)
-#   define bad_interrupt(x) __asm__("int"#x)
 #else
 #   define bad_interrupt(x) exit((x))
 #endif
 
-// bad_assert
+
 #if defined(DEBUG) || defined(_DEBUG)
 #   include <stdio.h>
 
-    // bad_assert
 #   define bad_assert(x)                                               \
     do                                                                 \
     {                                                                  \
@@ -35,13 +32,12 @@
         else                                                           \
         {                                                              \
             fprintf(stderr, "\nAssertion failed in %s: %s\n(%s:%i)\n", \
-                    bad_func, #x, __FILE__, __LINE__);                 \
-            bad_interrupt(3);                                          \
+                    __func__, #x, __FILE__, __LINE__);                 \
+            bad_interrupt();                                           \
         }                                                              \
     }                                                                  \
     while (0)
 
-    // bad_assert_aligned
 #   define bad_assert_aligned(ptr, alignment)                                                        \
     do                                                                                               \
     {                                                                                                \
@@ -50,8 +46,8 @@
         else                                                                                         \
         {                                                                                            \
             fprintf(stderr, "\nVariable %s in %s is not %i-bytes aligned, but should be\n(%s:%i)\n", \
-                    #ptr, bad_func, alignment, __FILE__, __LINE__);                                  \
-            bad_interrupt(3);                                                                        \
+                    #ptr, __func__, alignment, __FILE__, __LINE__);                                  \
+            bad_interrupt();                                                                         \
         }                                                                                            \
     }                                                                                                \
     while (0)

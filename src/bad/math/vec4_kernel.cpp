@@ -1,6 +1,6 @@
 #include "vec4_kernel.h"
 
-#include <bad/debug.h>
+#include <bad/debug_checks.h>
 #include "vec4.h"
 
 BAD_NAMESPACE_START
