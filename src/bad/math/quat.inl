@@ -8,7 +8,7 @@ bad_forceinline quat quat_identity()
 
 
 // axis_angle = (x, y, z, angle)
-bad_inline quat bad_veccall quat_from_axis_angle(f32x4 unit_axis, f32 angle)
+bad_inline quat bad_veccall quat_from_axis_angle(vec3 unit_axis, f32 angle)
 {
     // Compute cos(angle * 0.5) and sin(angle * 0.5)
     f32 half_angle = angle * .5f;
@@ -56,7 +56,39 @@ bad_inline quat bad_veccall quat_from_euler(f32x4 xyz_angles)
 }
 
 
-bad_inline quat bad_veccall quat_conjugate(f32x4 q)
+bad_inline f32 bad_veccall quat_length_squared(quat q)
+{
+    return quat_dot(q, q);
+}
+
+
+bad_inline f32 bad_veccall quat_length(quat q)
+{
+#if defined(__SSE2__)
+    f32x4 dot = _mm_dp_ps(q, q, 0b11111111);
+#else
+    f32x4 dot = f32x4_hadd4(f32x4_mul(q, q));
+#endif
+
+    return f32x4_get_0(f32x4_sqrt(dot));
+}
+
+
+bad_inline quat bad_veccall quat_normalize(quat q)
+{
+#if defined(__SSE2__)
+    f32x4 length2 = _mm_dp_ps(q, q, 0b11111111);
+#else
+    f32x4 length2 = f32x4_broadcast_0(f32x4_hadd4(f32x4_mul(q, q)));
+#endif
+
+    f32x4 inv_len = f32x4_rsqrt(length2);
+
+    return f32x4_mul(q, inv_len);
+}
+
+
+bad_inline quat bad_veccall quat_inverse(quat q)
 {
     // TODO: compare performance with mask128_all1() and bitshifts
     mask128 conj_mask = mask128_set(0x80000000, 0x80000000, 0x80000000, 0x00000000);
@@ -67,7 +99,7 @@ bad_inline quat bad_veccall quat_conjugate(f32x4 q)
 
 // xyz = (q1.w * q0.xyz) + (q0.w * q1.xyz) + vec3_cross(q0.xyz, q1.xyz)
 // w   = (q0.w * q1.w) - vec3_dot(q0.axis, q1.axis)
-bad_inline quat bad_veccall quat_mul(f32x4 q0, f32x4 q1)
+bad_inline quat bad_veccall quat_mul(quat q0, quat q1)
 {
     vec3  new_axis = vec3_cross(q0, q1);
 
@@ -88,7 +120,7 @@ bad_inline quat bad_veccall quat_mul(f32x4 q0, f32x4 q1)
 
 
 // 2.f * (v * (q.w² - 0.5) + (q.axis * dot(q.axis, v)) + (cross(q.axis, v) * q.w))
-bad_inline vec3 bad_veccall quat_rot(f32x4 q, f32x4 v)
+bad_inline vec3 bad_veccall quat_rot(quat q, vec3 v)
 {
 // dot(q.axis, v)
 #if defined(__SSE4_1__)
@@ -111,7 +143,6 @@ bad_inline vec3 bad_veccall quat_rot(f32x4 q, f32x4 v)
     f32x4 res = f32x4_sub(q_w2, half);
     // res = (v.x * (q.w² - 1), v.y * (q.w² - 1), v.z * (q.w² - 1), 0)
           res = f32x4_mul(v, res);
-    // res = (v.x * (q.w² - 1), v.y * (q.w² - 1), v.z * (q.w² - 1), 0)
           res = f32x4_mul_add(q, dot3, res);
           res = f32x4_mul_add(cross, q_w, res);
 
@@ -119,11 +150,53 @@ bad_inline vec3 bad_veccall quat_rot(f32x4 q, f32x4 v)
 }
 
 
-bad_inline f32 bad_veccall quat_dot(f32x4 q0, f32x4 q1)
+bad_inline f32 bad_veccall quat_dot(quat q0, quat q1)
 {
 #if defined(__SSE4_1__)
     return f32x4_get_0(_mm_dp_ps(q0, q1, 0b11111111));
 #else
     return f32x4_sum4(f32x4_mul(q0, q1));
 #endif
+}
+
+
+bad_inline quat bad_veccall quat_lerp(quat q0, quat q1, f32 t)
+{
+#if defined(__SSE4_1__)
+    f32x4 dot   = f32x4_get_0(_mm_dp_ps(q0, q1, 0b11111111));
+#else
+    f32x4 dot   = f32x4_broadcast_0(f32x4_hadd4(f32x4_mul(q0, q1)));
+#endif
+    q1 = f32x4_mul_by_sign(q1, dot);
+    
+    quat lerped = f32x4_lerp(q0, q1, f32x4_set_all(t));
+
+    return quat_normalize(lerped);
+}
+
+
+// TODO(review)
+bad_inline quat bad_veccall quat_slerp(quat q0, quat q1, f32 t)
+{
+#if defined(__SSE4_1__)
+    f32x4 dot   = f32x4_get_0(_mm_dp_ps(q0, q1, 0b11111111));
+#else
+    f32x4 dot   = f32x4_broadcast_0(f32x4_hadd4(f32x4_mul(q0, q1)));
+#endif
+
+    q1 = f32x4_mul_by_sign(q1, dot);
+    f32x4 one_min_t     = f32x4_set_all(1.f - t);
+    f32x4 sin_one_min_t = f32x4_sin(one_min_t);
+
+    f32x4 angle         = f32x4_acos(dot);
+    f32x4 vt            = f32x4_set_all(t);
+    f32x4 t_angle       = f32x4_mul(vt, angle);
+    f32x4 sin_t_angle   = f32x4_sin(t_angle);
+    f32x4 sin_angle     = f32x4_sin(angle);
+
+    f32x4 slerp = f32x4_mul_add(angle, sin_one_min_t, q0);
+          slerp = f32x4_mul_add(sin_t_angle, q1, slerp);
+          slerp = f32x4_div(slerp, sin_angle);
+
+    return slerp;
 }
