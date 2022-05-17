@@ -9,6 +9,7 @@ BAD_NAMESPACE_START
 
 static bad_forceinline f32 u32_as_f32(u32 a);
 static bad_forceinline u32 u32_bool_to_mask(u32 zero_or_one);
+static bad_forceinline u32 u32_div_ceiled(u32 a, u32 b);
 
 #include "u32.inl"
 
