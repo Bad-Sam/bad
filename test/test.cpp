@@ -60,12 +60,12 @@ void reset_f32_array(f32* array, s32 n)
     }
 }
 
-bool is_nan(f32 a)
+u32 is_nan(f32 a)
 {
     return a != a;
 }
 
-bool is_qnan(f32 a)
+u32 is_qnan(f32 a)
 {
     const u32 bits = *(u32*)&a;
 
@@ -73,7 +73,7 @@ bool is_qnan(f32 a)
 }
 
 
-bool is_snan(f32 a)
+u32 is_snan(f32 a)
 {
     const u32 bits = *(u32*)&a;
 
@@ -126,7 +126,7 @@ f32 ulp(f32 a)
 }
 
 
-bool are_equal_ulp(f32 a, f32 b)
+u32 are_equal_ulp(f32 a, f32 b)
 {
     const f32 a_ulp   = ulp(a);
     const f32 b_ulp   = ulp(b);
@@ -136,7 +136,7 @@ bool are_equal_ulp(f32 a, f32 b)
 }
 
 
-bool are_equal_n_ulp(f32 a, f32 b, f32 ulp_delta)
+u32 are_equal_n_ulp(f32 a, f32 b, f32 ulp_delta)
 {
     f32 a_ulp   = ulp(a);
     f32 b_ulp   = ulp(b);

@@ -23,8 +23,8 @@ extern s32 test_results[2];
 #   define bad_test_check(cond)                                                            \
     do                                                                                     \
     {                                                                                      \
-        u32 test_res = (cond);                                                            \
-        test_results[test_res]++;                                                     \
+        u32 test_res = (cond);                                                             \
+        test_results[test_res]++;                                                          \
         HANDLE err = GetStdHandle(STD_ERROR_HANDLE);                                       \
         WriteFile(err, "\n[", 2, NULL, NULL);                                              \
         if (test_res)                                                                      \
@@ -47,8 +47,8 @@ extern s32 test_results[2];
 #   define bad_test_check(cond)                                                         \
     do                                                                                  \
     {                                                                                   \
-        u32 test_res = (cond);                                                         \
-        test_results[test_res]++;                                                  \
+        u32 test_res = (cond);                                                          \
+        test_results[test_res]++;                                                       \
         fprintf(stderr, "\n[%s] %s", test_res ? BAD_PASSED : BAD_FAILED, __FUNCTION__); \
     } while (0)
 #endif
@@ -62,7 +62,8 @@ do                                                                              
 {                                                                                     \
     f32 __c[4];                                                                       \
     f32x4_storeu(__c, (__v));                                                         \
-    fprintf(stderr, "\n%s = [%.20f, %.20f, %.20f, %.20f]", #__v, __c[0], __c[1], __c[2], __c[3]); \
+    fprintf(stderr, "\n%s = [%.20f, %.20f, %.20f, %.20f]",                            \
+            #__v, __c[0], __c[1], __c[2], __c[3]);                                    \
 } while(0)
 
 #define print_f32x8(__v)                                                     \
@@ -94,7 +95,7 @@ do                                                                           \
 #define test_debug(cond)                                                      \
 do                                                                            \
 {                                                                             \
-    bool __cond_res = (cond);                                                 \
+    u32 __cond_res = (cond);                                                  \
     fprintf(stderr, "\n%s returns %s", #cond, __cond_res ? "true" : "false"); \
 } while(0)
 
@@ -102,16 +103,16 @@ f32  random_f32(f32 min, f32 range);
 void randomize_f32_array(f32* array, s32 n, f32 min, f32 max);
 void randomize_f32x4_array(f32x4* array, s32 n, f32 min, f32 max);
 void reset_f32_array(f32* array, s32 n);
-bool is_nan(f32 a);
-bool is_qnan(f32 a);
-bool is_snan(f32 a);
+u32  is_nan(f32 a);
+u32  is_qnan(f32 a);
+u32  is_snan(f32 a);
 u8   unbiased_exponent(f32 a);
 s8   exponent(f32 a);
 s8   sign(s8 a);
 f32  abs(f32 a);
 f32  ulp(f32 a);
-bool are_equal_ulp(f32 a, f32 b);
-bool are_equal_n_ulp(f32 a, f32 b, f32 ulp_delta);
+u32  are_equal_ulp(f32 a, f32 b);
+u32  are_equal_n_ulp(f32 a, f32 b, f32 ulp_delta);
 
 BAD_NAMESPACE_END
 
