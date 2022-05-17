@@ -274,6 +274,7 @@ static bad_forceinline mask128 mask128_neq(mask128 a, mask128 b)
 {
 #if defined(__SSE2__)
     const mask128 eq = _mm_cmpeq_epi32(a, b);
+    
     return _mm_xor_si128(eq, _mm_cmpeq_epi32(a, a));
 #else
     const mask128 a_ord = _mm_cmpord_ps(a, a);
