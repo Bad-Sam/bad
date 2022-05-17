@@ -34,7 +34,7 @@ Because I am working on this library primarily to learn, it is a work in progres
     - [`math/`](src/bad/math/): math functions
     - [`types/`](src/bad/types/): where scalar, simd and math types are defined. No functions are contained here, only declarations
     - [`bad.h`](src/bad/bad.h): included accross all headers, currently used solely for wrapping sources in an optional namespace
-    - [`debug.h`](src/bad/debug.h): debug-mode runtime checks through macros
+    - [`debug.h`](src/bad/debug_checks.h): debug-mode runtime checks through macros
     - [`qualifiers.h`](src/bad/qualifiers.h): a variety of qualifiers used to affect how the compiler generates code
 - [`test/`](test/): unit tests on important and/or non-trivial functions
 - [`build.bat`](build.bat/): custom compilation script for Windows 10 with Clang. Can be called with `build`, `build run`, `build clean` or `build asm`
