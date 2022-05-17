@@ -149,22 +149,60 @@ static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8 a, f32x8 b, f32x8 t)
 }
 
 
+static bad_inline f32x8 bad_veccall f32x8_copysign(f32x8 a, f32x8 reference_sign)
+{
+    return (f32x8)
+    {
+        f32x4_copysign(a.a, reference_sign.a),
+        f32x4_copysign(a.b, reference_sign.b)
+    };
+}
+
+
+static bad_inline f32x8 bad_veccall f32x8_mul_by_sign(f32x8 a, f32x8 reference_sign)
+{
+    return (f32x8)
+    {
+        f32x4_mul_by_sign(a.a, reference_sign.a),
+        f32x4_mul_by_sign(a.b, reference_sign.b)
+    };
+}
+
+
 // ========== Trigonometry ===========
-static bad_forceinline f32x8 bad_veccall f32x8_cos(f32x8 a)
+static bad_inline f32x8 bad_veccall f32x8_cos(f32x8 a)
 {
     return (f32x8){f32x4_cos(a.a), f32x4_cos(a.b)};
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_sin(f32x8 a)
+static bad_inline f32x8 bad_veccall f32x8_cos_0_halfpi(f32x8 a)
+{
+    return (f32x8){f32x4_cos_0_halfp(a.a), f32x4_cos_0_halfp(a.b)};
+}
+
+
+static bad_inline f32x8 bad_veccall f32x8_sin(f32x8 a)
 {
     return (f32x8){f32x4_sin(a.a), f32x4_sin(a.b)};
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_tan(f32x8 a)
+static bad_inline f32x8 bad_veccall f32x8_sin_npi_pi(f32x8 a)
+{
+    return (f32x8){f32x8_sin_npi_pi(a.a), f32x8_sin_npi_pi(a.b)};
+}
+
+
+static bad_inline f32x8 bad_veccall f32x8_tan(f32x8 a)
 {
     return (f32x8){f32x4_tan(a.a), f32x4_tan(a.b)};
+}
+
+
+static bad_inline f32x8 bad_veccall f32x8_acos(f32x8 a)
+{
+    return (f32x8){f32x4_acos(a.a), f32x4_acos(a.b)};
 }
 
 
@@ -175,17 +213,20 @@ static bad_forceinline f32x8 bad_veccall f32x8_mul_add(f32x8 a, f32x8 b, f32x8 c
     return (f32x8){f32x4_mul_add(a.a, b.a, c.a), f32x4_mul_add(a.b, b.b, c.b)};
 }
 
+
 // a * b - c
 static bad_forceinline f32x8 bad_veccall f32x8_mul_sub(f32x8 a, f32x8 b, f32x8 c)
 {
     return (f32x8){f32x4_mul_sub(a.a, b.a, c.a), f32x4_mul_sub(a.b, b.b, c.b)};
 }
 
+
 // -a * b + c
 static bad_forceinline f32x8 bad_veccall f32x8_nmul_add(f32x8 a, f32x8 b, f32x8 c)
 {
     return (f32x8){f32x4_mul_sub(a.a, b.a, c.a), f32x4_mul_sub(a.b, b.b, c.b)};
 }
+
 
 // -a * b - c
 static bad_forceinline f32x8 bad_veccall f32x8_nmul_sub(f32x8 a, f32x8 b, f32x8 c)

@@ -290,73 +290,67 @@ static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8 a, f32x8 b, f32x8 t)
 }
 
 
-// ========== Trigonometry ===========
-static bad_forceinline f32x8 bad_veccall f32x8_cos(f32x8 x)
+static bad_forceinline f32x8 bad_veccall f32x8_copysign(f32x8 a, f32x8 reference_sign)
 {
-    static const f32x8 vhalf_pi_rcp = f32x8_set_all(half_pi_rcp);
-    static const f32x8 vhalf_pi     = f32x8_set_all(half_pi);
-    static const f32x8 vzero        = f32x8_zero();
+    static const mask256 value_mask = mask256_set_all(0x7FFFFFFF);
 
-    // This simplifies computations
-    // cos(-x) = cos(x)
-    x = f32x8_abs(x);
+    mask256 a_bits    = f32x8_as_mask256(a);
+    mask256 sign_bits = f32x8_as_mask256(reference_sign);
+            sign_bits = mask256_and_not(sign_bits, value_mask);
+    mask256 a_value   = mask256_and(a_bits, value_mask);
+    mask256 copysign  = mask256_or(a_value, sign_bits);
 
-    f32x8   div           = f32x8_mul(x, vhalf_pi_rcp);
-    mask256 euclidian_div = f32x8_to_s32x8(div);
-    mask256 is_odd        = mask256_keep_lowbit32(euclidian_div);
-
-    div = mask256_s32x8_to_f32x8(euclidian_div);
-    x   = f32x8_nmul_add(div, vhalf_pi, x);
-
-    // Apply offset sign to x
-    mask256 offset_x_sign = mask256_shift_left32(is_odd, 31);
-    mask256 offset_x      = mask256_xor(f32x8_as_mask256(x), offset_x_sign);
-
-    // Pick an offset
-    mask256 is_not_zero = mask256_neq(vzero, is_odd);
-    mask256 offset      = mask256_and(f32x8_as_mask256(vhalf_pi), is_not_zero);
-
-    // Remap x accordingly (offset + offset_x_sign * x)
-    x = f32x8_add(mask256_as_f32x8(offset), mask256_as_f32x8(offset_x));
-
-    f32x8 cos_x = f32x8_cos_0_halfpi(x);
-
-    // Assign result sign
-    mask256 cos_x_bits = f32x8_as_mask256(cos_x);
-
-    // div modulo 4
-#if defined(__AVX2__)
-    mask256 sign_bit_idx = _mm256_srli_epi32(_mm256_slli_epi32(euclidian_div, 30), 30);
-#else
-    mask256 mod4_mask    = mask256_set_all(0x00000003);
-            sign_bit_idx = mask256_and(euclidian_div, mod4_mask);
-#endif
-
-
-// cos_x_bits | ((0b0110 >> sign_bit_idx) << 31);
-#if defined(__AVX2__)
-    static const mask256 sign_bits = mask256_set_all(0b0110);
-
-    mask256 cos_x_sign = _mm256_srlv_epi32(sign_bits, sign_bit_idx);
-            cos_x_sign = mask256_shift_left32(cos_x_sign, 31);
-
-    cos_x_bits = mask256_or(cos_x_bits, cos_x_sign);
-#else
-    mask256 one_mask   = mask256_shift_right32(mask256_all1(), 31);
-    mask256 two_mask   = mask256_shift_left32(one_mask, 1);
-    mask256 div_eq_1   = mask256_eq(euclidian_div, one_mask);
-    mask256 div_eq_2   = mask256_eq(euclidian_div, two_mask);
-    mask256 div_mask   = mask256_or(div_eq_1, div_eq_2);
-    mask256 cos_x_sign = mask256_keep_highbit32(div_mask);
-    
-    cos_x_bits = mask256_or(f32x8_as_mask256(cos_x), cos_x_sign);
-#endif
-
-    return mask256_as_f32x8(cos_x_bits);
+    return mask256_as_f32x8(copysign);
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_sin(f32x8 x)
+static bad_forceinline f32x8 bad_veccall f32x8_mul_by_sign(f32x8 a, f32x8 reference_sign)
+{
+    mask256 a_bits    = f32x8_as_mask256(a);
+    mask256 sign_bits = f32x8_as_mask256(reference_sign);
+            sign_bits = mask256_keep_highbit32(sign_bits);
+
+    mask256 mul_by_sign_bits = mask256_xor(a_bits, sign_bits);
+
+    return mask256_as_f32x8(mul_by_sign_bits);
+}
+
+
+// ========== Trigonometry ===========
+// TODO(review): try to find an approximation proper to cos? Or keep it as is?
+static bad_inline f32x8 bad_veccall f32x8_cos(f32x8 x)
+{
+    static const f32x8 vhalf_pi = f32x8_set_all(half_pi);
+
+    f32x8 shifted_x = f32x8_add(x, vhalf_pi);
+    
+    return f32x8_sin(shifted_x);
+}
+
+
+// Expects inputs in [0, pi/2]
+static bad_inline f32x8 bad_veccall f32x8_cos_0_halfpi(f32x8 x)
+{
+    static const f32x8 a2  = f32x8_set_all(-.4999999963f);
+    static const f32x8 a4  = f32x8_set_all( .0416666418f);
+    static const f32x8 a6  = f32x8_set_all(-.0013888397f);
+    static const f32x8 a8  = f32x8_set_all( .0000247609f);
+    static const f32x8 a10 = f32x8_set_all(-.0000002605f);
+    static const f32x8 one = f32x8_one();
+
+    f32x8 x2  = f32x8_mul(x, x);
+    f32x8 res = f32x8_mul_add(a10, x2,  a8);
+          res = f32x8_mul_add(res, x2,  a6);
+          res = f32x8_mul_add(res, x2,  a4);
+          res = f32x8_mul_add(res, x2,  a2);
+          res = f32x8_mul_add(res, x2, one);
+
+    return res;
+}
+
+
+// Expects values in [-pi, pi]
+static bad_inline f32x8 bad_veccall f32x8_sin(f32x8 x)
 {
     static const f32x8 vpi_rcp  = f32x8_set_all(pi_rcp);
     static const f32x8 vpi      = f32x8_set_all(pi);
@@ -377,36 +371,8 @@ static bad_forceinline f32x8 bad_veccall f32x8_sin(f32x8 x)
 }
 
 
-static bad_forceinline f32x8 bad_veccall f32x8_tan(f32x8 a)
-{
-    // TODO
-    return a;
-}
-
-
-// Expects inputs in [0, pi/2]
-static bad_forceinline f32x8 bad_veccall f32x8_cos_0_halfpi(f32x8 x)
-{
-    static const f32x8 a2  = f32x8_set_all(-.4999999963f);
-    static const f32x8 a4  = f32x8_set_all( .0416666418f);
-    static const f32x8 a6  = f32x8_set_all(-.0013888397f);
-    static const f32x8 a8  = f32x8_set_all( .0000247609f);
-    static const f32x8 a10 = f32x8_set_all(-.0000002605f);
-    static const f32x8 one = f32x8_one();
-
-    f32x8 x2  = f32x8_mul(x, x);
-    f32x8 res = f32x8_mul_add(a10, x2,  a8);
-          res = f32x8_mul_add(res, x2,  a6);
-          res = f32x8_mul_add(res, x2,  a4);
-          res = f32x8_mul_add(res, x2,  a2);
-          res = f32x8_mul_add(res, x2, one);
-
-    return res;
-}
-
-
 // Expects inputs in [-pi, pi]
-static bad_forceinline f32x8 bad_veccall f32x8_sin_npi_pi(f32x8 x)
+static bad_inline f32x8 bad_veccall f32x8_sin_npi_pi(f32x8 x)
 {
     static const f32x8 c1  = f32x8_set_all(-.10132118f),
                        c3  = f32x8_set_all( .0066208798f),
@@ -426,6 +392,42 @@ static bad_forceinline f32x8 bad_veccall f32x8_sin_npi_pi(f32x8 x)
           res = f32x8_mul(res, f32x8_sub(x, er));
 
     return f32x8_mul(res, f32x8_add(x, er));
+}
+
+
+static bad_inline f32x8 bad_veccall f32x8_tan(f32x8 a)
+{
+    // TODO
+    return a;
+}
+
+
+// Expects inputs in [-1; 1]
+// Max error: ~1.5974045e-5
+// Max relative error: ~0.0005%
+static bad_inline f32x8 bad_veccall f32x8_acos(f32x8 x)
+{
+    static const f32x8 vhalf_pi = f32x8_set_all(half_pi);
+    static const f32x8 vone     = f32x8_one();
+    static const f32x8 a2       = f32x8_set_all(-.0392588f);
+    static const f32x8 a4       = f32x8_set_all(.179323f);
+    static const f32x8 a6       = f32x8_set_all(-1.75866f);
+    static const f32x8 a8       = f32x8_set_all(-3.66063f);
+
+    f32x8 abs_x = f32x8_abs(x);
+
+    f32x8 acos  = f32x8_mul_add(a2,   abs_x, a4);
+          acos  = f32x8_mul_add(acos, abs_x, a6);
+          acos  = f32x8_mul_add(acos, abs_x, a8);
+    f32x8 shift = f32x8_mul_sub(abs_x, abs_x, abs_x);
+          acos  = f32x8_div(shift, acos);
+          acos  = f32x8_add(abs_x, acos);
+
+    f32x8 left = f32x8_sqrt(f32x8_sub(vone, acos));
+          left = f32x8_sub(left, vone);
+    f32x8 mul  = f32x8_mul_by_sign(left, x);
+
+    return f32x8_mul_add(mul, vhalf_pi, vhalf_pi);
 }
 
 

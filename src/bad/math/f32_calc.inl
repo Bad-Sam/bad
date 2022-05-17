@@ -261,10 +261,52 @@ static bad_forceinline f32 f32_lerp(f32 a, f32 b, f32 t)
 }
 
 
+static bad_forceinline f32 f32_copysign(f32 a, f32 reference_sign)
+{
+#if bad_has_builtin(__builtin_copysignf)
+    return __builtin_copysignf(a, reference_sign);
+#elif defined(__SSE__)
+    f32x4 va        = f32x4_set_lower(a);
+    f32x4 vref_sign = f32x4_set_lower(reference_sign);
+
+    f32x4 res = f32x4_copysign(va, vref_sign);
+
+    return f32x4_get_0(res);
+#else
+    u32 a_bits    = f32_as_u32(sa);
+    u32 sign_bits = f32_as_u32(sreference_sign);
+
+    u32 res = (a_bits & 0x7FFFFFFF) | (sign_bits & ~0x80000000);
+
+    return u32_as_f32(res);
+#endif
+}
+
+
+static bad_forceinline f32 f32_mul_by_sign(f32 a, f32 reference_sign)
+{
+#if defined(__SSE__)
+    f32x4 va        = f32x4_set_lower(a);
+    f32x4 vref_sign = f32x4_set_lower(reference_sign);
+
+    f32x4 res = f32x4_mul_by_sign(va, vref_sign);
+
+    return f32x4_get_0(res);
+#else
+    u32 a_mask    = f32_as_u32(sa);
+    u32 sign_mask = f32_as_u32(sreference_sign);
+
+    u32 res = (a_mask & 0x7FFFFFFF) | (sign_mask & 0x80000000);
+
+    return u32_as_f32(res);
+#endif
+}
+
+
 
 
 // ========== Trigonometry ===========
-static bad_forceinline f32 f32_cos(f32 x)
+static bad_inline f32 f32_cos(f32 x)
 {
     static const u32 sign_table[4] = {0x00000000, 0x80000000, 0x80000000, 0x00000000};
     static const f32 offset[2]     = {.0f, half_pi};
@@ -288,36 +330,8 @@ static bad_forceinline f32 f32_cos(f32 x)
 }
 
 
-// TODO: implement and keep only scalar
-static bad_forceinline f32 f32_sin(f32 x)
-{
-    f32 euclidian_div_f32 = f32_trunc(x * pi_rcp);
-    s32 euclidian_div_s32 = (s32)euclidian_div_f32;
-    u32 sin_x_neg         = (euclidian_div_s32 & 1) << 31; 
-
-    x = f32_nmul_add(euclidian_div_f32, pi, x);
-
-    f32 sin_x             = f32_sin_npi_pi(x);
-    u32 signed_sin_x_bits = f32_as_u32(sin_x) ^ sin_x_neg;
-
-    return u32_as_f32(signed_sin_x_bits);
-}
-
-
-// TODO: implement and keep only scalar
-// From the "Even faster math" GDC talk by Green Robin
-// https://www.gdcvault.com/play/1026734/Math-in-Game-Development-Summit
-static bad_forceinline f32 f32_tan(f32 x)
-{
-    f32x4 vx    = f32x4_set_lower(x);
-    f32x4 tan_x = f32x4_tan(vx);
-
-    return f32x4_get_0(tan_x);
-}
-
-
 // Expects input between in [0, pi/2]
-static bad_forceinline f32 f32_cos_0_halfpi(f32 x)
+static bad_inline f32 f32_cos_0_halfpi(f32 x)
 {
     static const f32 a2  = -.4999999963f;
     static const f32 a4  =  .0416666418f;
@@ -337,8 +351,24 @@ static bad_forceinline f32 f32_cos_0_halfpi(f32 x)
 }
 
 
+// TODO: implement and keep only scalar
+static bad_inline f32 f32_sin(f32 x)
+{
+    f32 euclidian_div_f32 = f32_trunc(x * pi_rcp);
+    s32 euclidian_div_s32 = (s32)euclidian_div_f32;
+    u32 sin_x_neg         = (euclidian_div_s32 & 1) << 31; 
+
+    x = f32_nmul_add(euclidian_div_f32, pi, x);
+
+    f32 sin_x             = f32_sin_npi_pi(x);
+    u32 signed_sin_x_bits = f32_as_u32(sin_x) ^ sin_x_neg;
+
+    return u32_as_f32(signed_sin_x_bits);
+}
+
+
 // Expects inputs in [-pi, pi]
-static bad_forceinline f32 f32_sin_npi_pi(f32 x)
+static bad_inline f32 f32_sin_npi_pi(f32 x)
 {
     // Based on Chebyshev polynomials
     static const f32 c1  = -.10132118f;
@@ -358,6 +388,39 @@ static bad_forceinline f32 f32_sin_npi_pi(f32 x)
         res *= (x - err) * (x + err) * x;
 
     return res;
+}
+
+
+// TODO: implement and keep only scalar
+// From the "Even faster math" GDC talk by Green Robin
+// https://www.gdcvault.com/play/1026734/Math-in-Game-Development-Summit
+static bad_inline f32 f32_tan(f32 x)
+{
+    f32x4 vx    = f32x4_set_lower(x);
+    f32x4 tan_x = f32x4_tan(vx);
+
+    return f32x4_get_0(tan_x);
+}
+
+
+static bad_inline f32 f32_acos(f32 x)
+{
+    static const f32 a2 = -0.0392588f;
+    static const f32 a4 = 0.179323f;
+    static const f32 a6 = -1.75866f;
+    static const f32 a8 = -3.66063f;
+
+    f32 abs_x = f32_abs(x);
+
+    f32 acos  = f32_mul_add(a2,   abs_x, a4);
+        acos  = f32_mul_add(acos, abs_x, a6);
+        acos  = f32_mul_add(acos, abs_x, a8);
+        acos  = f32_mul_sub(abs_x, abs_x, abs_x) / acos;
+        acos += abs_x;
+
+    f32 mul = f32_mul_by_sign(f32_sqrt(1.f - acos) - 1.f, x);
+
+    return f32_mul_add(mul, half_pi, half_pi);
 }
 
 

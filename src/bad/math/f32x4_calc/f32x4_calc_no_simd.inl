@@ -263,24 +263,87 @@ static bad_forceinline f32x4 f32x4_lerp(f32x4 a, f32x4 b, f32x4 t)
 }
 
 
+static bad_forceinline f32x4 bad_veccall f32x4_copysign(f32x4 a, f32x4 reference_sign)
+{
+    mask128 res;
+    mask128 a_mask    = f32x4_as_mask128(a);
+    mask128 sign_mask = f32x4_as_mask128(reference_sign);
+
+    res.x = (a_mask.x & 0x7FFFFFFF) | (sign_mask.x & 0x80000000);
+    res.y = (a_mask.y & 0x7FFFFFFF) | (sign_mask.y & 0x80000000);
+    res.z = (a_mask.z & 0x7FFFFFFF) | (sign_mask.z & 0x80000000);
+    res.w = (a_mask.w & 0x7FFFFFFF) | (sign_mask.w & 0x80000000);
+
+    return mask128_as_f32x4(res);
+}
+
+
+static bad_forceinline f32x4 f32x4_mul_by_sign(f32x4 a, f32x4 reference_sign)
+{
+    mask128 res;
+    mask128 a_bits    = f32x4_as_mask128(a);
+    mask128 sign_bits = f32x4_as_mask128(reference_sign);
+
+    res.x = a_bits.x ^ (sign_bits.x & 0x80000000);
+    res.y = a_bits.y ^ (sign_bits.y & 0x80000000);
+    res.z = a_bits.z ^ (sign_bits.z & 0x80000000);
+    res.w = a_bits.w ^ (sign_bits.w & 0x80000000);
+
+    return mask128_as_f32x4(res);
+}
+
+
 
 
 // ========== Trigonometry ===========
 static bad_forceinline f32x4 bad_veccall f32x4_cos(f32x4 a)
 {
-    return a;
+    return (f32x4)
+    {
+        f32_cos(x.x),
+        f32_cos(x.y),
+        f32_cos(x.z),
+        f32_cos(x.w)
+    };
 }
 
 
 static bad_forceinline f32x4 bad_veccall f32x4_sin(f32x4 a)
 {
-    return a;
+        return (f32x4)
+    {
+        f32_sin(x.x),
+        f32_sin(x.y),
+        f32_sin(x.z),
+        f32_sin(x.w)
+    };
 }
 
 
 static bad_forceinline f32x4 bad_veccall f32x4_tan(f32x4 a)
 {
-    return a;
+        return (f32x4)
+    {
+        f32_tan(x.x),
+        f32_tan(x.y),
+        f32_tan(x.z),
+        f32_tan(x.w)
+    };
+}
+
+
+// Expects inputs in [-1; 1]
+// Max error: ~1.5974045e-5
+// Max relative error: ~0.0005%
+static bad_forceinline f32x4 bad_veccall f32x4_acos(f32x4 x)
+{
+    return (f32x4)
+    {
+        f32_acos(x.x),
+        f32_acos(x.y),
+        f32_acos(x.z),
+        f32_acos(x.w)
+    };
 }
 
 
@@ -314,10 +377,10 @@ static bad_forceinline mask128 f32x4_neq(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x != b.x) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.y = (a.y != b.y) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.z = (a.z != b.z) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.w = (a.w != b.w) ? mask128_all_bits_set : mask128_all_bits_clear;
+    res.x = (a.x != b.x);
+    res.y = (a.y != b.y);
+    res.z = (a.z != b.z);
+    res.w = (a.w != b.w);
 
     return res;
  }
@@ -327,10 +390,10 @@ static bad_forceinline mask128 f32x4_eq(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x == b.x) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.y = (a.y == b.y) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.z = (a.z == b.z) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.w = (a.w == b.w) ? mask128_all_bits_set : mask128_all_bits_clear;
+    res.x = (a.x == b.x);
+    res.y = (a.y == b.y);
+    res.z = (a.z == b.z);
+    res.w = (a.w == b.w);
 
     return res;
 }
@@ -340,10 +403,10 @@ static bad_forceinline mask128 f32x4_ge(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x >= b.x) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.y = (a.y >= b.y) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.z = (a.z >= b.z) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.w = (a.w >= b.w) ? mask128_all_bits_set : mask128_all_bits_clear;
+    res.x = (a.x >= b.x);
+    res.y = (a.y >= b.y);
+    res.z = (a.z >= b.z);
+    res.w = (a.w >= b.w);
 
     return res;
 }
@@ -353,10 +416,10 @@ static bad_forceinline mask128 f32x4_gt(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x > b.x) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.y = (a.y > b.y) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.z = (a.z > b.z) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.w = (a.w > b.w) ? mask128_all_bits_set : mask128_all_bits_clear;
+    res.x = (a.x > b.x);
+    res.y = (a.y > b.y);
+    res.z = (a.z > b.z);
+    res.w = (a.w > b.w);
 
     return res;
 }
@@ -366,10 +429,10 @@ static bad_forceinline mask128 f32x4_le(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x <= b.x) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.y = (a.y <= b.y) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.z = (a.z <= b.z) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.w = (a.w <= b.w) ? mask128_all_bits_set : mask128_all_bits_clear;
+    res.x = (a.x <= b.x);
+    res.y = (a.y <= b.y);
+    res.z = (a.z <= b.z);
+    res.w = (a.w <= b.w);
 
     return res;
 }
@@ -379,16 +442,41 @@ static bad_forceinline mask128 f32x4_lt(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x < b.x) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.y = (a.y < b.y) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.z = (a.z < b.z) ? mask128_all_bits_set : mask128_all_bits_clear;
-    res.w = (a.w < b.w) ? mask128_all_bits_set : mask128_all_bits_clear;
+    res.x = (a.x < b.x);
+    res.y = (a.y < b.y);
+    res.z = (a.z < b.z);
+    res.w = (a.w < b.w);
 
     return res;
 }
 
 
-// ======= Selection & swizzling ========
+// ======= Selection & tests ========
+static bad_forceinline mask128 f32x4_is_positive(f32x4 a)
+{
+    mask128 res;
+
+    res.x = (a.x >= .0f);
+    res.y = (a.y >= .0f);
+    res.z = (a.z >= .0f);
+    res.w = (a.w >= .0f);
+
+    return res;
+}
+
+
+static bad_forceinline mask128 f32x4_is_negative(f32x4 a)
+{
+    mask128 res;
+
+    res.x = (a.x < .0f);
+    res.y = (a.y < .0f);
+    res.z = (a.z < .0f);
+    res.w = (a.w < .0f);
+
+    return res;
+}
+
 static bad_forceinline mask128 f32x4_is_nan(f32x4 a)
 {
     return f32x4_neq(a, a);
@@ -406,10 +494,10 @@ static bad_forceinline mask128 f32x4_is_infinite(f32x4 a)
     a_mask.z &= value_mask;
     a_mask.w &= value_mask;
 
-    a_mask.x = (a_mask.x == inf_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
-    a_mask.y = (a_mask.y == inf_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
-    a_mask.z = (a_mask.z == inf_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
-    a_mask.w = (a_mask.w == inf_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+    a_mask.x = (a_mask.x == inf_mask);
+    a_mask.y = (a_mask.y == inf_mask);
+    a_mask.z = (a_mask.z == inf_mask);
+    a_mask.w = (a_mask.w == inf_mask);
 
     return a_mask;
 }
@@ -425,10 +513,10 @@ static bad_forceinline mask128 f32x4_is_finite(f32x4 a)
     a_mask.z &= expo_mask;
     a_mask.w &= expo_mask;
 
-    a_mask.x = (a_mask.x != expo_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
-    a_mask.y = (a_mask.y != expo_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
-    a_mask.z = (a_mask.z != expo_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
-    a_mask.w = (a_mask.w != expo_mask) ? mask128_all_bits_set : mask128_all_bits_clear;
+    a_mask.x = (a_mask.x != expo_mask);
+    a_mask.y = (a_mask.y != expo_mask);
+    a_mask.z = (a_mask.z != expo_mask);
+    a_mask.w = (a_mask.w != expo_mask);
 
     return a_mask;
 }

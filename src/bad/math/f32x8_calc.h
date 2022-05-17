@@ -34,15 +34,17 @@ static bad_forceinline f32x8 bad_veccall f32x8_floor(f32x8 a);
 static bad_forceinline f32x8 bad_veccall f32x8_ceil(f32x8 a);
 static bad_forceinline f32x8 bad_veccall f32x8_clamp(f32x8 a, f32x8 min, f32x8 max);
 static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8 a, f32x8 b, f32x8 t);
-
+static bad_forceinline f32x8 bad_veccall f32x8_copysign(f32x8 a, f32x8 reference_sign);
+static bad_forceinline f32x8 bad_veccall f32x8_mul_by_sign(f32x8 a, f32x8 reference_sign);
 
 /* ========== Trigonometry =========== */
-static bad_forceinline f32x8 bad_veccall f32x8_cos(f32x8 a);
-static bad_forceinline f32x8 bad_veccall f32x8_sin(f32x8 a);
-static bad_forceinline f32x8 bad_veccall f32x8_tan(f32x8 a);
+static bad_inline f32x8 bad_veccall f32x8_cos(f32x8 a);
+static bad_inline f32x8 bad_veccall f32x8_cos_0_halfpi(f32x8 a);
+static bad_inline f32x8 bad_veccall f32x8_sin(f32x8 a);
+static bad_inline f32x8 bad_veccall f32x8_sin_npi_pi(f32x8 a);
+static bad_inline f32x8 bad_veccall f32x8_tan(f32x8 a);
+static bad_inline f32x8 bad_veccall f32x8_acos(f32x8 a);
 
-static bad_forceinline f32x8 bad_veccall f32x8_cos_0_halfpi(f32x8 a);
-static bad_forceinline f32x8 bad_veccall f32x8_sin_npi_pi(f32x8 a);
 
 
 /* ======== Fused operations ======== */

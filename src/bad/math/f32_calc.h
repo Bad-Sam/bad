@@ -38,15 +38,17 @@ static bad_forceinline f32 f32_floor(f32 a);
 static bad_forceinline f32 f32_ceil(f32 a);
 static bad_forceinline f32 f32_clamp(f32 a, f32 min, f32 max);
 static bad_forceinline f32 f32_lerp(f32 a, f32 b, f32 t);
+static bad_forceinline f32 f32_copysign(f32 a, f32 reference_sign);
+static bad_forceinline f32 f32_mul_by_sign(f32 a, f32 reference_sign);
 
 
 /* ========== Trigonometry =========== */
-static bad_forceinline f32 f32_cos(f32 a);
-static bad_forceinline f32 f32_sin(f32 a);
-static bad_forceinline f32 f32_tan(f32 a);
-
-static bad_forceinline f32 f32_cos_0_halfpi(f32 a);
-static bad_forceinline f32 f32_sin_npi_pi(f32 a);
+static bad_inline f32 f32_cos(f32 a);
+static bad_inline f32 f32_cos_0_halfpi(f32 a);
+static bad_inline f32 f32_sin(f32 a);
+static bad_inline f32 f32_sin_npi_pi(f32 a);
+static bad_inline f32 f32_tan(f32 a);
+static bad_inline f32 f32_acos(f32 x);
 
 
 /* ======== Fused operations ======== */

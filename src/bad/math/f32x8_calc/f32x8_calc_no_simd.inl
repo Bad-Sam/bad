@@ -230,19 +230,37 @@ static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8 a, f32x8 b, f32x8 t)
 // ========== Trigonometry ===========
 static bad_forceinline f32x8 bad_veccall f32x8_cos(f32x8 a)
 {
-    return a;
+    return (f32x8){f32x4_cos(a.a), f32x4_cos(a.b)};
+}
+
+
+static bad_inline f32x8 bad_veccall f32x8_cos_0_halfpi(f32x8 a)
+{
+    return (f32x8){f32x4_cos_0_halfp(a.a), f32x4_cos_0_halfp(a.b)};
 }
 
 
 static bad_forceinline f32x8 bad_veccall f32x8_sin(f32x8 a)
 {
-    return a;
+    return (f32x8){f32x8_sin(a.a), f32x8_sin(a.b)};
+}
+
+
+static bad_inline f32x8 bad_veccall f32x8_sin_npi_pi(f32x8 a)
+{
+    return (f32x8){f32x8_sin_npi_pi(a.a), f32x8_sin_npi_pi(a.b)};
 }
 
 
 static bad_forceinline f32x8 bad_veccall f32x8_tan(f32x8 a)
 {
-    return a;
+    return (f32x8){f32x8_tan(a.a), f32x8_tan(a.b)};
+}
+
+
+static bad_inline f32x8 bad_veccall f32x8_acos(f32x8 a)
+{
+    return (f32x8){f32x4_acos(a.a), f32x4_acos(a.b)};
 }
 
 
