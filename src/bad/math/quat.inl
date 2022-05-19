@@ -128,20 +128,13 @@ bad_inline vec3 bad_veccall quat_rot(quat q, vec3 v)
 #   else
     f32x4 dot3 = f32x4_hadd3(f32x4_mul(q, v));
 #endif
-    // cross = cross(q.axis, v)
     f32x4 cross = vec3_cross(q, v);
-    // q_w = (q.w, q.w, q.w, q.w)
     f32x4 q_w  = f32x4_broadcast_3(q);
-    // q_w2 = (q.w², q.w², q.w², q.w²)
     f32x4 q_w2 = f32x4_mul(q_w, q_w);
-    // one = (1, 1, 1, 1)
     f32x4 half = f32x4_half();
-    // two = (2, 2, 2, 2)
     f32x4 two  = f32x4_two();
 
-    // res = (q.w² - 1, q.w² - 1, q.w² - 1, q.w² - 1)
     f32x4 res = f32x4_sub(q_w2, half);
-    // res = (v.x * (q.w² - 1), v.y * (q.w² - 1), v.z * (q.w² - 1), 0)
           res = f32x4_mul(v, res);
           res = f32x4_mul_add(q, dot3, res);
           res = f32x4_mul_add(cross, q_w, res);
