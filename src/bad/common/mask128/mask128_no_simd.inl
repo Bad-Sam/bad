@@ -1,6 +1,3 @@
-static const u32 mask128_all_bits_set   = 0xFFFFFFFF;
-static const u32 mask128_all_bits_clear = 0x00000000;
-
 static bad_forceinline mask128 mask128_load(const mask_elem* mem_addr)
 {
     return mask128_set(mem_addr[0], mem_addr[1], mem_addr[2], mem_addr[3]);
