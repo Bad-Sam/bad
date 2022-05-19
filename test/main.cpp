@@ -1,4 +1,3 @@
-#include "test.h"
 #include "tests/test_mask128.h"
 #include "tests/test_mask256.h"
 #include "tests/test_f32x4.h"
@@ -148,111 +147,40 @@ int main()
 
     test_report();
 
-    //__int32 a;
-
     return 0;
 }
 
 /*
-// ========== Tests ==========
-typedef struct
+int main()
 {
-    const char* name;
-    f32 (*func)(f32 a);
-    f32 max_err;
-    f32 max_rel_err;
-    f32 max_err_x;
-    s64 perf;
-} func_f32;
+    const u32 vec_count = 1000000;
+    const u32 f32_count = vec_count * 8u;
+    f32*  elem          = (f32*)_mm_malloc(f32_count * sizeof(f32), 32u);
+    f32*  res           = (f32*)_mm_malloc(f32_count * sizeof(f32), 32u);
 
+    s64 cycles = 0;
+    s64 t0 = get_perf_counter();
 
-#define ADD_FUNC_F32(a) {#a, a, .0f, .0f, .0f, 0}
-
-// Register cos approximation functions
-func_f32 functions[] =
-{
-    ADD_FUNC_F32(sinf),
-    ADD_FUNC_F32(f32_sin),
-};
-
-func_f32 ref_func = ADD_FUNC_F32(sinf);
-
-void mesure_accuracy(f32 start, f32 end, f32 step)
-{
-    // Compute constants
-    const s32 functions_size = sizeof(functions) / sizeof(functions[0]);
-
-    // Test each functions
-    for (s32 i = 0; i < functions_size; i++)
+#if 0
+    for (u32 i = 0u; i < f32_count; i++)
     {
-        func_f32* tested_func = functions + i;
-
-        for (f32 x = start; x < end; x += step)
-        {
-            f32 ref_x  = (*ref_func.func)(x);
-            f32 func_x = (*tested_func->func)(x);
-            f32 err     = f32_abs(ref_x - func_x);
-
-            if (tested_func->max_err < err)
-            {
-                tested_func->max_err     = err;
-                tested_func->max_rel_err = 100.f * err / ref_x;
-                tested_func->max_err_x   = x;
-            }
-        }
+        res[i] = f32_acos(elem[i]);
     }
+#else
+    f32_acos_kernel(res, elem, f32_count);
+#endif
 
-    // Display results
-    for (s32 i = 0; i < functions_size; i++)
-    {
-        fprintf(stderr,
-                "\n%s:\n"
-                "- max_err     = %.12f\n"
-                "- max_rel_err = %.12f\n"
-                "- max_err_x   = %.12f\n",
-                functions[i].name,
-                functions[i].max_err,
-                functions[i].max_rel_err,
-                functions[i].max_err_x);
-    }
+    s64 t1 = get_perf_counter();
+    cycles += t1 - t0;
+
+
+
+    asm volatile("" : : "r,m"(res) : "memory");
+    fprintf(stderr, "\n%lli cycles (%.3f cycles per element)", cycles, (f32)cycles / f32_count);
+
+    _mm_free(res);
+    _mm_free(elem);
+
+    return 0;
 }
-
-
-void mesure_perf(f32 start, f32 end, f32 step)
-{
-    // Compute constants
-    const s32 functions_size = sizeof(functions) / sizeof(functions[0]);
-    const s64 elem_count    = (end - start) / step;
-
-    // Test each functions
-    for (s32 i = 0; i < functions_size; i++)
-    {
-        func_f32* tested_func = functions + i;
-        s64       perf_sum    = 0;
-
-        for (f32 x = start; x < end; x += step)
-        {
-            s64 t0     = get_perf_counter();
-            f32 func_x = (*tested_func->func)(x);
-            s64 t1     = get_perf_counter();
-
-            perf_sum += t1 - t0;
-
-            asm volatile("" : : "r,m"(func_x) : "memory");
-        }
-
-        functions[i].perf = perf_sum;
-    }
-
-    // Show results
-    for (s32 i = 0; i < functions_size; i++)
-    {
-        fprintf(stderr,
-                "\n%s:\n"
-                "- elem_count = %lli\n"
-                "- perf   = %llif\n",
-                functions[i].name,
-                elem_count,
-                functions[i].perf);
-    }
-}*/
+*/
