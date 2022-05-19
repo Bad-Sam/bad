@@ -20,7 +20,7 @@ void vec4_ker_dot(      f32* bad_restrict dot,
     bad_assert_f32xn_aligned(b);
 
     const u32 end = (vec4_count << 4);
-    for (u32 i = 0u; i < end; i += 4u)
+    for (u32 i = 0u; i < end; i += f32xn_width)
     {
 #if defined(__AVX__)
         f32x8 va  = f32x8_load(a + i);
@@ -52,7 +52,7 @@ void vec4_ker_length(      f32* bad_restrict len,
                            u32               vec4_count)
 {
     const u32 end = (vec4_count << 4);
-    for (u32 i = 0u; i < end; i += 4u)
+    for (u32 i = 0u; i < end; i += f32xn_width)
     {
 
 #if defined(__AVX__)
@@ -93,7 +93,7 @@ void vec4_ker_lerp(      f32* bad_restrict lerp,
     const f32x8 one = f32x8_one();
 #endif
 
-    for (u32 i = 0u; i < end; i += 4u)
+    for (u32 i = 0u; i < end; i += f32xn_width)
     {
 #if defined(__AVX__)
         f32x8 va = f32x8_load(a + i);
