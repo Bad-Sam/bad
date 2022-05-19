@@ -137,7 +137,8 @@ static bad_forceinline f32x8 bad_veccall f32x8_abs(f32x8 a)
 {
 #if defined(__AVX2__)
     // Shift out the sign bit, shift in zero instead
-    const mask256 a_mask = _mm256_castps_si256(a);
+    mask256 a_mask = _mm256_castps_si256(a);
+
     return _mm256_castsi256_ps(_mm256_srli_epi32(_mm256_slli_epi32(a_mask, 1), 1));
 #elif defined(__AVX__)
     return _mm256_and_ps(mask256_value32(), a);
@@ -145,6 +146,7 @@ static bad_forceinline f32x8 bad_veccall f32x8_abs(f32x8 a)
     return (f32x8){f32x4_abs(a.a), f32x4_abs(a.b)};
 #else
     const mask128 value32 = mask128_value32();
+    
     return {_mm_and_ps(value32, a.a), _mm_and_ps(value32, a.b)};
 #endif
 }
@@ -215,7 +217,7 @@ static bad_forceinline f32x8 bad_veccall f32x8_mod(f32x8 a, f32x8 b)
     const f32x8 a_div_b = _mm256_div_ps(a, b);
     const f32x8 trunc   = f32x8_trunc(a_div_b);
     
-    return _mm256_sub_ps(a, _mm256_mul_ps(trunc, b));
+    return f32x8_nmul_add(trunc, b, a);
 #else
     return (f32x8){f32x4_mod(a, b), f32x4_mod(a, b)};
 #endif
@@ -539,6 +541,37 @@ static bad_forceinline mask256 bad_veccall f32x8_lt(f32x8 a, f32x8 b)
 
 
 // ============= Tests ==============
+static bad_forceinline mask256 bad_veccall f32x8_is_positive(f32x8 a)
+{
+#if defined(__AVX2__)
+    mask256 a_mask    = f32x8_as_mask256(a);
+    mask256 sign_only = mask256_shift_right32(a_mask, 31);
+    mask256 zero_mask = mask256_zero();
+
+    return _mm256_cmpeq_epi32(sign_only, zero_mask);
+#else
+    f32x8 vzero = f32x8_zero();
+    
+    return f32x8_ge(a, vzero);
+#endif
+}
+
+
+static bad_forceinline mask256 bad_veccall f32x8_is_negative(f32x8 a)
+{
+#if defined(__AVX2__)
+    mask256 a_mask    = f32x8_as_mask256(a);
+    mask256 zero_mask = mask256_zero();
+
+    return _mm256_cmpgt_epi32(a_mask, zero_mask);
+#else
+    f32x8 vzero = f32x8_zero();
+    
+    return f32x8_neq(a_mask, vzero);
+#endif
+}
+
+
 static bad_forceinline mask256 bad_veccall f32x8_is_nan(f32x8 a)
 {
 #if defined(__AVX__)

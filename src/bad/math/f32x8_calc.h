@@ -22,7 +22,6 @@ static bad_forceinline f32x8 bad_veccall f32x8_sqrt(f32x8 a);
 static bad_forceinline f32x8 bad_veccall f32x8_rsqrt(f32x8 a);
 static bad_forceinline f32x8 bad_veccall f32x8_min(f32x8 a, f32x8 b);
 static bad_forceinline f32x8 bad_veccall f32x8_max(f32x8 a, f32x8 b);
-
 static bad_forceinline f32x8 bad_veccall f32x8_abs(f32x8 a);
 static bad_forceinline f32x8 bad_veccall f32x8_sign(f32x8 a);
 static bad_forceinline f32x8 bad_veccall f32x8_neg(f32x8 a);
@@ -64,6 +63,8 @@ static bad_forceinline mask256 bad_veccall f32x8_lt(f32x8 a, f32x8 b);
 
 
 /* ======= Tests ======== */
+static bad_forceinline mask256 bad_veccall f32x8_is_positive(f32x8 a);
+static bad_forceinline mask256 bad_veccall f32x8_is_negative(f32x8 a);
 static bad_forceinline mask256 bad_veccall f32x8_is_nan(f32x8 a);
 static bad_forceinline mask256 bad_veccall f32x8_is_infinite(f32x8 a);
 static bad_forceinline mask256 bad_veccall f32x8_is_finite(f32x8 a);
