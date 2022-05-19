@@ -24,8 +24,8 @@ bad_inline quat bad_veccall quat_from_axis_angle(vec3 unit_axis, f32 angle)
 
 bad_inline quat bad_veccall quat_from_euler(f32x4 xyz_angles)
 {
-    static const f32x4   half            = f32x4_half();
-    static const mask128 right_sign_mask = mask128_set(0x80000000, 0x80000000, 0x00000000, 0x00000000);
+    const f32x4   half            = f32x4_half();
+    const mask128 right_sign_mask = mask128_set(0x80000000, 0x80000000, 0x00000000, 0x00000000);
 
     f32x4 half_angles = f32x4_mul(xyz_angles, half);
     f32x4 cos_angles  = f32x4_cos(half_angles);
@@ -156,7 +156,7 @@ bad_inline f32 bad_veccall quat_dot(quat q0, quat q1)
 bad_inline quat bad_veccall quat_lerp(quat q0, quat q1, f32 t)
 {
 #if defined(__SSE4_1__)
-    f32x4 dot   = f32x4_get_0(_mm_dp_ps(q0, q1, 0b11111111));
+    f32x4 dot   = _mm_dp_ps(q0, q1, 0b11111111);
 #else
     f32x4 dot   = f32x4_broadcast_0(f32x4_hadd4(f32x4_mul(q0, q1)));
 #endif
@@ -172,7 +172,7 @@ bad_inline quat bad_veccall quat_lerp(quat q0, quat q1, f32 t)
 bad_inline quat bad_veccall quat_slerp(quat q0, quat q1, f32 t)
 {
 #if defined(__SSE4_1__)
-    f32x4 dot   = f32x4_get_0(_mm_dp_ps(q0, q1, 0b11111111));
+    f32x4 dot   = _mm_dp_ps(q0, q1, 0b11111111);
 #else
     f32x4 dot   = f32x4_broadcast_0(f32x4_hadd4(f32x4_mul(q0, q1)));
 #endif
