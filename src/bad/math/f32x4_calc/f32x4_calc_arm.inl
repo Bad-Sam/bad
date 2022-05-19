@@ -113,11 +113,10 @@ static bad_forceinline f32x4 bad_veccall f32x4_frac(f32x4 a)
 
 static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4 a, f32x4 b)
 {
-    // TODO: test vmulq_f32(a, vrecpeq_f32(b))
-    f32x4 truncated = vdivq_f32(a, b);
-          truncated = vrndq_f32(truncated);
+    f32x4 trunc = vdivq_f32(a, b);
+          trunc = vrndq_f32(truncated);
     
-    return vsubq_f32(a, vmulq_f32(truncated, b));
+    return f32x4_nmul_add(trunc, b, a);
 }
 
 

@@ -157,7 +157,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_mod(f32x4 a, f32x4 b)
     f32x4 trunc = _mm_div_ps(a, b);
           trunc = f32x4_trunc(trunc);
     
-    return _mm_sub_ps(a, _mm_mul_ps(trunc, b));
+    return f32x4_nmul_add(trunc, b, a);
 }
 
 
@@ -538,7 +538,6 @@ static bad_forceinline mask128 bad_veccall f32x4_lt(f32x4 a, f32x4 b)
 {
     return f32x4_as_mask128(_mm_cmplt_ps(a, b));
 }
-
 
 
 // ============= Tests ==============

@@ -203,10 +203,10 @@ static bad_forceinline f32x4 f32x4_trunc(f32x4 a)
 {
     f32x4 res;
 
-    res.x = (f32)(s32)a.x;
-    res.y = (f32)(s32)a.y;
-    res.z = (f32)(s32)a.z;
-    res.w = (f32)(s32)a.w;
+    res.x = f32_trunc(a.x);
+    res.y = f32_trunc(a.y);
+    res.z = f32_trunc(a.z);
+    res.w = f32_trunc(a.w);
 
     return res;
 }
@@ -377,10 +377,10 @@ static bad_forceinline mask128 f32x4_neq(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x != b.x);
-    res.y = (a.y != b.y);
-    res.z = (a.z != b.z);
-    res.w = (a.w != b.w);
+    res.x = (a.x != b.x) * 0xFFFFFFFF;
+    res.y = (a.y != b.y) * 0xFFFFFFFF;
+    res.z = (a.z != b.z) * 0xFFFFFFFF;
+    res.w = (a.w != b.w) * 0xFFFFFFFF;
 
     return res;
  }
@@ -390,10 +390,10 @@ static bad_forceinline mask128 f32x4_eq(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x == b.x);
-    res.y = (a.y == b.y);
-    res.z = (a.z == b.z);
-    res.w = (a.w == b.w);
+    res.x = (a.x == b.x) * 0xFFFFFFFF;
+    res.y = (a.y == b.y) * 0xFFFFFFFF;
+    res.z = (a.z == b.z) * 0xFFFFFFFF;
+    res.w = (a.w == b.w) * 0xFFFFFFFF;
 
     return res;
 }
@@ -403,10 +403,10 @@ static bad_forceinline mask128 f32x4_ge(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x >= b.x);
-    res.y = (a.y >= b.y);
-    res.z = (a.z >= b.z);
-    res.w = (a.w >= b.w);
+    res.x = (a.x >= b.x) * 0xFFFFFFFF;
+    res.y = (a.y >= b.y) * 0xFFFFFFFF;
+    res.z = (a.z >= b.z) * 0xFFFFFFFF;
+    res.w = (a.w >= b.w) * 0xFFFFFFFF;
 
     return res;
 }
@@ -416,10 +416,10 @@ static bad_forceinline mask128 f32x4_gt(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x > b.x);
-    res.y = (a.y > b.y);
-    res.z = (a.z > b.z);
-    res.w = (a.w > b.w);
+    res.x = (a.x > b.x) * 0xFFFFFFFF;
+    res.y = (a.y > b.y) * 0xFFFFFFFF;
+    res.z = (a.z > b.z) * 0xFFFFFFFF;
+    res.w = (a.w > b.w) * 0xFFFFFFFF;
 
     return res;
 }
@@ -429,10 +429,10 @@ static bad_forceinline mask128 f32x4_le(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x <= b.x);
-    res.y = (a.y <= b.y);
-    res.z = (a.z <= b.z);
-    res.w = (a.w <= b.w);
+    res.x = (a.x <= b.x) * 0xFFFFFFFF;
+    res.y = (a.y <= b.y) * 0xFFFFFFFF;
+    res.z = (a.z <= b.z) * 0xFFFFFFFF;
+    res.w = (a.w <= b.w) * 0xFFFFFFFF;
 
     return res;
 }
@@ -442,10 +442,10 @@ static bad_forceinline mask128 f32x4_lt(f32x4 a, f32x4 b)
 {
     mask128 res;
 
-    res.x = (a.x < b.x);
-    res.y = (a.y < b.y);
-    res.z = (a.z < b.z);
-    res.w = (a.w < b.w);
+    res.x = (a.x < b.x) * 0xFFFFFFFF;
+    res.y = (a.y < b.y) * 0xFFFFFFFF;
+    res.z = (a.z < b.z) * 0xFFFFFFFF;
+    res.w = (a.w < b.w) * 0xFFFFFFFF;
 
     return res;
 }
@@ -456,10 +456,10 @@ static bad_forceinline mask128 f32x4_is_positive(f32x4 a)
 {
     mask128 res;
 
-    res.x = (a.x >= .0f);
-    res.y = (a.y >= .0f);
-    res.z = (a.z >= .0f);
-    res.w = (a.w >= .0f);
+    res.x = (a.x >= .0f) * 0xFFFFFFFF;
+    res.y = (a.y >= .0f) * 0xFFFFFFFF;
+    res.z = (a.z >= .0f) * 0xFFFFFFFF;
+    res.w = (a.w >= .0f) * 0xFFFFFFFF;
 
     return res;
 }
@@ -469,10 +469,10 @@ static bad_forceinline mask128 f32x4_is_negative(f32x4 a)
 {
     mask128 res;
 
-    res.x = (a.x < .0f);
-    res.y = (a.y < .0f);
-    res.z = (a.z < .0f);
-    res.w = (a.w < .0f);
+    res.x = (a.x < .0f) * 0xFFFFFFFF;
+    res.y = (a.y < .0f) * 0xFFFFFFFF;
+    res.z = (a.z < .0f) * 0xFFFFFFFF;
+    res.w = (a.w < .0f) * 0xFFFFFFFF;
 
     return res;
 }
