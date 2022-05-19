@@ -10,17 +10,18 @@
 #   define bad_interrupt() do { __asm__("int3"); } while (0)
 #elif defined(_MSC_VER)
 #   if defined(BAD_x64)
-        // NOTE: Assembly block seem to be forbidden with x64 MSVC?
 #       include <intrin.h>
 #       define bad_interrupt() do { __debugbreak(); } while (0)
 #   elif defined(BAD_x86)
-#       define bad_interrupt(x) do { __asm { int3 }; } while (0)
+#       define bad_interrupt() do { __asm { int3 }; } while (0)
 #   endif
 #else
-#   define bad_interrupt(x) exit((x))
+#   include <stdlib.h>
+#   define bad_interrupt() do { exit(EXIT_FAILURE); } while (0)
 #endif
 
 
+// bad_assert
 #if defined(DEBUG) || defined(_DEBUG)
 #   include <stdio.h>
 
@@ -52,9 +53,11 @@
     }                                                                                                \
     while (0)
 
-#define bad_assert_sse_aligned(ptr)   bad_assert_aligned((ptr), 16)
-#define bad_assert_avx_aligned(ptr)   bad_assert_aligned((ptr), 32)
-#define bad_assert_f32xn_aligned(ptr) bad_assert_aligned((ptr), (f32xn_width * 4))
+// bad_assert
+#define bad_assert_sse_aligned(ptr)   bad_assert_aligned((ptr), 16u)
+#define bad_assert_avx_aligned(ptr)   bad_assert_aligned((ptr), 32u)
+#define bad_assert_f32xn_aligned(ptr) bad_assert_aligned((ptr), (f32xn_width * 4u))
+#define bad_assert_maskn_aligned(ptr) bad_assert_aligned((ptr), (maskn_width * 4u))
 #else
 #   define bad_assert(x)                      do {} while (0)
 #   define bad_assert_aligned(ptr, alignment) do {} while (0)
