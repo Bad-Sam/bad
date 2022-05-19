@@ -168,7 +168,7 @@ static bad_forceinline f32x4 bad_veccall f32x4_copysign(f32x4 a, f32x4 reference
 
 static bad_forceinline f32x4 bad_veccall f32x4_mul_by_sign(f32x4 a, f32x4 reference_sign)
 {
-    static const mask128 value_mask = mask128_set_all(0x7FFFFFFF);
+    const mask128 value_mask = mask128_set_all(0x7FFFFFFF);
 
     mask128 a_bits    = f32x4_as_mask128(a);
     mask128 sign_bits = f32x4_as_mask128(reference_sign);
@@ -192,12 +192,12 @@ static bad_inline f32x4 bad_veccall f32x4_cos(f32x4 x)
 // Expects inputs in [0, pi/2]
 static bad_inline f32x4 bad_veccall f32x4_cos_0_halfpi(f32x4 x)
 {
-    static const f32x4 a2  = f32x4_set_all(-.4999999963f);
-    static const f32x4 a4  = f32x4_set_all( .0416666418f);
-    static const f32x4 a6  = f32x4_set_all(-.0013888397f);
-    static const f32x4 a8  = f32x4_set_all( .0000247609f);
-    static const f32x4 a10 = f32x4_set_all(-.0000002605f);
-    static const f32x4 one = f32x4_one();
+    const f32x4 a2  = f32x4_set_all(-.4999999963f);
+    const f32x4 a4  = f32x4_set_all( .0416666418f);
+    const f32x4 a6  = f32x4_set_all(-.0013888397f);
+    const f32x4 a8  = f32x4_set_all( .0000247609f);
+    const f32x4 a10 = f32x4_set_all(-.0000002605f);
+    const f32x4 one = f32x4_one();
 
     f32x4 x2  = f32x4_mul(x, x);
     f32x4 res = f32x4_mul_add(a10, x2,  a8);
@@ -212,8 +212,8 @@ static bad_inline f32x4 bad_veccall f32x4_cos_0_halfpi(f32x4 x)
 
 static bad_inline f32x4 bad_veccall f32x4_sin(f32x4 x)
 {
-    static const f32x4 vpi_rcp  = f32x4_set_all(pi_rcp);
-    static const f32x4 vpi      = f32x4_set_all(pi);
+    const f32x4 vpi_rcp  = f32x4_set_all(pi_rcp);
+    const f32x4 vpi      = f32x4_set_all(pi);
 
     f32x4   euclidian_div_f32 = f32x4_mul(x, vpi_rcp);
             euclidian_div_f32 = f32x4_trunc(euclidian_div_f32);
@@ -234,13 +234,13 @@ static bad_inline f32x4 bad_veccall f32x4_sin(f32x4 x)
 // Expects inputs in [-pi, pi]
 static bad_inline f32x4 bad_veccall f32x4_sin_npi_pi(f32x4 x)
 {
-    static const f32x4 c1  = f32x4_set_all(-.10132118f);
-    static const f32x4 c3  = f32x4_set_all( .0066208798f);
-    static const f32x4 c5  = f32x4_set_all(-.00017350505f);
-    static const f32x4 c7  = f32x4_set_all( .0000025222919f);
-    static const f32x4 c9  = f32x4_set_all(-.000000023317787f);
-    static const f32x4 c11 = f32x4_set_all( .00000000013291342f);
-    static const f32x4 er  = f32x4_set_all(3.1415927f + .00000008742278f);
+    const f32x4 c1  = f32x4_set_all(-.10132118f);
+    const f32x4 c3  = f32x4_set_all( .0066208798f);
+    const f32x4 c5  = f32x4_set_all(-.00017350505f);
+    const f32x4 c7  = f32x4_set_all( .0000025222919f);
+    const f32x4 c9  = f32x4_set_all(-.000000023317787f);
+    const f32x4 c11 = f32x4_set_all( .00000000013291342f);
+    const f32x4 er  = f32x4_set_all(3.1415927f + .00000008742278f);
 
     f32x4 x2  = f32x4_mul(x, x);
     f32x4 res = f32x4_mul_add(x2, c11, c9);
@@ -266,12 +266,12 @@ static bad_inline f32x4 bad_veccall f32x4_tan(f32x4 x)
 // Max relative error: ~0.0005%
 static bad_inline f32x4 bad_veccall f32x4_acos(f32x4 x)
 {
-    static const f32x4 vhalf_pi = f32x4_set_all(half_pi);
-    static const f32x4 vone     = f32x4_one();
-    static const f32x4 a2       = f32x4_set_all(-.0392588f);
-    static const f32x4 a4       = f32x4_set_all(.179323f);
-    static const f32x4 a6       = f32x4_set_all(-1.75866f);
-    static const f32x4 a8       = f32x4_set_all(-3.66063f);
+    const f32x4 vhalf_pi = f32x4_set_all(half_pi);
+    const f32x4 vone     = f32x4_one();
+    const f32x4 a2       = f32x4_set_all(-.0392588f);
+    const f32x4 a4       = f32x4_set_all(.179323f);
+    const f32x4 a6       = f32x4_set_all(-1.75866f);
+    const f32x4 a8       = f32x4_set_all(-3.66063f);
 
     f32x4 abs_x = f32x4_abs(x);
 
