@@ -247,7 +247,9 @@ static bad_forceinline f32x4 bad_veccall f32x4_clamp(f32x4 a, f32x4 min, f32x4 m
 
 static bad_forceinline f32x4 bad_veccall f32x4_lerp(f32x4 a, f32x4 b, f32x4 t)
 {
-    f32x4 one_min_t = f32x4_sub(f32x4_one(), t);
+    const f32x4 vone = f32x4_one();
+
+    f32x4 one_min_t = f32x4_sub(vone, t);
 
     return f32x4_mul_add(one_min_t, a, f32x4_mul(t, b));
 }
