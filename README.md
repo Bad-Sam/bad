@@ -19,7 +19,7 @@ Because I am working on this library primarily to learn, it is a work in progres
 
 ## Current state of the library
 - Tested on a laptop with an AMD x86-64 CPU (Ryzen 7 5800H)
-- Compiled with Clang
+- Compiled with Clang for both C and C++
 - Compiled under Windows 10
 - C++ compatible
 - Takes advantage of MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2 and FMA intrinsics
@@ -37,24 +37,24 @@ Because I am working on this library primarily to learn, it is a work in progres
     - [`debug.h`](src/bad/debug_checks.h): debug-mode runtime checks through macros
     - [`qualifiers.h`](src/bad/qualifiers.h): a variety of qualifiers used to affect how the compiler generates code
 - [`test/`](test/): unit tests on important and/or non-trivial functions
-- [`build.bat`](build.bat/): custom compilation script for Windows 10 with Clang. Can be called with `build`, `build run`, `build clean` or `build asm`
+- [`build.bat`](build.bat/): custom compilation script for Windows 10 with Clang. Can be called with `build` to build the library, `build test`, `build asm`, `build run`, `build clean`
 - [`RESOURCES.md`](RESOURCES.md): a collection of knowledge that helped me learn
 
 
 ## To do
 General:
-- [ ] Work on C/C++ interoperability
+- [X] Work on C/C++ interoperability
 - [ ] Work on Linux support
 - [ ] Support compilation with GCC and MSVC
 - [ ] Support compilation under ARM
-- [ ] Add support for more SIMD instruction sets (RISC-V "V", PowerPC's AltiVec, MIPS' MSA, ARM's Helium?)
+- [ ] Add support for more SIMD instruction sets? (RISC-V "V", PowerPC's AltiVec, MIPS' MSA, ARM's Helium?)
 - [ ] Take endianness in consideration
 
 Common:
-- [ ] Implement `f32xn` and `maskn`, a general vector type built on top of the most suited SIMD ISA available for the needs of the user
+- [X] Implement `f32xn` and `maskn`, a general vector type built on top of the most suited SIMD ISA available for the needs of the user
 - [ ] Explore non-temporal loads and stores
-- [ ] Explore possible implementation of types whose size is not a multiple of the available vector width (vec2 and vec3 for instance)
-- [ ] Remove the dependency on `stdint.h` in [`types.h`](src/bad/types.h)
+- [X] Explore possible implementation of types whose size is not a multiple of the available vector width (vec2 and vec3 for instance)
+- [X] Remove the dependency on `stdint.h` if possible in [`types.h`](src/bad/types.h)
 - [ ] Learn about interoperability and penalties between ISA (SSE <--> AVX for instance), and manage them
 
 Tests:
@@ -62,11 +62,11 @@ Tests:
 - [ ] Improve testing framework?
 
 Math:
-- [ ] Migrate calculus/mathematical functions in `common/f32x4.h` to `math`
-- [ ] Implement common calculus functions such as power, exponential, log, cos, sin, tan...
-- [ ] Implement 4-dimensional vector
-- [ ] Implement 3-dimensional vector
-- [ ] Implement quaternion
+- [X] Migrate calculus/mathematical functions in `common/f32x4.h` to `math`
+- [ ] Implement common calculus functions such as power, exponential, log, tan...
+- [X] Implement 4-dimensional vector
+- [X] Implement 3-dimensional vector
+- [X] Implement quaternion
 - [ ] Implement 4x4, 3x4 and 3x3 matrices
 - [ ] Implement math types conversion functions
 - [ ] Implement common splines
