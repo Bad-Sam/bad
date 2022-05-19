@@ -44,6 +44,7 @@ static bad_forceinline mask_elem bad_veccall mask128_get_3(mask128 a);
 // ========== Comparison ==========
 static bad_forceinline mask128 mask128_eq(mask128 a, mask128 b);
 static bad_forceinline mask128 mask128_neq(mask128 a, mask128 b);
+static bad_forceinline mask128 mask128_gt(mask128 a, mask128 b);
 
 
 // ======= Bitwise operations =======

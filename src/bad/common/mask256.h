@@ -42,6 +42,7 @@ static bad_forceinline mask256 bad_veccall mask256_shift_right32(mask256 a, s32 
 // ========== Comparison ==========
 static bad_forceinline mask256 mask256_eq(mask256 a, mask256 b);
 static bad_forceinline mask256 mask256_neq(mask256 a, mask256 b);
+static bad_forceinline mask256 mask256_gt(mask256 a, mask256 b);
 
 
 // ======= Bitwise operations =======

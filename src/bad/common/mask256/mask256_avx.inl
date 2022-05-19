@@ -177,11 +177,13 @@ static bad_forceinline mask256 mask256_eq(mask256 a, mask256 b)
 #if defined(__AVX2__)
     return _mm256_cmpeq_epi32(a, b);
 #else
-    const f32x4 a_nans = _mm256_cmp_ps(_mm256_castsi256_ps(a), _mm256_castsi256_ps(a), _CMP_UNORD_Q);
-    f32x4       nans   = _mm256_cmp_ps(_mm256_castsi256_ps(b), _mm256_castsi256_ps(b), _CMP_UNORD_Q);
-                nans   = _mm256_and_ps(a_nans, nans);
+    mask128 store[2];
+    _mm256_store_si256((mask256*)store, a);
+
+    store[0] = mask128_eq(store[0], shift);
+    store[1] = mask128_eq(store[1], shift);
     
-    return _mm256_castps_si256(_mm256_or_ps(_mm256_cmp_ps(a, b, _CMP_EQ_OQ), nans));
+    return _mm256_set_m128i(store[1], store[0]);
 #endif
 }
 
@@ -191,11 +193,29 @@ static bad_forceinline mask256 mask256_neq(mask256 a, mask256 b)
 #if defined(__AVX2__)
     return _mm256_xor_si256(_mm256_cmpeq_epi32(a, b), _mm256_cmpeq_epi32(a, a));
 #else
-    const mask256 a_ord = _mm256_cmp_ps(_mm256_castsi256_ps(a), _mm256_castsi256_ps(a), _CMP_UNORD_Q);
-    const mask256 b_ord = _mm256_cmp_ps(_mm256_castsi256_ps(b), _mm256_castsi256_ps(b), _CMP_UNORD_Q);
-    const mask256 ord   = _mm256_and_ps(a_ord, b_ord);
+    mask128 store[2];
+    _mm256_store_si256((mask256*)store, a);
+
+    store[0] = mask128_neq(store[0], shift);
+    store[1] = mask128_neq(store[1], shift);
     
-    return _mm256_and_ps(_mm256_cmp_ps(a, b, _CMP_NEQ_OQ), ord);
+    return _mm256_set_m128i(store[1], store[0]);
+#endif
+}
+
+
+static bad_forceinline mask256 mask256_gt(mask256 a, mask256 b)
+{
+#if defined(__AVX2__)
+    return _mm256_cmpgt_epi32(a, b);
+#else
+    mask128 store[2];
+    _mm256_store_si256((mask256*)store, a);
+
+    store[0] = mask128_gt(store[0], shift);
+    store[1] = mask128_gt(store[1], shift);
+    
+    return _mm256_set_m128i(store[1], store[0]);
 #endif
 }
 

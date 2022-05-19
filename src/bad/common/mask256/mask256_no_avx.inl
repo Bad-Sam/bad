@@ -86,6 +86,12 @@ static bad_forceinline mask256 mask256_neq(mask256 a, mask256 b)
 }
 
 
+static bad_forceinline mask256 mask256_gt(mask256 a, mask256 b)
+{
+    return (mask256){mask128_gt(a.a, b.a), mask128_gt(a.b, b.b)};
+}
+
+
 // ============= Logical ==============
 static bad_forceinline mask256 bad_veccall mask256_and(mask256 a, mask256 b)
 {

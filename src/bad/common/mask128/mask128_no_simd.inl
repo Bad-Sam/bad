@@ -210,6 +210,19 @@ static bad_forceinline mask128 mask128_neq(mask128 a, mask128 b)
 }
 
 
+static bad_forceinline mask128 mask128_gt(mask128 a, mask128 b)
+{
+    mask128 res;
+
+    res.e[0] = (a.e[0] > b.e[0]) * 0xFFFFFFFF;
+    res.e[1] = (a.e[1] > b.e[1]) * 0xFFFFFFFF;
+    res.e[2] = (a.e[2] > b.e[2]) * 0xFFFFFFFF;
+    res.e[4] = (a.e[4] > b.e[4]) * 0xFFFFFFFF;
+
+    return res;
+}
+
+
 
 
 // ============= Logical ==============

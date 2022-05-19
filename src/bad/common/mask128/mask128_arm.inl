@@ -142,6 +142,12 @@ static bad_forceinline mask128 mask128_neq(mask128 a, mask128 b)
 }
 
 
+static bad_forceinline mask128 mask128_gt(mask128 a, mask128 b)
+{
+    return vcgtq_u32(a, b);
+}
+
+
 // ============= Logical ==============
 static bad_forceinline mask128 bad_veccall mask128_and(mask128 a, mask128 b)
 {
