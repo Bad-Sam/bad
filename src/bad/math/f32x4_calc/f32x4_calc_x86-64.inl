@@ -583,7 +583,7 @@ static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4 a)
 
 static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4 a)
 {
-    // +inf is 0x7F800000, -inf is 0xFF800000
+    // +inf is 0x7F800000, ninf() is 0xFF800000
 #if defined(__SSE2__)
     mask128 a_abs    = mask128_all1();
     mask128 inf_mask = _mm_srli_epi32(_mm_slli_epi32(a_abs, 24), 1);

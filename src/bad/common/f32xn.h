@@ -16,7 +16,6 @@
 #       include "f32x8.h"
 #   else
 #       define f32xn_width 4u
-#       warning f32xn_width = 4u
 #       include "f32x4.h"
 #   endif
 #endif

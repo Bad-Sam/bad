@@ -9,9 +9,9 @@ BAD_NAMESPACE_START
 
 // =========== Arithmetic ===========
 void f32_add_kernel(      f32* bad_restrict dst,
-             const f32*        bad_restrict a,
-             const f32*        bad_restrict b,
-                   u32                      max_size);
+                    const f32* bad_restrict a,
+                    const f32* bad_restrict b,
+                          u32               max_size);
 
 void f32_sub_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict a,

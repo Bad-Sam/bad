@@ -1,4 +1,6 @@
 #include "test.h"
+#include "test_values.h"
+
 #include <bad/common/f32x4.h>
 
 BAD_NAMESPACE_START
@@ -31,6 +33,7 @@ void randomize_f32_array(f32* array, s32 n, f32 min, f32 max)
     }
 }
 
+
 void randomize_f32x4_array(f32x4* array, s32 n, f32 min, f32 max)
 {
     srand(__rdtsc());
@@ -60,10 +63,12 @@ void reset_f32_array(f32* array, s32 n)
     }
 }
 
+
 u32 is_nan(f32 a)
 {
     return a != a;
 }
+
 
 u32 is_qnan(f32 a)
 {
@@ -94,7 +99,7 @@ s8 exponent(f32 a)
 }
 
 
-f32 abs(f32 a)
+f32 absf(f32 a)
 {
     const u32 bits     = *(u32*)&a;
     const u32 abs_bits = bits & 0x7FFFFFFF;
@@ -132,7 +137,7 @@ u32 are_equal_ulp(f32 a, f32 b)
     const f32 b_ulp   = ulp(b);
     const f32 max_ulp = (a_ulp > b_ulp) ? a_ulp : b_ulp;
 
-    return abs(a - b) <= max_ulp;
+    return absf(a - b) <= max_ulp;
 }
 
 
@@ -142,7 +147,7 @@ u32 are_equal_n_ulp(f32 a, f32 b, f32 ulp_delta)
     f32 b_ulp   = ulp(b);
     f32 max_ulp = (a_ulp > b_ulp) ? a_ulp : b_ulp;
 
-    return abs(a - b) <= max_ulp * ulp_delta;
+    return absf(a - b) <= max_ulp * ulp_delta;
 }
 
 

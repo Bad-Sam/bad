@@ -282,7 +282,7 @@ static bad_forceinline mask128 bad_veccall f32x8_is_nan(f32x8 a)
 
 static bad_forceinline mask128 bad_veccall f32x8_is_infinite(f32x8 a)
 {
-    // +inf is 0x7F800000, -inf is 0xFF800000
+    // +inf is 0x7F800000, ninf() is 0xFF800000
     mask128 inf_mask   = mask128_all1();
     mask128 value_mask = vshrq_n_u32(all1_mask, 1);
             inf_mask   = vshrq_n_u32(vshlq_n_u32(all1_mask, 24), 1);

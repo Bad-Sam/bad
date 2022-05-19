@@ -60,7 +60,7 @@ if "%1"=="" (
 
 
 :find_src
-    for /R %SRC_DIR% %%f in (*.cpp) do (
+    for /R %SRC_DIR% %%f in (*.c) do (
         set "file=%%f"
         set "SRC=!SRC!!file! "
     )
@@ -68,7 +68,7 @@ if "%1"=="" (
 
 
 :find_test
-    for /R %TEST_DIR% %%f in (*.cpp) do (
+    for /R %TEST_DIR% %%f in (*.c) do (
         set "file=%%f"
         set "SRC=!SRC!!file! "
     )

@@ -1,6 +1,6 @@
 #include "test_f32x8.h" 
 #include "../test.h"
-#include "../test_values.h" // qnan, inff, -inff, denormf, all1
+#include "../test_values.h" // qnan(), inf(), ninf(), denorm(), all1
 
 #include <bad/qualifiers.h>
 #include <bad/common/f32x8.h>
@@ -45,7 +45,7 @@ void test_f32x8_one()
 
 void test_f32x8_load_store()
 {
-    bad_align(32) const f32 a[8] = {qnanf, inff, -inff, denormf, snanf, .0f, -.0f, 1.f};
+    bad_align(32) const f32 a[8] = {qnan(), inf(), ninf(), denorm(), snan(), .0f, -.0f, 1.f};
     bad_align(32) const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
     bad_align(32) f32 a_load_store[8];
     bad_align(32) f32 b_load_store[8];
@@ -74,7 +74,7 @@ void test_f32x8_load_store()
 
 void test_f32x8_loadu_storeu()
 {
-    const f32 a[8] = {qnanf, inff, -inff, denormf, snanf, .0f, -.0f, 1.f};
+    const f32 a[8] = {qnan(), inf(), ninf(), denorm(), snan(), .0f, -.0f, 1.f};
     const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
     f32 a_loadu_storeu[8];
     f32 b_loadu_storeu[8];
@@ -103,7 +103,7 @@ void test_f32x8_loadu_storeu()
 
 void test_f32x8_set()
 {
-    const f32 a[8] = {qnanf, inff, -inff, denormf, snanf, .0f, -.0f, 1.f};
+    const f32 a[8] = {qnan(), inf(), ninf(), denorm(), snan(), .0f, -.0f, 1.f};
     const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
     f32 a_set[8];
     f32 b_set[8];
@@ -132,7 +132,7 @@ void test_f32x8_set()
 
 void test_f32x8_set_all()
 {
-    const f32 a[4] = {qnanf, inff, -inff, denormf};
+    const f32 a[4] = {qnan(), inf(), ninf(), denorm()};
     const f32 b[4] = {-10.f, 1.f, -2.f, 10.f};
     f32 a0_set[8];
     f32 a1_set[8];
@@ -173,7 +173,7 @@ void test_f32x8_set_all()
 
 void test_f32x8_blend()
 {
-    const f32 a[8]  = {qnanf, inff, -inff, denormf, snanf, .0f, -.0f, 1.f};
+    const f32 a[8]  = {qnan(), inf(), ninf(), denorm(), snan(), .0f, -.0f, 1.f};
     const f32 b[8]  = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
 
 
@@ -209,10 +209,10 @@ void test_f32x8_blend()
 
 void test_f32x8_as_mask256()
 {
-    const f32 a[8] = {qnanf, inff, -inff, denormf, snanf, .0f, -.0f, 1.f};
+    const f32 a[8] = {qnan(), inf(), ninf(), denorm(), snan(), .0f, -.0f, 1.f};
     const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
 
-    const u32 expected_a_cast[8] = {qnan, inf, ninf, denorm, snan, zero, highbit32, 0x3F800000};
+    const u32 expected_a_cast[8] = {qnan_bits, inf_bits, ninf_bits, denorm_bits, snan_bits, zero_bits, highbit32_bits, 0x3F800000};
     const u32 expected_b_cast[8] = {0xC1200000, 0x3F800000, 0xC0000000, 0x41200000, 0x4B03DC76, 0xBDCCCCCD, 0x42C80000, 0xC2C7FFF3};
 
     u32 cast_a_store[8];

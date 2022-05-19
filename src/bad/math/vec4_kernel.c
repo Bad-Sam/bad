@@ -1,19 +1,20 @@
 #include "vec4_kernel.h"
+#include "vec4.h"
 
 #include <bad/debug_checks.h>
-#include "vec4.h"
 
 BAD_NAMESPACE_START
 
-void vec4_ker_dot(f32*       bad_restrict dot,
+// TODO: _mm256_dp_ps
+void vec4_ker_dot(      f32* bad_restrict dot,
                   const f32* bad_restrict v0,
                   const f32* bad_restrict v1,
-                  s32                     vec4_count)
+                        u32  vec4_count)
 {
-    bad_assert(dot != NULL);
-    bad_assert(v0  != NULL);
-    bad_assert(v1  != NULL);
-
+    bad_assert(dot        != NULL);
+    bad_assert(v0         != NULL);
+    bad_assert(v1         != NULL);
+    bad_assert(vec4_count != 0u);
     bad_assert_sse_aligned(dot);
     bad_assert_sse_aligned(v0);
     bad_assert_sse_aligned(v1);
@@ -29,13 +30,14 @@ void vec4_ker_dot(f32*       bad_restrict dot,
 }
 
 
-void vec4_ker_length_squared(f32*       bad_restrict len_sqr,
+// TODO: _mm256_dp_ps
+void vec4_ker_length_squared(      f32* bad_restrict len_sqr,
                              const f32* bad_restrict v,
-                             s32                     vec4_count)
+                                   u32               vec4_count)
 {
-    bad_assert(len_sqr != NULL);
-    bad_assert(v       != NULL);
-
+    bad_assert(len_sqr    != NULL);
+    bad_assert(v          != NULL);
+    bad_assert(vec4_count != 0u);
     bad_assert_sse_aligned(len_sqr);
     bad_assert_sse_aligned(v);
 
@@ -49,13 +51,14 @@ void vec4_ker_length_squared(f32*       bad_restrict len_sqr,
 }
 
 
-void vec4_ker_length(f32*       bad_restrict len,
+// TODO: _mm256_dp_ps?
+void vec4_ker_length(      f32* bad_restrict len,
                      const f32* bad_restrict v,
-                     s32                     vec4_count)
+                           u32               vec4_count)
 {
-    bad_assert(len != NULL);
-    bad_assert(v   != NULL);
-
+    bad_assert(len        != NULL);
+    bad_assert(v          != NULL);
+    bad_assert(vec4_count != 0u);
     bad_assert_sse_aligned(len);
     bad_assert_sse_aligned(v);
 
@@ -68,17 +71,18 @@ void vec4_ker_length(f32*       bad_restrict len,
 }
 
 
-void vec4_ker_lerp(f32*       bad_restrict lerp,
+// TODO: f32xn
+void vec4_ker_lerp(      f32* bad_restrict lerp,
                    const f32* bad_restrict v0,
                    const f32* bad_restrict v1,
                    const f32* bad_restrict t,
-                   s32                     vec4_count)
+                         u32               vec4_count)
 {
-    bad_assert(lerp != NULL);
-    bad_assert(v0   != NULL);
-    bad_assert(v1   != NULL);
-    bad_assert(t    != NULL);
-
+    bad_assert(lerp       != NULL);
+    bad_assert(v0         != NULL);
+    bad_assert(v1         != NULL);
+    bad_assert(t          != NULL);
+    bad_assert(vec4_count != 0u);
     bad_assert_sse_aligned(lerp);
     bad_assert_sse_aligned(v0);
     bad_assert_sse_aligned(v1);

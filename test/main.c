@@ -1,3 +1,4 @@
+#include "test.h"
 #include "tests/test_mask128.h"
 #include "tests/test_mask256.h"
 #include "tests/test_f32x4.h"
@@ -8,12 +9,12 @@
 #include "tests/test_vec4.h"
 #include "tests/test_vec4_kernel.h"
 
-#if defined(__cplusplus)
-using namespace bad;
-#endif
+#include <stdio.h>
+
+BAD_USE_NAMESPACE
 
 int main()
-{
+{    
     fprintf(stderr, "========== mask128.h ==========");
     test_mask128_load_store();
     test_mask128_loadu_storeu();

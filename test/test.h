@@ -109,7 +109,7 @@ u32  is_snan(f32 a);
 u8   unbiased_exponent(f32 a);
 s8   exponent(f32 a);
 s8   sign(s8 a);
-f32  abs(f32 a);
+f32  absf(f32 a);
 f32  ulp(f32 a);
 u32  are_equal_ulp(f32 a, f32 b);
 u32  are_equal_n_ulp(f32 a, f32 b, f32 ulp_delta);

@@ -8,7 +8,7 @@ BAD_NAMESPACE_START
 
 void test_vec3_cross()
 {
-    vec3 a = vec3_set(snanf, inff, ninff);
+    vec3 a = vec3_set(snan(), inf(), ninf());
     vec3 b = vec3_set(  1.f,  .0f,   .0f);
     vec3 c = vec3_set( 10.f,  .0f,   .0f);
     vec3 d = vec3_set(  .0f,  1.f,   .0f);

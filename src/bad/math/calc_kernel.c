@@ -1,9 +1,8 @@
 #include "calc_kernel.h"
+#include "f32xn_calc.h"
 
 #include <bad/debug_checks.h>
 #include <bad/common/maskn.h>
-#include <bad/math/constants.h>
-#include <bad/math/f32xn_calc.h>
 
 BAD_NAMESPACE_START
 

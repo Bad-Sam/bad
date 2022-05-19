@@ -13,7 +13,7 @@ BAD_NAMESPACE_START
 
 void test_mask256_load_store()
 {
-    bad_align(32) const u32 a[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    bad_align(32) const u32 a[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     bad_align(32) const u32 b[8] = {0x00E00100, 0xFFFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
 
     bad_align(32) u32 a_out[8];
@@ -30,7 +30,7 @@ void test_mask256_load_store()
 
 void test_mask256_loadu_storeu()
 {
-    const u32 a[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 b[8] = {0x00E00100, 0xF0F0F0F0, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
 
     u32 a_out[8];
@@ -47,7 +47,7 @@ void test_mask256_loadu_storeu()
 
 void test_mask256_set()
 {
-    const u32 a[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 b[8] = {0x00E00100, 0xFFFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
 
     u32 a_out[8];
@@ -64,7 +64,7 @@ void test_mask256_set()
 
 void test_mask256_set_all()
 {
-    const u32 a = all1;
+    const u32 a = all1_bits;
     const u32 b = 0xF9182765;
 
     u32 a_out[8];
@@ -81,13 +81,13 @@ void test_mask256_set_all()
 
 void test_mask256_zero()
 {
-    u32 zero_store[8];
-    mask256_storeu(zero_store, mask256_zero());
+    u32 zero_bits_store[8];
+    mask256_storeu(zero_bits_store, mask256_zero());
 
-    bad_test_check(zero_store[0] == zero && zero_store[1] == zero
-                && zero_store[2] == zero && zero_store[3] == zero
-                && zero_store[4] == zero && zero_store[5] == zero
-                && zero_store[6] == zero && zero_store[7] == zero);
+    bad_test_check(zero_bits_store[0] == zero_bits && zero_bits_store[1] == zero_bits
+                && zero_bits_store[2] == zero_bits && zero_bits_store[3] == zero_bits
+                && zero_bits_store[4] == zero_bits && zero_bits_store[5] == zero_bits
+                && zero_bits_store[6] == zero_bits && zero_bits_store[7] == zero_bits);
 }
 
 
@@ -96,10 +96,10 @@ void test_mask256_all1()
     u32 all1_out[8];
     mask256_storeu(all1_out, mask256_all1());
 
-    bad_test_check(all1_out[0] == all1 && all1_out[1] == all1
-                && all1_out[2] == all1 && all1_out[3] == all1
-                && all1_out[4] == all1 && all1_out[5] == all1
-                && all1_out[6] == all1 && all1_out[7] == all1);
+    bad_test_check(all1_out[0] == all1_bits && all1_out[1] == all1_bits
+                && all1_out[2] == all1_bits && all1_out[3] == all1_bits
+                && all1_out[4] == all1_bits && all1_out[5] == all1_bits
+                && all1_out[6] == all1_bits && all1_out[7] == all1_bits);
 }
 
 
@@ -108,34 +108,34 @@ void test_mask256_value32()
     u32 value32_out[8];
     mask256_storeu(value32_out, mask256_value32());
 
-    bad_test_check(value32_out[0] == nosign && value32_out[1] == nosign
-                && value32_out[2] == nosign && value32_out[3] == nosign
-                && value32_out[4] == nosign && value32_out[5] == nosign
-                && value32_out[6] == nosign && value32_out[7] == nosign);
+    bad_test_check(value32_out[0] == nosign_bits && value32_out[1] == nosign_bits
+                && value32_out[2] == nosign_bits && value32_out[3] == nosign_bits
+                && value32_out[4] == nosign_bits && value32_out[5] == nosign_bits
+                && value32_out[6] == nosign_bits && value32_out[7] == nosign_bits);
 }
 
 
 void test_mask256_highbit32()
 {
-    u32 highbit32_out[8];
-    mask256_storeu(highbit32_out, mask256_highbit32());
+    u32 highbit32_bits_out[8];
+    mask256_storeu(highbit32_bits_out, mask256_highbit32());
 
-    bad_test_check(highbit32_out[0] == highbit32 && highbit32_out[1] == highbit32
-                && highbit32_out[2] == highbit32 && highbit32_out[3] == highbit32
-                && highbit32_out[4] == highbit32 && highbit32_out[5] == highbit32
-                && highbit32_out[6] == highbit32 && highbit32_out[7] == highbit32);
+    bad_test_check(highbit32_bits_out[0] == highbit32_bits && highbit32_bits_out[1] == highbit32_bits
+                && highbit32_bits_out[2] == highbit32_bits && highbit32_bits_out[3] == highbit32_bits
+                && highbit32_bits_out[4] == highbit32_bits && highbit32_bits_out[5] == highbit32_bits
+                && highbit32_bits_out[6] == highbit32_bits && highbit32_bits_out[7] == highbit32_bits);
 }
 
 
 void test_mask256_lowbit32()
 {
-    u32 lowbit32_out[8];
-    mask256_storeu(lowbit32_out, mask256_lowbit32());
+    u32 lowbit32_bits_out[8];
+    mask256_storeu(lowbit32_bits_out, mask256_lowbit32());
 
-    bad_test_check(lowbit32_out[0] == lowbit32 && lowbit32_out[1] == lowbit32
-                && lowbit32_out[2] == lowbit32 && lowbit32_out[3] == lowbit32
-                && lowbit32_out[4] == lowbit32 && lowbit32_out[5] == lowbit32
-                && lowbit32_out[6] == lowbit32 && lowbit32_out[7] == lowbit32);
+    bad_test_check(lowbit32_bits_out[0] == lowbit32_bits && lowbit32_bits_out[1] == lowbit32_bits
+                && lowbit32_bits_out[2] == lowbit32_bits && lowbit32_bits_out[3] == lowbit32_bits
+                && lowbit32_bits_out[4] == lowbit32_bits && lowbit32_bits_out[5] == lowbit32_bits
+                && lowbit32_bits_out[6] == lowbit32_bits && lowbit32_bits_out[7] == lowbit32_bits);
 }
 
 
@@ -144,18 +144,18 @@ void test_mask256_exponent32()
     u32 exponent32_out[8];
     mask256_storeu(exponent32_out, mask256_exponent32());
 
-    bad_test_check(exponent32_out[0] == inf && exponent32_out[1] == inf
-                && exponent32_out[2] == inf && exponent32_out[3] == inf
-                && exponent32_out[4] == inf && exponent32_out[5] == inf
-                && exponent32_out[6] == inf && exponent32_out[7] == inf);
+    bad_test_check(exponent32_out[0] == inf_bits && exponent32_out[1] == inf_bits
+                && exponent32_out[2] == inf_bits && exponent32_out[3] == inf_bits
+                && exponent32_out[4] == inf_bits && exponent32_out[5] == inf_bits
+                && exponent32_out[6] == inf_bits && exponent32_out[7] == inf_bits);
 }
 
 
 void test_mask256_eq()
 {
-    const u32 a1[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a1[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 a2[8] = {0x00E00100, 0x7FFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
-    const u32 b[8]  = {all1, 0x12345678, all1, denorm, snan, zero, 0xFEDCBA65, nosign};
+    const u32 b[8]  = {all1_bits, 0x12345678, all1_bits, denorm_bits, snan_bits, zero_bits, 0xFEDCBA65, nosign_bits};
 
     u32 eq1_store[8];
     u32 eq2_store[8];
@@ -164,17 +164,17 @@ void test_mask256_eq()
 
     const u32 expected_eq1[8] =
     {
-        (a1[0] == b[0]) ? 0xFFFFFFFF : 0x00000000, (a1[1] == b[1]) ? 0xFFFFFFFF : 0x00000000, 
-        (a1[2] == b[2]) ? 0xFFFFFFFF : 0x00000000, (a1[3] == b[3]) ? 0xFFFFFFFF : 0x00000000,
-        (a1[4] == b[4]) ? 0xFFFFFFFF : 0x00000000, (a1[5] == b[5]) ? 0xFFFFFFFF : 0x00000000,
-        (a1[6] == b[6]) ? 0xFFFFFFFF : 0x00000000, (a1[7] == b[7]) ? 0xFFFFFFFF : 0x00000000
+        (a1[0] == b[0]) * 0xFFFFFFFF, (a1[1] == b[1]) * 0xFFFFFFFF, 
+        (a1[2] == b[2]) * 0xFFFFFFFF, (a1[3] == b[3]) * 0xFFFFFFFF,
+        (a1[4] == b[4]) * 0xFFFFFFFF, (a1[5] == b[5]) * 0xFFFFFFFF,
+        (a1[6] == b[6]) * 0xFFFFFFFF, (a1[7] == b[7]) * 0xFFFFFFFF
     };
     const u32 expected_eq2[8] =
     {
-        (a2[0] == b[0]) ? 0xFFFFFFFF : 0x00000000, (a2[1] == b[1]) ? 0xFFFFFFFF : 0x00000000, 
-        (a2[2] == b[2]) ? 0xFFFFFFFF : 0x00000000, (a2[3] == b[3]) ? 0xFFFFFFFF : 0x00000000,
-        (a2[4] == b[4]) ? 0xFFFFFFFF : 0x00000000, (a2[5] == b[5]) ? 0xFFFFFFFF : 0x00000000,
-        (a2[6] == b[6]) ? 0xFFFFFFFF : 0x00000000, (a2[7] == b[7]) ? 0xFFFFFFFF : 0x00000000
+        (a2[0] == b[0]) * 0xFFFFFFFF, (a2[1] == b[1]) * 0xFFFFFFFF, 
+        (a2[2] == b[2]) * 0xFFFFFFFF, (a2[3] == b[3]) * 0xFFFFFFFF,
+        (a2[4] == b[4]) * 0xFFFFFFFF, (a2[5] == b[5]) * 0xFFFFFFFF,
+        (a2[6] == b[6]) * 0xFFFFFFFF, (a2[7] == b[7]) * 0xFFFFFFFF
     };
 
     bad_test_check(eq1_store[0] == expected_eq1[0] && eq1_store[1] == expected_eq1[1]
@@ -190,9 +190,9 @@ void test_mask256_eq()
 
 void test_mask256_neq()
 {
-    const u32 a1[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a1[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 a2[8] = {0x00E00100, 0x7FFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
-    const u32 b[8]  = {all1, 0x12345678, all1, denorm, snan, zero, 0xFEDCBA65, nosign};
+    const u32 b[8]  = {all1_bits, 0x12345678, all1_bits, denorm_bits, snan_bits, zero_bits, 0xFEDCBA65, nosign_bits};
 
     u32 neq1_store[8];
     u32 neq2_store[8];
@@ -201,17 +201,17 @@ void test_mask256_neq()
 
     const u32 expected_neq1[8] =
     {
-        (a1[0] != b[0]) ? 0xFFFFFFFF : 0x00000000, (a1[1] != b[1]) ? 0xFFFFFFFF : 0x00000000, 
-        (a1[2] != b[2]) ? 0xFFFFFFFF : 0x00000000, (a1[3] != b[3]) ? 0xFFFFFFFF : 0x00000000,
-        (a1[4] != b[4]) ? 0xFFFFFFFF : 0x00000000, (a1[5] != b[5]) ? 0xFFFFFFFF : 0x00000000,
-        (a1[6] != b[6]) ? 0xFFFFFFFF : 0x00000000, (a1[7] != b[7]) ? 0xFFFFFFFF : 0x00000000
+        (a1[0] != b[0]) * 0xFFFFFFFF, (a1[1] != b[1]) * 0xFFFFFFFF,
+        (a1[2] != b[2]) * 0xFFFFFFFF, (a1[3] != b[3]) * 0xFFFFFFFF,
+        (a1[4] != b[4]) * 0xFFFFFFFF, (a1[5] != b[5]) * 0xFFFFFFFF,
+        (a1[6] != b[6]) * 0xFFFFFFFF, (a1[7] != b[7]) * 0xFFFFFFFF
     };
     const u32 expected_neq2[8] =
     {
-        (a2[0] != b[0]) ? 0xFFFFFFFF : 0x00000000, (a2[1] != b[1]) ? 0xFFFFFFFF : 0x00000000, 
-        (a2[2] != b[2]) ? 0xFFFFFFFF : 0x00000000, (a2[3] != b[3]) ? 0xFFFFFFFF : 0x00000000,
-        (a2[4] != b[4]) ? 0xFFFFFFFF : 0x00000000, (a2[5] != b[5]) ? 0xFFFFFFFF : 0x00000000,
-        (a2[6] != b[6]) ? 0xFFFFFFFF : 0x00000000, (a2[7] != b[7]) ? 0xFFFFFFFF : 0x00000000
+        (a2[0] != b[0]) * 0xFFFFFFFF, (a2[1] != b[1]) * 0xFFFFFFFF,
+        (a2[2] != b[2]) * 0xFFFFFFFF, (a2[3] != b[3]) * 0xFFFFFFFF,
+        (a2[4] != b[4]) * 0xFFFFFFFF, (a2[5] != b[5]) * 0xFFFFFFFF,
+        (a2[6] != b[6]) * 0xFFFFFFFF, (a2[7] != b[7]) * 0xFFFFFFFF
     };
 
     bad_test_check(neq1_store[0] == expected_neq1[0] && neq1_store[1] == expected_neq1[1]
@@ -227,9 +227,9 @@ void test_mask256_neq()
 
 void test_mask256_and()
 {
-    const u32 a1[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a1[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 a2[8] = {0x00E00100, 0x7FFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
-    const u32 b[8]  = {all1, 0x12345678, all1, denorm, snan, zero, 0xFEDCBA65, nosign};
+    const u32 b[8]  = {all1_bits, 0x12345678, all1_bits, denorm_bits, snan_bits, zero_bits, 0xFEDCBA65, nosign_bits};
 
     u32 and1_store[8];
     u32 and2_store[8];
@@ -254,9 +254,9 @@ void test_mask256_and()
 
 void test_mask256_and_not()
 {
-    const u32 a1[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a1[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 a2[8] = {0x00E00100, 0x7FFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
-    const u32 b[8]  = {all1, 0x12345678, all1, denorm, snan, zero, 0xFEDCBA65, nosign};
+    const u32 b[8]  = {all1_bits, 0x12345678, all1_bits, denorm_bits, snan_bits, zero_bits, 0xFEDCBA65, nosign_bits};
 
     u32 and_not1_store[8];
     u32 and_not2_store[8];
@@ -281,9 +281,9 @@ void test_mask256_and_not()
 
 void test_mask256_or()
 {
-    const u32 a1[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a1[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 a2[8] = {0x00E00100, 0x7FFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
-    const u32 b[8]  = {all1, 0x12345678, all1, denorm, snan, zero, 0xFEDCBA65, nosign};
+    const u32 b[8]  = {all1_bits, 0x12345678, all1_bits, denorm_bits, snan_bits, zero_bits, 0xFEDCBA65, nosign_bits};
 
     u32 or1_store[8];
     u32 or2_store[8];
@@ -308,9 +308,9 @@ void test_mask256_or()
 
 void test_mask256_xor()
 {
-    const u32 a1[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a1[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 a2[8] = {0x00E00100, 0x7FFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
-    const u32 b[8]  = {all1, 0x12345678, all1, denorm, snan, zero, 0xFEDCBA65, nosign};
+    const u32 b[8]  = {all1_bits, 0x12345678, all1_bits, denorm_bits, snan_bits, zero_bits, 0xFEDCBA65, nosign_bits};
 
     u32 xor1_store[8];
     u32 xor2_store[8];
@@ -335,7 +335,7 @@ void test_mask256_xor()
 
 void test_mask256_not()
 {
-    const u32 a[8] = {all1, nosign, zero, lowbit32, denorm, snan, all1, highbit32};
+    const u32 a[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
     const u32 b[8] = {0x00E00100, 0x7FFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
     
     u32 not1_store[8];
