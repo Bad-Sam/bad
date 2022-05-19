@@ -4,36 +4,41 @@
 setlocal EnableDelayedExpansion
 
 :: Directories
-set BUILD_DIR=build\
-set OBJ_DIR=%BUILD_DIR%obj\
-set ASM_DIR=%BUILD_DIR%asm\
-set SRC_DIR=src\
-set TEST_DIR=test\
+set "BUILD_DIR=build\"
+set "OBJ_DIR=%BUILD_DIR%obj\"
+set "ASM_DIR=%BUILD_DIR%asm\"
+set "SRC_DIR=src\"
+set "TEST_DIR=test\"
 
 :: Files
-set BINARY=%BUILD_DIR%bad.exe
-set SRC=
-set OBJ=
+set "BINARY=%BUILD_DIR%bad.exe"
+set "SRC="
+set "OBJ="
+set "SANDBOX_MAIN=sandbox.c"
 
-:: Compilation flags
-set COMP=clang++ -pipe
-:: Don't replace INCLUDE_DIR by INCLUDE. INCLUDE may be a global path variable
-set INCLUDE_DIR=-I%SRC_DIR% -I%TEST_DIR%
-set MACRO=-DNDEBUG
-set WARNING=-W -Wall -Werror -Wextra -Wshadow -Wnon-virtual-dtor -Wno-uninitialized
-set OPTI=-O3 -march=native -mno-vaes
-set ASM=-fverbose-asm -masm=intel
+:: Compilation
+set "COMP=clang"
+set "INCLUDE_DIR=-I%SRC_DIR%"
+set "MACRO=-DNDEBUG"
+set "WARNING=-W -Wall -Werror -Wextra -Wshadow -Wnon-virtual-dtor -Wno-uninitialized"
+set "OPTI=-O3 -march=native -mno-vaes"
+set "ASM=-fverbose-asm -masm=intel"
 
 :: Rules
 if "%1"=="" (
+    set "SRC=%SANDBOX_MAIN% "
     call :find_src
-    call :find_test
     call :compile
     exit /B 0
 ) else if "%1"=="asm" (
     call :find_src
-    call :find_test
     call :asm
+    exit /B 0
+) else if "%1"=="test" (
+    set "INCLUDE_DIR=%INCLUDE_DIR% -I%TEST_DIR%"
+    call :find_src
+    call :find_test
+    call :compile
     exit /B 0
 ) else if "%1"=="run" (
     if not exist %BINARY% (
@@ -54,23 +59,22 @@ if "%1"=="" (
 )
 
 
-:: Find the C++ sources and put them in SRC
 :find_src
     for /R %SRC_DIR% %%f in (*.cpp) do (
-        set file=%%f
+        set "file=%%f"
         set "SRC=!SRC!!file! "
     )
     exit /B 0
+
 
 :find_test
     for /R %TEST_DIR% %%f in (*.cpp) do (
-        set file=%%f
+        set "file=%%f"
         set "SRC=!SRC!!file! "
     )
     exit /B 0
 
 
-:: Asm output
 :asm
     setlocal EnableDelayedExpansion
 
@@ -80,9 +84,9 @@ if "%1"=="" (
 
     echo Compiling to asm...
     for %%i in (!SRC!) do (
-        set src_file=%%~nxi
-        set asm_file=!src_file:.cpp=.asm!
-        set asm_file=%~dp0%!ASM_DIR!!asm_file!
+        set "src_file=%%~nxi"
+        set "asm_file=!src_file:.cpp=.asm!"
+        set "asm_file=%~dp0%!ASM_DIR!!asm_file!"
         
         %COMP% %INCLUDE_DIR% %MACRO% %WARNING% %OPTI% %ASM% -S %%i -o !asm_file!
     )
@@ -90,13 +94,12 @@ if "%1"=="" (
     exit /B 0
 
 
-:: Compile into a binary
 :compile
     setlocal EnableDelayedExpansion
 
     :: Create the build and objects directories if they do not exist
     mkdir %BUILD_DIR% 2> nul
-    mkdir %OBJ_DIR% 2> nul
+    ::mkdir %OBJ_DIR% 2> nul
 
     echo Compiling to %BINARY%...
     echo(
