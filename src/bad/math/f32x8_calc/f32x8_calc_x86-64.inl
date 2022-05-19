@@ -276,17 +276,17 @@ static bad_forceinline f32x8 bad_veccall f32x8_clamp(f32x8 a, f32x8 min, f32x8 m
 
 static bad_forceinline f32x8 bad_veccall f32x8_lerp(f32x8 a, f32x8 b, f32x8 t)
 {
+    const f32x8 vone = f32x8_one();
+
 #if defined(__AVX__)
-    f32x8 one_min_t = f32x8_sub(f32x8_one(), t);
+    f32x8 one_min_t = f32x8_sub(vone, t);
 
     return f32x8_add(f32x8_mul(one_min_t, a), f32x8_mul(t, b));
 #else
-    f32x4 one = f32x4_one();
-
     return (f32x8)
     {
-        f32x4_add(f32x4_mul(f32x4_sub(one, t.a), a.a), f32x4_mul(t.a, b.a)),
-        f32x4_add(f32x4_mul(f32x4_sub(one, t.b), a.b), f32x4_mul(t.b, b.b))
+        f32x4_add(f32x4_mul(f32x4_sub(vone, t.a), a.a), f32x4_mul(t.a, b.a)),
+        f32x4_add(f32x4_mul(f32x4_sub(vone, t.b), a.b), f32x4_mul(t.b, b.b))
     };
 #endif
 }
