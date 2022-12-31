@@ -76,13 +76,8 @@ static bad_forceinline mask128 bad_veccall f32x4_is_nan(f32x4 a);
 static bad_forceinline mask128 bad_veccall f32x4_is_infinite(f32x4 a);
 static bad_forceinline mask128 bad_veccall f32x4_is_finite(f32x4 a);
 
-#if defined(__SSE__)
-#   include "f32x4_calc/f32x4_calc_x86-64.inl"
-#elif defined(__ARM_NEON_FP)
-#   include "f32x4_calc/f32x4_calc_arm.inl"
-#else
-#   include "f32x4_calc/f32x4_calc_no_simd.inl"
-#endif
+
+#include "f32x4_calc/f32x4_calc_x86-64.inl"
 
 BAD_NAMESPACE_END
 

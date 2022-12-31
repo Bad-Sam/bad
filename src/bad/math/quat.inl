@@ -1,7 +1,7 @@
 // [(0, 0, 0), 1]
 bad_forceinline quat quat_identity()
 {
-    bad_align(16) const f32 identity[4] = {.0f, .0f, .0f, 1.f};
+    bad_align_to(f32x4) const f32 identity[4] = {.0f, .0f, .0f, 1.f};
 
     return f32x4_load(identity);
 }
@@ -79,7 +79,7 @@ bad_inline quat bad_veccall quat_normalize(quat q)
 #if defined(__SSE2__)
     f32x4 length2 = _mm_dp_ps(q, q, 0b11111111);
 #else
-    f32x4 length2 = f32x4_broadcast_0(f32x4_hadd4(f32x4_mul(q, q)));
+    f32x4 length2 = f32x4_dup_0(f32x4_hadd4(f32x4_mul(q, q)));
 #endif
 
     f32x4 inv_len = f32x4_rsqrt(length2);
@@ -109,8 +109,8 @@ bad_inline quat bad_veccall quat_mul(quat q0, quat q1)
     f32x4 dot3     = f32x4_hadd3(f32x4_mul(q0, q1));
 #endif
 
-    f32x4 q0_w     = f32x4_broadcast_3(q0); 
-    f32x4 q1_w     = f32x4_broadcast_3(q1);
+    f32x4 q0_w     = f32x4_dup_3(q0); 
+    f32x4 q1_w     = f32x4_dup_3(q1);
           new_axis = f32x4_mul_add(q0_w, q1, new_axis);
           new_axis = f32x4_mul_add(q1_w, q0, new_axis);
     f32x4 new_w    = f32x4_mul_sub(q0_w, q1_w, dot3);
@@ -129,7 +129,7 @@ bad_inline vec3 bad_veccall quat_rot(quat q, vec3 v)
     f32x4 dot3 = f32x4_hadd3(f32x4_mul(q, v));
 #endif
     f32x4 cross = vec3_cross(q, v);
-    f32x4 q_w  = f32x4_broadcast_3(q);
+    f32x4 q_w  = f32x4_dup_3(q);
     f32x4 q_w2 = f32x4_mul(q_w, q_w);
     f32x4 half = f32x4_half();
     f32x4 two  = f32x4_two();
@@ -158,7 +158,7 @@ bad_inline quat bad_veccall quat_lerp(quat q0, quat q1, f32 t)
 #if defined(__SSE4_1__)
     f32x4 dot   = _mm_dp_ps(q0, q1, 0b11111111);
 #else
-    f32x4 dot   = f32x4_broadcast_0(f32x4_hadd4(f32x4_mul(q0, q1)));
+    f32x4 dot   = f32x4_dup_0(f32x4_hadd4(f32x4_mul(q0, q1)));
 #endif
     q1 = f32x4_mul_by_sign(q1, dot);
     
@@ -174,7 +174,7 @@ bad_inline quat bad_veccall quat_slerp(quat q0, quat q1, f32 t)
 #if defined(__SSE4_1__)
     f32x4 dot   = _mm_dp_ps(q0, q1, 0b11111111);
 #else
-    f32x4 dot   = f32x4_broadcast_0(f32x4_hadd4(f32x4_mul(q0, q1)));
+    f32x4 dot   = f32x4_dup_0(f32x4_hadd4(f32x4_mul(q0, q1)));
 #endif
 
     q1 = f32x4_mul_by_sign(q1, dot);

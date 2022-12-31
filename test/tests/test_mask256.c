@@ -13,11 +13,11 @@ BAD_NAMESPACE_START
 
 void test_mask256_load_store()
 {
-    bad_align(32) const u32 a[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
-    bad_align(32) const u32 b[8] = {0x00E00100, 0xFFFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
+    bad_align_to(mask256) const u32 a[8] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits, denorm_bits, snan_bits, all1_bits, highbit32_bits};
+    bad_align_to(mask256) const u32 b[8] = {0x00E00100, 0xFFFFFFFF, 0x12345678, 0xF9182765, 0x11111111, 0xAAAAAAAA, 0xA1B2C3D4, 0xFEDCBA65};
 
-    bad_align(32) u32 a_out[8];
-    bad_align(32) u32 b_out[8];
+    bad_align_to(mask256) u32 a_out[8];
+    bad_align_to(mask256) u32 b_out[8];
     mask256_store(a_out, mask256_load(a));
     mask256_store(b_out, mask256_load(b));
 

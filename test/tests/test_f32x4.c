@@ -38,10 +38,10 @@ void test_f32x4_one()
 
 void test_f32x4_load_store()
 {
-    bad_align(16) const f32 a[4] = {qnan(), inf(), ninf(), denorm()};
-    bad_align(16) const f32 b[4] = {.0f, 1.f, -2.f, 10.f};
-    bad_align(16) f32 a_load_store[4];
-    bad_align(16) f32 b_load_store[4];
+    bad_align_to(f32x4) const f32 a[4] = {qnan(), inf(), ninf(), denorm()};
+    bad_align_to(f32x4) const f32 b[4] = {.0f, 1.f, -2.f, 10.f};
+    bad_align_to(f32x4) f32 a_load_store[4];
+    bad_align_to(f32x4) f32 b_load_store[4];
 
     f32x4_store(a_load_store, f32x4_load(a));
     f32x4_store(b_load_store, f32x4_load(b));

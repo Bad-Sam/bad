@@ -3,64 +3,49 @@
 
 #include <bad/common/f32x4.h>
 
+#include <stdio.h>
+
 BAD_NAMESPACE_START
 
 s32 test_results[2] = {0, 0};
 
+void test_check(u32 cond, const char* func_name, u32 func_name_size)
+{
+    test_results[cond]++;
+    
+    static const char* test_result_texts[2] = {"Failed", "Passed"};
+
+#if defined(_MSC_VER)
+    static const u16 test_colors[2] = {FOREGROUND_RED, FOREGROUND_GREEN};
+
+    _write(2, "\n[", 2u);
+    
+    HANDLE stderr_handle = (HANDLE)_get_osfhandle(2);
+    SetConsoleTextAttribute(stderr_handle, test_colors[cond]);
+    _write(2, test_result_texts[cond], 6u);
+    SetConsoleTextAttribute(stderr_handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+
+    _write(2, "] ", 2u);
+    _write(2, func_name, func_name_size);
+#else
+    static const char* test_result_texts[2] =
+    {
+        "\n[\033[1m\033[31mFailed\033[0m\033[0m]",
+        "\n[\033[1m\033[32mPassed\033[0m\033[0m]"
+    };
+
+    write(2, test_result_texts[cond], 26u);
+    write(2, func_name, func_name_size);
+#endif
+}
+
+
 void test_report()
 {
     fprintf(stderr, "\n\nSum-up: %i passed, %i failed", test_results[1], test_results[0]);
+
     test_results[0] = 0;
     test_results[1] = 0;
-}
-
-
-f32 random_f32(f32 min, f32 range)
-{
-    return min + (rand() / (f32)RAND_MAX) * range;
-}
-
-
-void randomize_f32_array(f32* array, s32 n, f32 min, f32 max)
-{
-    srand(__rdtsc());
-    
-    const f32 range = max - min;
-    
-    for (s32 i = 0; i < n; i++)
-    {
-        array[i] = min + (rand() / (f32)RAND_MAX) * range;
-    }
-}
-
-
-void randomize_f32x4_array(f32x4* array, s32 n, f32 min, f32 max)
-{
-    srand(__rdtsc());
-
-    const f32 range = max - min;
-    
-    for (s32 i = 0; i < n; i++)
-    {
-        bad_align(16) const f32 values[4] =
-        {
-            random_f32(min, range),
-            random_f32(min, range),
-            random_f32(min, range),
-            random_f32(min, range)
-        };
-
-        array[i] = f32x4_load(values);
-    }
-}
-
-
-void reset_f32_array(f32* array, s32 n)
-{
-    for (s32 i = 0; i < n; i++)
-    {
-        array[i] = .0f;
-    }
 }
 
 
@@ -72,7 +57,7 @@ u32 is_nan(f32 a)
 
 u32 is_qnan(f32 a)
 {
-    const u32 bits = *(u32*)&a;
+    u32 bits = *(u32*)&a;
 
     return is_nan(a) && (bits & 0x00400000);
 }
@@ -80,7 +65,7 @@ u32 is_qnan(f32 a)
 
 u32 is_snan(f32 a)
 {
-    const u32 bits = *(u32*)&a;
+    u32 bits = *(u32*)&a;
 
     return is_nan(a) && (bits & 0x00400000) == 0;
 }
@@ -88,7 +73,7 @@ u32 is_snan(f32 a)
 
 u8 unbiased_exponent(f32 a)
 {
-    const u32 bits = *(u32*)&a;
+    u32 bits = *(u32*)&a;
 
     return (u8)((bits & 0x7F800000) >> 23);
 }
@@ -101,8 +86,8 @@ s8 exponent(f32 a)
 
 f32 absf(f32 a)
 {
-    const u32 bits     = *(u32*)&a;
-    const u32 abs_bits = bits & 0x7FFFFFFF;
+    u32 bits     = *(u32*)&a;
+    u32 abs_bits = bits & 0x7FFFFFFF;
 
     return *(f32*)&abs_bits;
 }
@@ -110,15 +95,15 @@ f32 absf(f32 a)
 
 f32 ulp(f32 a)
 {
-    // 32-bits floating point machine epsilon (0x34000000)
-    f32       res      = 1.1920928955078125e-7f;
-    f32       mul      = 2.f;
-    s8        expo_a   = exponent(a);
-    const s8  a_is_neg = expo_a & 0x80;
+    // 32-bits floating point epsilon (0x34000000)
+    f32 res      = 1.1920928955078125e-7f;
+    f32 mul      = 2.f;
+    s8  expo_a   = exponent(a);
+    s8  a_is_neg = expo_a & 0x80;
 
     if (a_is_neg)
     {
-        mul = .5f;
+        mul    = .5f;
         expo_a = -expo_a;
     }
 

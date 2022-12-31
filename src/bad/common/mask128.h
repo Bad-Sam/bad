@@ -60,13 +60,8 @@ static bad_forceinline f32x4 bad_veccall mask128_as_f32x4(mask128 a);
 static bad_forceinline f32x4 bad_veccall mask128_u32x4_to_f32x4(mask128 a);
 static bad_forceinline f32x4 bad_veccall mask128_s32x4_to_f32x4(mask128 a);
 
-#if defined(__SSE__)
-#   include "mask128/mask128_x86-64.inl"
-#elif defined(__ARM_NEON_FP)
-#   include "mask128/mask128_arm.inl"
-#else
-#   include "mask128/mask128_no_simd.inl"
-#endif
+
+#include "mask128/mask128_x86-64.inl"
 
 BAD_NAMESPACE_END
 

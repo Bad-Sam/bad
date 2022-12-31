@@ -34,7 +34,7 @@ static bad_forceinline f32 bad_veccall f32x4_get_0(f32x4 a);
 static bad_forceinline f32 bad_veccall f32x4_get_1(f32x4 a);
 static bad_forceinline f32 bad_veccall f32x4_get_2(f32x4 a);
 static bad_forceinline f32 bad_veccall f32x4_get_3(f32x4 a);
-static bad_forceinline f32 bad_veccall f32x4_get_i(f32x4 a, s32 i);
+static bad_forceinline f32 bad_veccall f32x4_get_i(f32x4 a, u32 i);
 
 
 // ============== Setters =============
@@ -49,10 +49,10 @@ static bad_forceinline f32x4 bad_veccall f32x4_set_3(f32x4 a, f32 value);
 
 
 // ==== Vector element broadcast =====
-static bad_forceinline f32x4 bad_veccall f32x4_broadcast_0(f32x4 a);
-static bad_forceinline f32x4 bad_veccall f32x4_broadcast_1(f32x4 a);
-static bad_forceinline f32x4 bad_veccall f32x4_broadcast_2(f32x4 a);
-static bad_forceinline f32x4 bad_veccall f32x4_broadcast_3(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_dup_0(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_dup_1(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_dup_2(f32x4 a);
+static bad_forceinline f32x4 bad_veccall f32x4_dup_3(f32x4 a);
 
 
 // ============ Selection =============
@@ -65,13 +65,7 @@ static bad_forceinline mask128 bad_veccall f32x4_to_s32x4(f32x4 a);
 static bad_forceinline mask128 bad_veccall f32x4_to_u32x4(f32x4 a);
 
 
-#if defined(__SSE__)
-#   include "f32x4/f32x4_x86-64.inl"
-#elif defined(__ARM_NEON_FP)
-#   include "f32x4/f32x4_arm.inl"
-#else
-#   include "f32x4/f32x4_no_simd.inl"
-#endif
+#include "f32x4/f32x4_x86-64.inl"
 
 BAD_NAMESPACE_END
 

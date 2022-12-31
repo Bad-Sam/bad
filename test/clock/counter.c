@@ -5,18 +5,17 @@
 #if defined(BAD_LINUX)
 #   include <time.h>
 #elif defined(BAD_WINDOWS)
-#   include <Windows.h>
-#   include <intrin.h>
+#   include <windows.h>
 #endif
 
-namespace bad
-{
+BAD_NAMESPACE_START
 
 s64 get_perf_counter()
 {
 #if defined(BAD_LINUX)
     timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
+
     return ts.tv_nsec * 1000;
 #elif defined(BAD_WINDOWS)
     LARGE_INTEGER counter;
@@ -36,4 +35,4 @@ s64 get_tsc()
 #endif
 }
 
-}
+BAD_NAMESPACE_END

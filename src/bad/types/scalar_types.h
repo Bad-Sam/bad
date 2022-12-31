@@ -2,15 +2,15 @@
 #define BAD_SCALAR_TYPES_H
 
 #include <bad/bad.h>
-#include <bad/detect/os.h>
+#include <bad/detect/isa.h>
 
-#if !defined(BAD_WINDOWS)
+#if !defined(_MSC_VER)
 #   include <stdint.h>
 #endif
 
 BAD_NAMESPACE_START
 
-#if defined(BAD_WINDOWS)
+#if defined(_MSC_VER)
     typedef __int8   s8;
     typedef __int16  s16;
     typedef __int32  s32;
@@ -31,6 +31,12 @@ BAD_NAMESPACE_START
 #endif
 
 typedef float    f32;
+
+#if defined(BAD_x64)
+    typedef u64 size_t;
+#else
+    typedef u32 size_t;
+#endif
 
 #if defined(__SSE__) && !defined(__SSE2__)
     typedef f32 mask_elem;

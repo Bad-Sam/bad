@@ -19,22 +19,25 @@ set "SANDBOX_MAIN=sandbox.c"
 :: Compilation
 set "COMP=clang"
 set "INCLUDE_DIR=-I%SRC_DIR%"
-set "MACRO=-DNDEBUG"
+set "MACRO=-DENABLE_DEBUG_MODE=1"
 set "WARNING=-W -Wall -Werror -Wextra -Wshadow -Wnon-virtual-dtor -Wno-uninitialized"
 set "OPTI=-O3 -march=native -mno-vaes"
 set "ASM=-fverbose-asm -masm=intel"
 
 :: Rules
 if "%1"=="" (
+    cls
     set "SRC=%SANDBOX_MAIN% "
     call :find_src
     call :compile
     exit /B 0
 ) else if "%1"=="asm" (
+    set "SRC=%SANDBOX_MAIN% "
     call :find_src
     call :asm
     exit /B 0
 ) else if "%1"=="test" (
+    cls
     set "INCLUDE_DIR=%INCLUDE_DIR% -I%TEST_DIR%"
     call :find_src
     call :find_test
@@ -83,9 +86,10 @@ if "%1"=="" (
     mkdir %ASM_DIR% 2> nul
 
     echo Compiling to asm...
+
     for %%i in (!SRC!) do (
         set "src_file=%%~nxi"
-        set "asm_file=!src_file:.cpp=.asm!"
+        set "asm_file=!src_file:.c=.asm!"
         set "asm_file=%~dp0%!ASM_DIR!!asm_file!"
         
         %COMP% %INCLUDE_DIR% %MACRO% %WARNING% %OPTI% %ASM% -S %%i -o !asm_file!
@@ -115,7 +119,7 @@ if "%1"=="" (
     ::    %COMP% %INCLUDE_DIR% %MACRO% %WARNING% %OPTI% -c %%i -o !obj_file!
     ::)
 
-    %COMP% %INCLUDE_DIR% %MACRO% %WARNING% %OPTI% %LIB% !SRC! -o %BINARY%
+    %COMP% %INCLUDE_DIR% %MACRO% %WARNING% %OPTI% !SRC! -o %BINARY%
 
     :: https://stackoverflow.com/a/9935540
     set "endTime=%time: =0%"

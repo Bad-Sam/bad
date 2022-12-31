@@ -12,11 +12,11 @@ void test_mask128_load_store()
 // With SSE, mask128_load/mask128_store is the same as _mm_load_ps/_mm_store_ps,
 // which are already tested in test_f32x4.cpp
 #if defined(__SSE2__)
-    bad_align(16) u32 a[4] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits};
-    bad_align(16) u32 b[4] = {6484587u, 3u, 55u, 987654321u};
+    bad_align_to(mask128) u32 a[4] = {all1_bits, nosign_bits, zero_bits, lowbit32_bits};
+    bad_align_to(mask128) u32 b[4] = {6484587u, 3u, 55u, 987654321u};
 
-    bad_align(16) u32 a_out[4];
-    bad_align(16) u32 b_out[4];
+    bad_align_to(mask128) u32 a_out[4];
+    bad_align_to(mask128) u32 b_out[4];
     mask128_store(a_out, mask128_load(a));
     mask128_store(b_out, mask128_load(b));
 

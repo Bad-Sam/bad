@@ -34,7 +34,7 @@ bad_inline vec4 bad_veccall vec4_unit(vec4 v0)
 #else
     f32x4 len2 = f32x4_mul(v0, v0);
           len2 = f32x4_hadd4(len2);
-          len2 = f32x4_broadcast_0(len2);
+          len2 = f32x4_dup_0(len2);
 #endif
 
     f32x4 len = f32x4_rsqrt(len2);

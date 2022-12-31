@@ -1,69 +1,65 @@
 #ifndef BAD_DEBUG_CHECKS_H
 #define BAD_DEBUG_CHECKS_H
 
-#if defined(DEBUG) || defined(_DEBUG)
-#   include <bad/detect/isa.h>
-#endif
+// Runtime debug checks performed depending on ENABLE_DEBUG_MODE macro definition and value
+// - ENABLE_DEBUG_MODE not defined: no debug checks are performed, debug macros evaluate to nothing
+// - ENABLE_DEBUG_MODE set to `1`: debug checks are performed and output a message on failure
+// - ENABLE_DEBUG_MODE set to `2`: debug checks are performed and output a message on failure and trigger a debug break
+#if defined(ENABLE_DEBUG_MODE) && (ENABLE_DEBUG_MODE == 1 || ENABLE_DEBUG_MODE == 2)
+#   include <bad/types/scalar_types.h>
+
+// bad_debug_write_literal
+// stderr file descriptor is always 2
+#   if defined(_MSC_VER)
+#       include <io.h>
+#       define bad_debug_write_literal(msg) _write(2, msg, sizeof(msg) - 1u)
+#   else
+#       include <unistd.h>
+#       define bad_debug_write_literal(msg) write(2, msg, sizeof(msg) - 1u)
+#   endif
 
 // bad_interrupt
-#if defined(__clang__) || defined(__GNUC__)
-#   define bad_interrupt() do { __asm__("int3"); } while (0)
-#elif defined(_MSC_VER)
-#   if defined(BAD_x64)
-#       include <intrin.h>
-#       define bad_interrupt() do { __debugbreak(); } while (0)
-#   elif defined(BAD_x86)
-#       define bad_interrupt() do { __asm { int3 }; } while (0)
+#   if defined(_MSC_VER)
+#      include <windows.h>
+#      define bad_debug_breakpoint() do { __debugbreak(); } while (0)
+#   elif defined(__has_builtin) && __has_builtin(__builtin_trap)
+#       define bad_debug_breakpoint() do { __builtin_trap(); } while (0)
+#   elif defined(__clang__) || defined(__GNUC__)
+#       define bad_debug_breakpoint() do { __asm__("int3"); } while (0)
+#   else
+#      include <stdlib.h>
+#      define bad_debug_breakpoint() do { abort(); } while (0)
 #   endif
-#else
-#   include <stdlib.h>
-#   define bad_interrupt() do { exit(EXIT_FAILURE); } while (0)
-#endif
 
+// bad_debug_check
+#   if ENABLE_DEBUG_MODE == 1
+#       define bad_debug_check_failed()
+#   elif ENABLE_DEBUG_MODE == 2
+#       define bad_debug_check_failed() bad_debug_breakpoint()
+#   endif
 
-// bad_assert
-#if defined(DEBUG) || defined(_DEBUG)
-#   include <stdio.h>
+#   define BAD_TO_STR_DEPTH(x) #x
+#   define BAD_TO_STR(x)       BAD_TO_STR_DEPTH(x)
 
-#   define bad_assert(x)                                               \
-    do                                                                 \
-    {                                                                  \
-        if ((x))                                                       \
-        {}                                                             \
-        else                                                           \
-        {                                                              \
-            fprintf(stderr, "\nAssertion failed in %s: %s\n(%s:%i)\n", \
-                    __func__, #x, __FILE__, __LINE__);                 \
-            bad_interrupt();                                           \
-        }                                                              \
-    }                                                                  \
+#   define bad_debug_check(x)                                                                            \
+    do                                                                                                   \
+    {                                                                                                    \
+        if (!(x))                                                                                        \
+        {                                                                                                \
+            bad_debug_write_literal("\n" __FILE__ ":" BAD_TO_STR(__LINE__) ": " #x " returned false\n"); \
+            bad_debug_check_failed();                                                                    \
+        }                                                                                                \
+    }                                                                                                    \
     while (0)
 
-#   define bad_assert_aligned(ptr, alignment)                                                        \
-    do                                                                                               \
-    {                                                                                                \
-        if ((size_t)(ptr) % (size_t)(alignment) == 0)                                                \
-        {}                                                                                           \
-        else                                                                                         \
-        {                                                                                            \
-            fprintf(stderr, "\nVariable %s in %s is not %i-bytes aligned, but should be\n(%s:%i)\n", \
-                    #ptr, __func__, alignment, __FILE__, __LINE__);                                  \
-            bad_interrupt();                                                                         \
-        }                                                                                            \
-    }                                                                                                \
-    while (0)
-
-// bad_assert
-#define bad_assert_sse_aligned(ptr)   bad_assert_aligned((ptr), 16u)
-#define bad_assert_avx_aligned(ptr)   bad_assert_aligned((ptr), 32u)
-#define bad_assert_f32xn_aligned(ptr) bad_assert_aligned((ptr), (f32xn_width * 4u))
-#define bad_assert_maskn_aligned(ptr) bad_assert_aligned((ptr), (maskn_width * 4u))
+// bad_debug_check_aligned
+#   define bad_debug_check_aligned(ptr, type) bad_debug_check(((size_t)ptr % sizeof(type)) == 0) 
 #else
-#   define bad_assert(x)                      do {} while (0)
-#   define bad_assert_aligned(ptr, alignment) do {} while (0)
-#   define bad_assert_sse_aligned(ptr)        do {} while (0)
-#   define bad_assert_avx_aligned(ptr)        do {} while (0)
-#   define bad_assert_f32xn_aligned(ptr)      do {} while (0)
+#   define bad_debug_write_literal(msg)       do {} while (0)
+#   define bad_debug_breakpoint()             do {} while (0)
+#   define bad_debug_check_failed()           do {} while (0)
+#   define bad_debug_check(x)                 do {} while (0)
+#   define bad_debug_check_aligned(ptr, type) (void)ptr
 #endif
 
 #endif

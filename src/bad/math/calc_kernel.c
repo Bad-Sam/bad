@@ -12,13 +12,13 @@ void f32_add_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict b,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -36,13 +36,13 @@ void f32_sub_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict b,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -61,13 +61,13 @@ void f32_mul_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict b,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -86,13 +86,13 @@ void f32_div_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict b,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -111,11 +111,11 @@ void f32_rcp_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict src,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -131,11 +131,11 @@ void f32_sqrt_kernel(      f32* bad_restrict dst,
                      const f32* bad_restrict src,
                            u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -151,11 +151,11 @@ void f32_rsqrt_kernel(      f32* bad_restrict dst,
                       const f32* bad_restrict src,
                             u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -172,13 +172,13 @@ void f32_min_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict b,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -196,13 +196,13 @@ void f32_max_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict b,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -219,11 +219,11 @@ void f32_abs_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict src,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     const maskn value32_mask = maskn_value32();
 
@@ -244,11 +244,11 @@ void f32_sign_kernel(      f32* bad_restrict dst,
                      const f32* bad_restrict src,
                            u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     const maskn highbit32_mask = maskn_highbit32();
     const maskn vone           = f32xn_as_maskn(f32xn_one());
@@ -271,11 +271,11 @@ void f32_neg_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict src,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     const maskn highbit32_mask = maskn_highbit32();
 
@@ -296,11 +296,11 @@ void f32_frac_kernel(      f32* bad_restrict dst,
                      const f32* bad_restrict src,
                            u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -316,13 +316,13 @@ void f32_mod_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict b,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -339,11 +339,11 @@ void f32_trunc_kernel(      f32* bad_restrict dst,
                       const f32* bad_restrict src,
                             u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -359,11 +359,11 @@ void f32_round_kernel(      f32* bad_restrict dst,
                       const f32* bad_restrict src,
                             u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -379,11 +379,11 @@ void f32_floor_kernel(      f32* bad_restrict dst,
                       const f32* bad_restrict src,
                             u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -399,11 +399,11 @@ void f32_ceil_kernel(       f32* bad_restrict dst,
                       const f32* bad_restrict src,
                             u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -421,15 +421,15 @@ void f32_clamp_kernel(      f32* bad_restrict dst,
                       const f32* bad_restrict max,
                             u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(min      != NULL);
-    bad_assert(max      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(min);
-    bad_assert_f32xn_aligned(max);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(min      != NULL);
+    bad_debug_check(max      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(min, f32xn);
+    bad_debug_check_aligned(max, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -450,15 +450,15 @@ void f32_lerp_kernel(      f32* bad_restrict dst,
                      const f32* bad_restrict t,
                     u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(t        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
-    bad_assert_f32xn_aligned(t);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(t        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
+    bad_debug_check_aligned(t, f32xn);
 
     const f32xn vone = f32xn_one();
 
@@ -482,13 +482,13 @@ void f32_copysign_kernel(      f32* bad_restrict dst,
                          const f32* bad_restrict reference_sign,
                                u32               max_size)
 {
-    bad_assert(dst            != NULL);
-    bad_assert(a              != NULL);
-    bad_assert(reference_sign != NULL);
-    bad_assert(max_size       != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(reference_sign);
+    bad_debug_check(dst            != NULL);
+    bad_debug_check(a              != NULL);
+    bad_debug_check(reference_sign != NULL);
+    bad_debug_check(max_size       != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(reference_sign, f32xn);
 
     const maskn value32_mask = maskn_set_all(0x7FFFFFFF);
 
@@ -514,13 +514,13 @@ void f32_mul_by_sign_kernel(      f32* bad_restrict dst,
                             const f32* bad_restrict reference_sign,
                                   u32               max_size)
 {
-    bad_assert(dst            != NULL);
-    bad_assert(a              != NULL);
-    bad_assert(reference_sign != NULL);
-    bad_assert(max_size       != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(reference_sign);
+    bad_debug_check(dst            != NULL);
+    bad_debug_check(a              != NULL);
+    bad_debug_check(reference_sign != NULL);
+    bad_debug_check(max_size       != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(reference_sign, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -538,11 +538,11 @@ void f32_cos_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict src,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -558,11 +558,11 @@ void f32_cos_0_halfpi_kernel(      f32* bad_restrict dst,
                              const f32* bad_restrict src,
                                    u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -578,11 +578,11 @@ void f32_sin_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict src,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -597,11 +597,11 @@ void f32_sin_npi_pi_kernel(      f32* bad_restrict dst,
                            const f32* bad_restrict src,
                                  u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -616,11 +616,11 @@ void f32_tan_kernel(      f32* bad_restrict dst,
                     const f32* bad_restrict src,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -635,11 +635,11 @@ void f32_acos_kernel(      f32* bad_restrict dst,
                      const f32* bad_restrict src,
                            u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -658,15 +658,15 @@ void f32_mul_add_kernel(      f32* bad_restrict dst,
                         const f32* bad_restrict c,
                               u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(c        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
-    bad_assert_f32xn_aligned(c);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(c        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
+    bad_debug_check_aligned(c, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -686,15 +686,15 @@ void f32_mul_sub_kernel(      f32* bad_restrict dst,
                         const f32* bad_restrict c,
                               u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(c        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
-    bad_assert_f32xn_aligned(c);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(c        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
+    bad_debug_check_aligned(c, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -714,15 +714,15 @@ void f32_nmul_add_kernel(      f32* bad_restrict dst,
                          const f32* bad_restrict c,
                                u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(c        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
-    bad_assert_f32xn_aligned(c);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(c        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
+    bad_debug_check_aligned(c, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -742,15 +742,15 @@ void f32_nmul_sub_kernel(      f32* bad_restrict dst,
                          const f32* bad_restrict c,
                                u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(c        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
-    bad_assert_f32xn_aligned(c);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(c        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
+    bad_debug_check_aligned(c, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -771,13 +771,13 @@ void f32_neq_kernel(      u32* bad_restrict dst,
                     const f32* bad_restrict b,
                           u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -795,13 +795,13 @@ void f32_eq_kernel(      u32* bad_restrict dst,
                    const f32* bad_restrict b,
                          u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -819,13 +819,13 @@ void f32_ge_kernel(      u32* bad_restrict dst,
                    const f32* bad_restrict b,
                          u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -843,13 +843,13 @@ void f32_gt_kernel(      u32* bad_restrict dst,
                    const f32* bad_restrict b,
                          u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -867,13 +867,13 @@ void f32_le_kernel(      u32* bad_restrict dst,
                    const f32* bad_restrict b,
                          u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -891,13 +891,13 @@ void f32_lt_kernel(      u32* bad_restrict dst,
                    const f32* bad_restrict b,
                          u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(a        != NULL);
-    bad_assert(b        != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(a);
-    bad_assert_f32xn_aligned(b);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(a        != NULL);
+    bad_debug_check(b        != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(a,   sizeof(f32xn));
+    bad_debug_check_aligned(b,   sizeof(f32xn));
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -915,11 +915,11 @@ void f32_is_positive_kernel(      u32* bad_restrict dst,
                             const f32* bad_restrict src,
                                   u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     const maskn zero_mask = maskn_zero();
 
@@ -945,11 +945,11 @@ void f32_is_negative_kernel(      u32* bad_restrict dst,
                             const f32* bad_restrict src,
                                   u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     const maskn zero_mask = maskn_zero();
 
@@ -969,11 +969,11 @@ void f32_is_nan_kernel(      u32* bad_restrict dst,
                        const f32* bad_restrict src,
                              u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     for (u32 i = 0u; i < max_size; i += f32xn_width)
     {
@@ -989,11 +989,11 @@ void f32_is_infinite_kernel(      u32* bad_restrict dst,
                             const f32* bad_restrict src,
                                   u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     const maskn value32_mask = maskn_value32();
     const maskn inf_mask     = maskn_exponent32();
@@ -1014,11 +1014,11 @@ void f32_is_finite_kernel(      u32* bad_restrict dst,
                           const f32* bad_restrict src,
                                 u32               max_size)
 {
-    bad_assert(dst      != NULL);
-    bad_assert(src      != NULL);
-    bad_assert(max_size != 0u);
-    bad_assert_f32xn_aligned(dst);
-    bad_assert_f32xn_aligned(src);
+    bad_debug_check(dst      != NULL);
+    bad_debug_check(src      != NULL);
+    bad_debug_check(max_size != 0u);
+    bad_debug_check_aligned(dst, f32xn);
+    bad_debug_check_aligned(src, f32xn);
 
     const maskn exp32_mask = maskn_exponent32();
 

@@ -45,10 +45,10 @@ void test_f32x8_one()
 
 void test_f32x8_load_store()
 {
-    bad_align(32) const f32 a[8] = {qnan(), inf(), ninf(), denorm(), snan(), .0f, -.0f, 1.f};
-    bad_align(32) const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
-    bad_align(32) f32 a_load_store[8];
-    bad_align(32) f32 b_load_store[8];
+    bad_align_to(f32x8) const f32 a[8] = {qnan(), inf(), ninf(), denorm(), snan(), .0f, -.0f, 1.f};
+    bad_align_to(f32x8) const f32 b[8] = {-10.f, 1.f, -2.f, 10.f, 8641654.2154f, -.1f, 100.f, -99.9999f};
+    bad_align_to(f32x8) f32 a_load_store[8];
+    bad_align_to(f32x8) f32 b_load_store[8];
 
     f32x8_store(a_load_store, f32x8_load(a));
     f32x8_store(b_load_store, f32x8_load(b));

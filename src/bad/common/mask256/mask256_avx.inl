@@ -1,6 +1,6 @@
 static bad_forceinline mask256 mask256_load(const u32* mem_addr)
 {
-    bad_assert_avx_aligned(mem_addr);
+    bad_debug_check_aligned(mem_addr, f32x8);
     return _mm256_load_si256((__m256i*)mem_addr);
 }
 
@@ -14,7 +14,8 @@ static bad_forceinline mask256 mask256_loadu(const u32* mem_addr)
 static bad_forceinline mask256 mask256_set(u32 a, u32 b, u32 c, u32 d,
                                            u32 e, u32 f, u32 g, u32 h)
 {
-    bad_align(32) const u32 mem_addr[8] = {a, b, c, d, e, f, g, h};
+    bad_align_to(mask256) const u32 mem_addr[8] = {a, b, c, d, e, f, g, h};
+
     return mask256_load(mem_addr);
 }
 
@@ -27,7 +28,7 @@ static bad_forceinline mask256 mask256_set_all(u32 k)
 
 static bad_forceinline void mask256_store(u32* mem_addr, mask256 a)
 {
-    bad_assert_avx_aligned(mem_addr);
+    bad_debug_check_aligned(mem_addr, f32x8);
     
     _mm256_store_si256((__m256i*)mem_addr, a);
 }
@@ -277,10 +278,11 @@ static bad_forceinline f32x8 bad_veccall mask256_as_f32x8(mask256 a)
     return _mm256_castsi256_ps(a);
 }
 
+
 static bad_forceinline f32x8 bad_veccall mask256_u32x8_to_f32x8(mask256 a)
 {
-    bad_align(32) s32 store[8];
-    bad_align(32) f32 load[8];
+    bad_align_to(mask256) s32 store[8];
+    bad_align_to(f32x8) f32 load[8];
 
     mask256_store((mask_elem*)store, a);
 
@@ -293,7 +295,9 @@ static bad_forceinline f32x8 bad_veccall mask256_u32x8_to_f32x8(mask256 a)
     load[6] = (f32)*(u32*)(store + 6);
     load[7] = (f32)*(u32*)(store + 7);
 
-    return _mm256_load_si256((const mask256*)load);
+    mask256 res = _mm256_load_si256((const mask256*)load);
+
+    return _mm256_castsi256_ps(res);
 }
 
 

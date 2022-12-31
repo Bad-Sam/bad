@@ -396,10 +396,14 @@ static bad_inline f32 f32_sin_npi_pi(f32 x)
 // https://www.gdcvault.com/play/1026734/Math-in-Game-Development-Summit
 static bad_inline f32 f32_tan(f32 x)
 {
+#if bad_has_builtin(__builtin_tanf)
+    return __builtin_tanf(x);
+#else
     f32x4 vx    = f32x4_set_lower(x);
     f32x4 tan_x = f32x4_tan(vx);
 
     return f32x4_get_0(tan_x);
+#endif
 }
 
 

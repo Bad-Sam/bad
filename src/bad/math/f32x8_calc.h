@@ -70,13 +70,7 @@ static bad_forceinline mask256 bad_veccall f32x8_is_infinite(f32x8 a);
 static bad_forceinline mask256 bad_veccall f32x8_is_finite(f32x8 a);
 
 
-#if defined(__SSE__)
-#   include "f32x8_calc/f32x8_calc_x86-64.inl"
-#elif defined(__ARM_NEON_FP)
-#   include "f32x8_calc/f32x8_calc_arm.inl"
-#else
-#   include "f32x8_calc/f32x8_calc_no_simd.inl"
-#endif
+#include "f32x8_calc/f32x8_calc_x86-64.inl"
 
 BAD_NAMESPACE_END
 

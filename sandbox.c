@@ -26,17 +26,52 @@
 #include <bad/math/quat.h>
 #include <bad/math/calc_kernel.h>
 #include <bad/math/vec4_kernel.h>
+#include <bad/math/mat4x4.h>
 
 #include <bad/types/math_types.h>
 #include <bad/types/scalar_types.h>
 #include <bad/types/simd_types.h>
 
+#include <windows.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 BAD_USE_NAMESPACE
 
+s64 get_perf_counter()
+{
+    LARGE_INTEGER counter;
+    QueryPerformanceCounter(&counter);
+
+    return counter.QuadPart;
+}
+
 int main()
 {
+    const u32 mat_count = 1000000u;
+    mat4x4* bad_restrict a = _mm_malloc(sizeof(mat4x4) * mat_count * 2u, 32u);
+    mat4x4* bad_restrict b = a + mat_count;
+    mat4x4 c;
+
+    s64 total = 0l;
+    for (u32 i = 0u; i < mat_count; i++)
+    {
+        s64 t0 = get_perf_counter();
+        c = mat4x4_mul(a[i], b[i]);
+        s64 t1 = get_perf_counter();
+
+        total += t1 - t0;
+    }
+
+    fprintf(stderr, "Total: %llu cycles\n", total);
+
+    _mm_free(a);
+
+    
+    asm volatile("" : : "r,m"(a) : "memory");
+    asm volatile("" : : "r,m"(b) : "memory");
+    asm volatile("" : : "r,m"(c) : "memory");
 
     return 0;
 }

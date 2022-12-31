@@ -18,15 +18,13 @@
 #endif
 
 // bad_align
-#if defined(__GNUC__)
-#   define bad_align(x) __attribute__((aligned((x))))
+#if defined(__GNUC__) || defined(__clang__)
+#   define bad_align_to(x) __attribute__((aligned(sizeof(x))))
 #elif defined(_MSC_VER)
-#   define bad_align(x) __declspec(align((x)))
+#   define bad_align_to(x) __declspec(align(sizeof(x)))
 #else
-#   define bad_align(x) _Alignas((x))
+#   define bad_align_to(x) _Alignas(sizeof(x))
 #endif
-
-#define bad_align_to_f32xn bad_align(f32xn_width * 4)
 
 // bad_restrict
 #if defined(__cplusplus)
@@ -48,7 +46,7 @@
 #if defined(_MSC_VER)
 #   define bad_forceinline __forceinline
 #elif __has_attribute(always_inline)
-#   define bad_forceinline __attribute__((always_inline))
+#   define bad_forceinline __attribute__((always_inline)) bad_inline
 #else
 #   define bad_forceinline bad_inline
 #endif

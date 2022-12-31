@@ -59,7 +59,7 @@ static bad_forceinline f32x8 f32x8_two()
 // ========== Loads & stores ==========
 static bad_forceinline f32x8 f32x8_load(const f32* mem_addr)
 {
-    bad_assert_avx_aligned(mem_addr);
+    bad_debug_check_aligned(mem_addr, f32x8);
 
     return _mm256_castsi256_ps(_mm256_load_si256((__m256i*)mem_addr));
 }
@@ -86,17 +86,19 @@ static bad_forceinline f32x8 f32x8_set_all(f32 a)
 
 static bad_forceinline void bad_veccall f32x8_store(f32* mem_addr, f32x8 a)
 {
-    bad_assert_avx_aligned(mem_addr);
+    bad_debug_check_aligned(mem_addr, f32x8);
 
-    // NOTE: si128 version has a better throughput
-    return _mm256_store_si256((__m256i*)mem_addr, a);
+    // NOTE: si256 version has a better throughput
+	mask256 a_mask = f32x8_as_mask256(a);
+	
+    _mm256_store_si256((__m256i*)mem_addr,a_mask);
 }
 
 
 static bad_forceinline void bad_veccall f32x8_storeu(f32* mem_addr, f32x8 a)
 {
-    // NOTE: si128 version has a better throughput
-    return _mm256_storeu_si256((__m256i*)mem_addr, a);
+    // NOTE: si256 version has a better throughput
+    _mm256_storeu_si256((__m256i*)mem_addr, a);
 }
 
 
@@ -124,32 +126,14 @@ static bad_forceinline mask256 bad_veccall f32x8_as_mask256(f32x8 a)
 
 static bad_forceinline mask256 bad_veccall f32x8_to_s32x8(f32x8 a)
 {
-#if defined(___SSE2__)
     return _mm256_cvtps_epi32(a);
-#else
-    bad_align(32) f32 store[8];
-    bad_align(32) s32 load[8];
-
-    f32x8_store(store, a);
-
-    load[0] = (s32)store[0];
-    load[1] = (s32)store[1];
-    load[2] = (s32)store[2];
-    load[3] = (s32)store[3];
-    load[4] = (s32)store[4];
-    load[5] = (s32)store[5];
-    load[6] = (s32)store[6];
-    load[7] = (s32)store[7];
-
-    return mask256_load((mask_elem*)load);
-#endif
 }
 
 
 static bad_forceinline mask256 bad_veccall f32x8_to_u32x8(f32x8 a)
 {
-    bad_align(32) f32 store[8];
-    bad_align(32) u32 load[8];
+    bad_align_to(f32x8) f32 store[8];
+    bad_align_to(mask256) u32 load[8];
 
     f32x8_store(store, a);
 

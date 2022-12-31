@@ -1,6 +1,6 @@
 static bad_forceinline vec3 vec3_load(const f32* mem_addr)
 {
-    bad_assert(mem_addr != NULL);
+    bad_debug_check(mem_addr != NULL);
 
     return vec3_set(mem_addr[0], mem_addr[1], mem_addr[2]);
 }
@@ -8,7 +8,7 @@ static bad_forceinline vec3 vec3_load(const f32* mem_addr)
 
 static bad_forceinline vec3 vec3_set(f32 x, f32 y, f32 z)
 {
-    bad_align(16) f32 elem[4] = {x, y, z, .0f};
+    bad_align_to(f32x4) f32 elem[4] = {x, y, z, .0f};
 
     return f32x4_load(elem);
 }
@@ -16,9 +16,9 @@ static bad_forceinline vec3 vec3_set(f32 x, f32 y, f32 z)
 
 static bad_forceinline void bad_veccall vec3_store(f32* mem_addr, vec3 a)
 {
-    bad_assert(mem_addr != NULL);
+    bad_debug_check(mem_addr != NULL);
 
-    bad_align(16) f32 store[4];
+    bad_align_to(f32x4) f32 store[4];
     f32x4_store(store, a);
 
     mem_addr[0] = store[0];
@@ -62,14 +62,14 @@ bad_inline f32 bad_veccall vec3_length(vec3 v)
 // v / ||v||
 bad_inline vec3 bad_veccall vec3_unit(vec3 v)
 {
-    bad_assert(vec3_length_squared(v) != .0f);
+    bad_debug_check(vec3_length_squared(v) != .0f);
     
 #if defined(__SSE4_1__)
     f32x4 len2 = _mm_dp_ps(v, v, 0b01110111);
 #else
     f32x4 len2 = f32x4_mul(v, v);
           len2 = f32x4_hadd3(len2);
-          len2 = f32x4_broadcast_0(len2);
+          len2 = f32x4_dup_0(len2);
 #endif
 
 #if defined(__SSE__)
@@ -123,14 +123,14 @@ bad_inline vec3 bad_veccall vec3_project_on(vec3 v, vec3 axis)
     f32x4 dot       = f32x4_hadd3(f32x4_mul(v, axis));
     f32x4 axis_len2 = f32x4_hadd3(f32x4_mul(axis, axis));
 
-    bad_assert(f32x4_get_0(axis_len2) != .0f);
+    bad_debug_check(f32x4_get_0(axis_len2) != .0f);
 
 #   if defined(__SSE__)
     f32x4 proj = _mm_div_ss(dot, axis_len2);
 #   else
     f32x4 proj = f32x4_div(dot, axis_len2);
 #   endif
-          proj = f32x4_broadcast_0(proj);
+          proj = f32x4_dup_0(proj);
 #endif
 
     return f32x4_mul(proj, axis);
@@ -144,7 +144,7 @@ bad_inline vec3 bad_veccall vec3_project_on_unit(vec3 v, vec3 unit_axis)
     f32x4 dot = _mm_dp_ps(v, unit_axis, 0b01110111);
 #else
     f32x4 dot = f32x4_hadd3(f32x4_mul(v, unit_axis));
-          dot = f32x4_broadcast_0(dot);
+          dot = f32x4_dup_0(dot);
 #endif
 
     // Apply projection
@@ -168,7 +168,7 @@ bad_inline vec3 bad_veccall vec3_reflect(vec3 v, vec3 unit_normal)
 #endif
     // 2 * dot(v, unit_normal)
     f32x4 offset = f32x4_mul(two, dot);
-          offset = f32x4_broadcast_0(offset);
+          offset = f32x4_dup_0(offset);
     
     // v - offset * unit_normal
     return f32x4_nmul_add(offset, unit_normal, v);
@@ -183,7 +183,7 @@ bad_inline vec3 bad_veccall vec3_rot_around_axis(vec3 v, vec3 unit_axis, f32 ang
     f32x4 axis_dot_v = _mm_dp_ps(v, unit_axis, 0b01110111);
 #else
     f32x4 axis_dot_v = f32x4_hadd3(f32x4_mul(v, unit_axis));
-          axis_dot_v = f32x4_broadcast_0(axis_dot_v);
+          axis_dot_v = f32x4_dup_0(axis_dot_v);
 #endif
 
     f32x4 cos_angle = f32x4_set_all(f32_cos(angle));

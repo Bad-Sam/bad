@@ -33,11 +33,12 @@ Because I am working on this library primarily to learn, it is a work in progres
     - [`detect/`](src/bad/detect/): context detection around the library
     - [`math/`](src/bad/math/): math functions
     - [`types/`](src/bad/types/): where scalar, simd and math types are defined. No functions are contained here, only declarations
-    - [`bad.h`](src/bad/bad.h): included accross all headers, currently used solely for wrapping sources in an optional namespace
-    - [`debug.h`](src/bad/debug_checks.h): debug-mode runtime checks through macros
-    - [`qualifiers.h`](src/bad/qualifiers.h): a variety of qualifiers used to affect how the compiler generates code
+    - [`bad.h`](src/bad/bad.h): included across most headers, currently used solely for wrapping sources in an optional namespace
+    - [`debug.h`](src/bad/debug_checks.h): debug runtime checks, conditionnally enabled only depending on `ENABLE_DEBUG_MODE` macro definition and value:
+
+    - [`qualifiers.h`](src/bad/qualifiers.h): a variety of qualifiers used to affect how the compiler generates code (`restrict` keyword, `forceinline` definition, `vectorcall` calling convention under Win32, alignment...)
 - [`test/`](test/): unit tests on important and/or non-trivial functions
-- [`build.bat`](build.bat/): custom compilation script for Windows 10 with Clang. Can be called with `build` to build the library, `build test`, `build asm`, `build run`, `build clean`
+- [`build.bat`](build.bat/): custom compilation script for Windows 10 with Clang. Can be called with `build` to build the library (using `sandbox.c`'s main), `build test`, `build asm`, `build run`, `build clean`
 - [`RESOURCES.md`](RESOURCES.md): a collection of knowledge that helped me learn
 
 
@@ -54,12 +55,12 @@ Common:
 - [X] Implement `f32xn` and `maskn`, a general vector type built on top of the most suited SIMD ISA available for the needs of the user
 - [ ] Explore non-temporal loads and stores
 - [X] Explore possible implementation of types whose size is not a multiple of the available vector width (vec2 and vec3 for instance)
-- [X] Remove the dependency on `stdint.h` if possible in [`types.h`](src/bad/types.h)
+- [X] Remove the dependency on `stdint.h` if possible
 - [ ] Learn about interoperability and penalties between ISA (SSE <--> AVX for instance), and manage them
 
 Tests:
 - [ ] Extend tests to all functions, trivial or not
-- [ ] Improve testing framework?
+- [X] Improve testing framework?
 
 Math:
 - [X] Migrate calculus/mathematical functions in `common/f32x4.h` to `math`

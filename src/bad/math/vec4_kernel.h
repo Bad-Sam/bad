@@ -7,20 +7,20 @@
 
 BAD_NAMESPACE_START
 
-void vec4_ker_dot(      f32* bad_restrict dot,
+void vec4_ker_dot(      f32* bad_restrict res,
                   const f32* bad_restrict a,
                   const f32* bad_restrict b,
                         u32               vec4_count);
 
-void vec4_ker_length_squared(      f32* bad_restrict len_sqr,
+void vec4_ker_length_squared(      f32* bad_restrict res,
                              const f32* bad_restrict a,
                                    u32               vec4_count);
 
-void vec4_ker_length(      f32* bad_restrict len,
+void vec4_ker_length(      f32* bad_restrict res,
                      const f32* bad_restrict v,
                            u32               vec4_count);
                      
-void vec4_ker_lerp(      f32* bad_restrict lerp,
+void vec4_ker_lerp(      f32* bad_restrict res,
                    const f32* bad_restrict a,
                    const f32* bad_restrict b,
                    const f32* bad_restrict t,

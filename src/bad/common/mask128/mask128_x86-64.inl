@@ -20,7 +20,7 @@ static bad_forceinline mask128 mask128_loadu(const mask_elem* mem_addr)
 
 static bad_forceinline mask128 mask128_set(mask_elem a, mask_elem b, mask_elem c, mask_elem d)
 {
-    bad_align(16) const mask_elem elem[4] = {a, b, c, d};
+    bad_align_to(mask128) const mask_elem elem[4] = {a, b, c, d};
 
     return mask128_load(elem);
 }
@@ -28,7 +28,7 @@ static bad_forceinline mask128 mask128_set(mask_elem a, mask_elem b, mask_elem c
 
 static bad_forceinline mask128 mask128_set_all(mask_elem k)
 {
-    bad_align(16) const mask_elem elem[4] = {k, k, k, k};
+    bad_align_to(mask128) const mask_elem elem[4] = {k, k, k, k};
 
     return mask128_load(elem);
 }
@@ -163,7 +163,7 @@ static bad_forceinline mask128 bad_veccall mask128_shift_left32(mask128 a, s32 s
 #if defined(__SSE2__)
     return _mm_slli_epi32(a, shift);
 #else
-    bad_align(16) f32 s[4];
+    bad_align_to(f32x4) f32 s[4];
     mask128_store(s, a);
 
     s[0] <<= shift;
@@ -181,7 +181,7 @@ static bad_forceinline mask128 bad_veccall mask128_shift_right32(mask128 a, s32 
 #if defined(__SSE2__)
     return _mm_srli_epi32(a, shift);
 #else
-    bad_align(16) f32 s[4];
+    bad_align_to(f32x4) f32 s[4];
     mask128_store(s, a);
 
     s[0] >>= shift;
@@ -213,9 +213,9 @@ static bad_forceinline mask_elem bad_veccall mask128_get_1(mask128 a)
 {
 #if defined(__SSE2__)
     mask128 shuf   = _mm_shuffle_epi32(a, _MM_SHUFFLE(1, 1, 1, 1));
-    f32     second = _mm_cvtss_f32(shuf);
+    f32     second = _mm_cvtss_f32(mask128_as_f32x4(shuf));
 
-    return *(u32*)&second;
+    return *(mask_elem*)&second;
 #else
     mask128 shuf = _mm_shuffle_ps(a, a, _MM_SHUFFLE(1, 1, 1, 1));
 
@@ -228,9 +228,9 @@ static bad_forceinline mask_elem bad_veccall mask128_get_2(mask128 a)
 {
 #if defined(__SSE2__)
     mask128 shuf   = _mm_shuffle_epi32(a, _MM_SHUFFLE(2, 2, 2, 2));
-    f32     second = _mm_cvtss_f32(shuf);
+    f32     second = _mm_cvtss_f32(mask128_as_f32x4(shuf));
 
-    return *(u32*)&second;
+    return *(mask_elem*)&second;
 #else
     mask128 shuf = _mm_shuffle_ps(a, a, _MM_SHUFFLE(2, 2, 2, 2));
 
@@ -243,9 +243,9 @@ static bad_forceinline mask_elem bad_veccall mask128_get_3(mask128 a)
 {
 #if defined(__SSE2__)
     mask128 shuf   = _mm_shuffle_epi32(a, _MM_SHUFFLE(3, 3, 3, 3));
-    f32     second = _mm_cvtss_f32(shuf);
+    f32     second = _mm_cvtss_f32(mask128_as_f32x4(shuf));
 
-    return *(u32*)&second;
+    return *(mask_elem*)&second;
 #else
     mask128 shuf = _mm_shuffle_ps(a, a, _MM_SHUFFLE(3, 3, 3, 3));
 
@@ -360,8 +360,8 @@ static bad_forceinline f32x4 bad_veccall mask128_as_f32x4(mask128 a)
 
 static bad_forceinline f32x4 bad_veccall mask128_u32x4_to_f32x4(mask128 a)
 {
-    bad_align(16) s32 store[4];
-    bad_align(16) f32 load[4];
+    bad_align_to(mask128) s32 store[4];
+    bad_align_to(f32x4) f32 load[4];
 
     mask128_store((mask_elem*)store, a);
 
@@ -379,8 +379,8 @@ static bad_forceinline f32x4 bad_veccall mask128_s32x4_to_f32x4(mask128 a)
 #if defined(__SSE2__)
     return _mm_cvtepi32_ps(a);
 #else
-    bad_align(16) s32 store[4];
-    bad_align(16) f32 load[4];
+    bad_align_to(mask128) s32 store[4];
+    bad_align_to(f32x4) f32 load[4];
 
     mask128_store((mask_elem*)store, a);
 

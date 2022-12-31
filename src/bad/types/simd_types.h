@@ -3,10 +3,12 @@
 
 #include <bad/bad.h>
 
-#include "scalar_types.h"
+#if !defined(__AVX__) && !defined(__SSE__)
+#   include "scalar_types.h"
+#endif
 
 // SIMD headers
-#if defined(__FMA__) || defined(__AVX__)
+#if defined(__AVX__) || defined(__FMA__)
 #   include <immintrin.h>
 #elif defined(__SSE4_2__)
 #   include <nmmintrin.h>
@@ -26,7 +28,6 @@
 #   endif
 #endif
 
-
 BAD_NAMESPACE_START
 
 // 4-way
@@ -37,9 +38,6 @@ BAD_NAMESPACE_START
 #   else
         typedef __m128  mask128;
 #   endif
-#elif defined(__ARM_NEON_FP)
-    typedef float32x4_t f32x4;
-    typedef uint32x4_t  mask128;
 #else
     typedef union { f32 e[4]; struct { f32 x, y, z, w; }; } f32x4;
     typedef union { u32 e[4]; struct { u32 x, y, z, w; }; } mask128;
@@ -52,6 +50,14 @@ BAD_NAMESPACE_START
 #else
     typedef union { f32x4   e[2]; struct { f32x4   a; f32x4   b; }; } f32x8;
     typedef union { mask128 e[2]; struct { mask128 a; mask128 b; }; } mask256;
+#endif
+
+#if defined(__AVX__)
+    typedef f32x8   f32xn;
+    typedef mask256 maskn;
+#else
+    typedef f32x4   f32xn;
+    typedef mask128 maskn;
 #endif
 
 
