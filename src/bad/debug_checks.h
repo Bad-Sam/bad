@@ -3,8 +3,8 @@
 
 // Runtime debug checks performed depending on ENABLE_DEBUG_MODE macro definition and value
 // - ENABLE_DEBUG_MODE not defined: no debug checks are performed, debug macros evaluate to nothing
-// - ENABLE_DEBUG_MODE set to `1`: debug checks are performed and output a message on failure
-// - ENABLE_DEBUG_MODE set to `2`: debug checks are performed and output a message on failure and trigger a debug break
+// - ENABLE_DEBUG_MODE set to 1: debug checks are performed, outputs a message on failure
+// - ENABLE_DEBUG_MODE set to 2: debug checks are performed, outputs a message on failure, triggers a debug break
 #if defined(ENABLE_DEBUG_MODE) && (ENABLE_DEBUG_MODE == 1 || ENABLE_DEBUG_MODE == 2)
 #   include <bad/types/scalar_types.h>
 
@@ -12,10 +12,10 @@
 // stderr file descriptor is always 2
 #   if defined(_MSC_VER)
 #       include <io.h>
-#       define bad_debug_write_literal(msg) _write(2, msg, sizeof(msg) - 1u)
+#       define bad_debug_write_literal(msg) do { _write(2, msg, sizeof(msg) - 1u); } while (0)
 #   else
 #       include <unistd.h>
-#       define bad_debug_write_literal(msg) write(2, msg, sizeof(msg) - 1u)
+#       define bad_debug_write_literal(msg) do { write(2, msg, sizeof(msg) - 1u); } while (0)
 #   endif
 
 // bad_interrupt
